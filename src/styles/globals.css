@@ -1,0 +1,12 @@
+@font-face {
+  font-family: Onest;
+  src: url(../fonts/Onest.ttf);
+}
+
+*{
+  margin: 0;
+}
+
+body{
+  font-family: Onest;
+}
