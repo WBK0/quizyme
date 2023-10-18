@@ -4,10 +4,12 @@ import Logo from "./Logo";
 
 const Navbar = () => {
   return (
-    <div className="h-16 container mx-auto flex items-center px-3">
-      <Logo />
-      <Content />
-      <Actions />
+    <div className="px-3 fixed w-full bg-white z-20">
+      <div className="container flex mx-auto h-16 items-center">
+        <Logo />
+        <Content />
+        <Actions />
+      </div>
     </div>
   )
 }
