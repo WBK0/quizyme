@@ -15,10 +15,12 @@ const config: Config = {
       },
     },
     colors: {
-      'purple': '#AF52DE',
+      'purple': '#AD3AE6',
       'green': '#94D39C',
       'white': '#FFFFFF',
       'black': '#000000',
+      'yellow': '#F9BB58',
+      'lightblue': '#599EFC'
     },
   },
   plugins: [],

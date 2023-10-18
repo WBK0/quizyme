@@ -6,6 +6,13 @@
   src: url(../fonts/Onest.ttf);
 }
 
+:root{
+  --purple: #AD3AE6;
+  --green: #94D39C;
+  --lightblue: #599EFC;
+  --yellow: #F9BB58;
+}
+
 *{
   margin: 0;
 }
