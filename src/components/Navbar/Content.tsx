@@ -1,7 +1,5 @@
 "use client";
 import Link from "next/link";
-import Image from 'next/image';
-import logo from '@/public/logo.svg'
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
 
