@@ -20,7 +20,8 @@ const config: Config = {
       'white': '#FFFFFF',
       'black': '#000000',
       'yellow': '#F9BB58',
-      'lightblue': '#599EFC'
+      'lightblue': '#599EFC',
+      'red': '#FF2D55'
     },
   },
   plugins: [],
