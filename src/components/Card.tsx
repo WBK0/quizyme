@@ -27,8 +27,11 @@ const Card = ({to, image, color, type, topic, authorId} : CardProps) => {
           </div>
         </div>
       </div>
-      <p className="my-6 text-lg font-bold">
-        Guest the questions about <span className="font-black">{topic}!</span>
+      <p className="sm:my-6 mt-3 mb-1 text-lg font-bold">
+        {
+          type == 'quiz' ? 'Guest the questions about ' : 'Learn from flashcards about '
+        } 
+        <span className="font-black">{topic}!</span>
       </p>
     </Link>
   )
