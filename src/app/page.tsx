@@ -1,6 +1,7 @@
 import Collections from "./components/Collections";
 import Hero from "./components/Hero";
 import JoinByCode from "./components/JoinByCode";
+import TopQuizzes from "./components/TopQuizzes";
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <Hero />
       <Collections />
       <JoinByCode />
+      <TopQuizzes />
     </>
   )
 }
