@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/Navbar/Navbar';
+import Footer from '@/components/Footer/Footer';
 
 export const metadata: Metadata = {
   title: 'QuizyMe',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <div className='container mx-auto pt-28'>
           {children}
         </div>
+        <Footer />
       </body>
     </html>
   )
