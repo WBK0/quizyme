@@ -1,86 +1,110 @@
+import CollectionCard from "@/components/CollectionCard";
 import Searchbar from "@/components/Searchbar";
-import Image from "next/image";
 
 const data = [
   {
     image: 'https://cdn.pixabay.com/photo/2023/10/06/07/14/plant-8297610_1280.jpg',
-    title: 'title',
+    title: 'Autumn',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/10/01/19/47/ducks-8288033_640.jpg',
+    title: 'Ducks',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/07/23/08/46/flower-8144644_640.jpg',
+    title: 'Flowers',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/10/14/23/27/airplane-8315886_640.jpg',
+    title: 'Planes',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/21/17/05/european-shorthair-8267220_640.jpg',
+    title: 'Cats',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/16/22/05/japan-8257601_640.jpg',
+    title: 'Waterfalls',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/23/11/26/bird-8270719_640.jpg',
+    title: 'Birds',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/15/05/38/motorboat-8254157_640.jpg',
+    title: 'Water sports',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/25/19/52/bear-8275920_640.jpg',
+    title: 'Bears',
   },
   {
-    image: '',
-    title: 'title',
+    image: 'https://cdn.pixabay.com/photo/2023/09/16/15/38/drink-8257030_640.jpg',
+    title: 'Wine',
   }
 ]
 
 const Collections = () => {
   let grid = 0;
 
+  // Colors for each card
+  const colors = ['purple', 'yellow', 'green', 'lightblue'];
+
+  // Calculate grid for each card
+  const calculateGrid = () => {
+    grid++;
+    if (grid === 13) {
+      grid = 1;
+    }
+    return grid;
+  };
+
   return (
-    <div className="">
+    <div className="px-3">
       <div className="flex flex-col items-center max-w-3xl mx-auto px-3">
         <h1 className="font-bold text-4xl">COLLECTIONS</h1>
         <Searchbar />
       </div>
-      
-      <div className="grid grid-cols-3 gap-4 w-full mt-16">
-        {
-          data.map((collection, index) => {
-            grid++;
-            if(grid == 11){
-              grid = 1
-            }
-            return(
-            <div className={`bg-gray-500 w-full bg-cover bg-no-repeat	bg-center
-              ${grid < 4 ? 'col-span-1 h-80' : ''}
-              ${grid == 4 ? 'col-span-2 h-80' : ''}
-              ${grid == 5 ? 'col-span-1 h-80' : ''}
-              ${grid == 6 ? 'col-span-1 h-80' : ''}
-              ${grid == 7 ? 'col-span-2 row-span-2' : ''}
-              ${grid == 8 ? 'col-span-1 h-80' : ''}
-              ${grid == 9 ? 'col-span-1 h-80' : ''}
-              ${grid == 10 ? 'col-span-2 h-80' : ''}
-            `}
-              style={{
-                backgroundImage: `url(${collection.image})`,
-              }}
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-6 w-full mt-16">
+        {data.map((collection, index) => {
+          const currentGrid = calculateGrid();
+
+          let gridClass = '';
+
+          // Set grid for each card
+          switch (currentGrid) {
+            case 5:
+              gridClass = 'col-span-1 sm:col-span-2 sm:row-span-2';
+              break;
+            case 7:
+              gridClass = 'col-span-1 sm:col-span-2 sm:row-span-2 xl:col-span-1 xl:row-span-1';
+              break;
+            case 11:
+              gridClass = 'col-span-1 sm:col-span-2 sm:row-span-2 xl:col-span-1 xl:row-span-1';
+              break;
+            case 12:
+              gridClass = 'col-span-1 xl:col-span-2 xl:row-span-2';
+              break;
+            default:
+            gridClass = 'col-span-1';
+            break;
+          }
+
+          return (
+            <div
+              key={index}
+              className={`w-full hover:z-10 ${gridClass}`}
             >
+              <CollectionCard image={collection.image} to="/" color={colors[index % 4]}>
+                {collection.title}
+              </CollectionCard>
             </div>
-          )})
-        }
+          );
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default Collections;
