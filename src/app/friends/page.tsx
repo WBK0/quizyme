@@ -43,7 +43,7 @@ const data = [
 const Friends = () => {
   return (
     <div className="flex flex-col items-center max-w-3xl mx-auto px-3">
-      <h1 className="font-bold text-4xl">FIND FRIENDS</h1>
+      <h1 className="font-bold text-4xl mb-14">FIND FRIENDS</h1>
       <Searchbar />
       <h2 className="font-black text-2xl w-full text-left mt-14 mb-2">You may know</h2>
       {

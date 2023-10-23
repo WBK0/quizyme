@@ -62,7 +62,7 @@ const Collections = () => {
   return (
     <div className="px-3">
       <div className="flex flex-col items-center max-w-3xl mx-auto px-3">
-        <h1 className="font-bold text-4xl">COLLECTIONS</h1>
+        <h1 className="font-bold text-4xl mb-14">COLLECTIONS</h1>
         <Searchbar />
       </div>
 
