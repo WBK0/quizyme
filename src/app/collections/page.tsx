@@ -96,7 +96,7 @@ const Collections = () => {
               key={index}
               className={`w-full hover:z-10 ${gridClass}`}
             >
-              <CollectionCard image={collection.image} to="/" color={colors[index % 4]}>
+              <CollectionCard image={collection.image} to="/search?cat=test" color={colors[index % 4]}>
                 {collection.title}
               </CollectionCard>
             </div>
