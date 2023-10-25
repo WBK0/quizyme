@@ -1,6 +1,7 @@
 import Searchbar from "@/components/Searchbar";
 import SelectButton from "@/components/SelectButton";
 import Collections from "./Collections";
+import SearchResults from "./SearchResults";
 
 const Search = ({searchParams} : { searchParams : { cat: string | null } }) => {
   return (
@@ -13,6 +14,7 @@ const Search = ({searchParams} : { searchParams : { cat: string | null } }) => {
         <SelectButton
           options={['quizzes', 'flashcards']}
         />
+        <SearchResults />
       </div>
     </div>
   )
