@@ -1,7 +1,20 @@
+"use client";
 import Searchbar from "@/components/Searchbar";
-import Link from "next/link";
+import React, { useState } from "react";
 
 const Search = () => {
+  const [type, setType] = useState<'quiz' | 'flashcard'>('quiz');
+
+  const handleClick = (e : React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLButtonElement;
+
+    if(target.outerText == 'QUIZZES'){
+      setType("quiz");
+    }else if(target.outerText == 'FLASHCARDS'){
+      setType("flashcard");
+    }
+  }
+
   return (
     <div className="px-3">
       <div className="mx-auto max-w-3xl">
@@ -14,16 +27,19 @@ const Search = () => {
             </svg>
           </span>
         </Link>
-        <div className="flex mt-12 bg-gradient-to-r from-green-gradient to-yellow-gradient py-1 px-1 rounded-full font-bold ">
-          <div className="flex-1 text-center">
-            <div className="bg-white mx-auto py-3 rounded-full">
-              <h2>QUIZZES</h2>
-            </div>  
-          </div>
-          <div className="flex-1 text-center">
-            <h2>FLASHCARDS</h2>
-          </div>
-        </div>
+        <div className="mt-12 bg-gradient-to-r from-green-gradient to-yellow-gradient rounded-full py-1 max-w-sm mx-auto">
+          <div className="px-1  font-bold relative">
+            <div className="relative flex">
+              <div className={`absolute bg-white mx-auto rounded-full w-1/2 h-full my-auto top-0 duration-300 ${type === 'quiz' ? 'left-0' : 'left-1/2'} `}></div> 
+                <button className="flex-1 text-center z-10 py-2" onClick={handleClick}>
+                  <h2>QUIZZES</h2>
+                </button>
+                <button className="flex-1 text-center z-10 py-2" onClick={handleClick}>
+                  <h2>FLASHCARDS</h2>
+                </button>
+              </div>
+            </div>
+         </div>
       </div>
     </div>
   )
