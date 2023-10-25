@@ -12,8 +12,6 @@ const Search = () => {
   
   const params = getParams();
 
-  changeParams('type', 'quizzes');
-
   const [localStorageType, setLocalStorageType] = useLocalStorage('search-type', 'quizzes');
 
   // Set the type in the URL when type is not set
@@ -23,14 +21,14 @@ const Search = () => {
     }else{
       changeParams('type', localStorageType);
     }
-  }, [params])
+  }, [params.type])
 
   return (
     <div className="px-3">
       <div className="mx-auto max-w-3xl">
         <Searchbar />
         <Collections 
-          selected={params.cat}
+          selected={params.category}
         />
         <SelectButton
           options={['quizzes', 'flashcards']}

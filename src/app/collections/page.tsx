@@ -87,8 +87,8 @@ const Collections = () => {
               gridClass = 'col-span-1 xl:col-span-2 xl:row-span-2';
               break;
             default:
-            gridClass = 'col-span-1';
-            break;
+              gridClass = 'col-span-1';
+              break;
           }
 
           return (
@@ -96,7 +96,7 @@ const Collections = () => {
               key={index}
               className={`w-full hover:z-10 ${gridClass}`}
             >
-              <CollectionCard image={collection.image} to="/search?cat=test" color={colors[index % 4]}>
+              <CollectionCard image={collection.image} to="/search?category=Testowa kategoria" color={colors[index % 4]}>
                 {collection.title}
               </CollectionCard>
             </div>

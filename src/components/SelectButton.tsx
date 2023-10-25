@@ -1,28 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import useUrlParams from "@/hooks/useUrlParams";
 
 const SelectButton = ({ options } : {options : string[]}) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [type, setType] = useState<string>(searchParams.get('type') || 'quizzes');
+  const { changeParams, getParams } = useUrlParams();
+  const params = getParams();
+  const [type, setType] = useState<string>(params.type || 'quizzes');
 
   const handleClick = (e : React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement; // Get information about button
 
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-    current.set("type", target.outerText.toLowerCase());
-
-    const search = current.toString();
-
-    router.push(`${pathname}?${search}`);
+    changeParams('type', target.innerText.toLowerCase());
   }
 
   useEffect(() => {
-    setType(searchParams.get('type') || 'quizzes')
-  }, [searchParams])
+    setType(params.type || 'quizzes')
+  }, [params])
 
   return (
     <div className={`mt-12 bg-gradient-to-r from-green-gradient to-yellow-gradient rounded-full py-1 ${options.length === 2 ? 'max-w-sm' : 'max-w-lg'} mx-auto`}>

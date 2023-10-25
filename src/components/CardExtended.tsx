@@ -12,7 +12,7 @@ type CardExtendedProps = {
 
 const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtendedProps) => {
   return (
-    <div className='flex flex-col sm:flex-row gap-8 mt-8'>
+    <div className='flex flex-col sm:flex-row gap-8 mt-12'>
       <Card
         image={image}
         to={to}
@@ -28,11 +28,11 @@ const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtended
           <h6 className='text-gray-300 mt-1 text-sm'>#cosmos #moon #universe #earth</h6>
         </div>
         <div>
-          <div className='flex items-center mt-3'>
+          <div className='flex items-center mt-6 sm:mt-3'>
             <span className='text-gray-300 font-semibold'>2 Days ago</span> 
             <div className='px-6 py-1 rounded-full text-white font-semibold ml-5' style={{backgroundColor: `var(--${color})`}}>1.6K plays</div>
           </div>
-          <div className='flex mt-3 sm:mt-4 gap-2'>
+          <div className='flex mt-4 gap-2'>
             <div className='flex-1'>
               <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-xs'>
                 REMOVE FROM WISHLIST
@@ -45,7 +45,6 @@ const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtended
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   )
