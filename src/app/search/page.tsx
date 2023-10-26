@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
 
 const Search = () => {
-  const { changeParams, getParams } = useUrlParams();
+  const { changeParams, getParams, deleteParams } = useUrlParams();
   
   const params = getParams();
 
@@ -29,6 +29,7 @@ const Search = () => {
         <Searchbar />
         <Collections 
           selected={params.category}
+          deleteParams={deleteParams}
         />
         <SelectButton
           options={['quizzes', 'flashcards']}

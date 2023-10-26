@@ -20,7 +20,13 @@ const useUrlParams = () => {
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  return {changeParams, getParams}
+  const deleteParams = (param: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.delete(param);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
+  return { changeParams, getParams, deleteParams }
 }
 
 export default useUrlParams;

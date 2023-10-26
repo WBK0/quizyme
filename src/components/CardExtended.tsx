@@ -22,7 +22,7 @@ const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtended
         authorId={authorId}
         hideText={true}
       />
-      <div className='flex-1 flex justify-between flex-col sm:py-3'>
+      <div className='flex-1 flex justify-between flex-col md:py-3'>
         <div>
           <h2 className='font-bold text-lg'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black'>{topic}</span></h2>
           <h6 className='text-gray-300 mt-1 text-sm'>#cosmos #moon #universe #earth</h6>
