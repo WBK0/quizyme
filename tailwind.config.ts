@@ -13,6 +13,11 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      boxShadow: {
+        'small': '3px 3px 0px 1px transparent',
+        'none': '0px 0px 0px 0px transparent',
+        'medium': '5px 5px 0px 1px transparent',
+      }
     },
     colors: {
       'purple': '#AD3AE6',

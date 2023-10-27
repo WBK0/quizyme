@@ -18,7 +18,7 @@ const Card = ({to, image, color, type, topic, authorId, hideText} : CardProps) =
   return (
     <Link href={to} className="flex-1">
       <div className="flex justify-center w-full hover:scale-105 duration-300 ">
-        <div className={`w-full aspect-video bg-no-repeat bg-center bg-cover rounded-xl rounded-tr-2xl relative`} style={{backgroundImage: `url(${image})`, boxShadow: `5px 5px 0px 1px var(--${color}) `}}>
+        <div className={`w-full aspect-video bg-no-repeat bg-center bg-cover rounded-xl rounded-tr-2xl relative `} style={{backgroundImage: `url(${image})`, boxShadow: `5px 5px 0px 1px var(--${color}) `}}>
           <div className="absolute left-4 bottom-4 text-white font-black flex flex-wrap items-center gap-2">
             <Image src={userPhoto} width={32} height={32} alt="User photo"/>
             <p>Bartłomiej</p>
