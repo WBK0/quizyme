@@ -20,7 +20,7 @@ const Collections = ({ selected, deleteParams } : {selected: string | null, dele
       {
         selected 
         ? 
-          <button className='bg-black ml-auto flex rounded-full text-white px-6 py-2 mt-3 font-bold border-b-4 border-r-4 border-white hover:border-red duration-300' onClick={handleDeleteParams}>
+          <button className='bg-black ml-auto flex rounded-full text-white px-6 py-2 mt-3 font-bold duration-300 shadow-small shadow-red hover:shadow-none' onClick={handleDeleteParams}>
             Reset category
           </button>
         : 

@@ -31,9 +31,11 @@ const Search = () => {
           selected={params.category}
           deleteParams={deleteParams}
         />
-        <SelectButton
-          options={['quizzes', 'flashcards']}
-        />
+        <div className="mt-12">
+          <SelectButton
+            options={['quizzes', 'flashcards']}
+          />
+        </div>
         <SearchResults />
       </div>
     </div>
