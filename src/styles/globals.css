@@ -20,3 +20,21 @@
 body{
   font-family: Onest;
 }
+
+.scroll-sm {
+  scrollbar-width: thin;
+  scrollbar-color: #f1f1f1;
+}
+
+.scroll-sm::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-sm::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 4px;
+}
+
+.scroll-sm::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}

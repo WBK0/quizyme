@@ -6,7 +6,8 @@ import User from "./User";
 import About from "./About";
 import Recommendations from "@/components/Recommendations";
 import Studies from "./Studies";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import FollowingModal from "./FollowingModal";
 
 const data = {
   firstname: 'Bartłomiej',
@@ -111,6 +112,12 @@ const data = {
 }
 
 const page = () => {
+  const [showModal, setShowModal] = useState<number>(0);
+
+  const handleCloseModal = () => {
+    setShowModal(0);
+  }
+
   const { getParams, changeParams } = useUrlParams();
   const params = getParams();
 
@@ -127,38 +134,53 @@ const page = () => {
         username={data.username}
       />
       <Stats 
-          stats={data.stats}
-        />
-        <SelectVariant />
-        {
-          (() => {
-            switch(params.type) {
-              case 'about me':
-                return <About 
-                  firstname={data.firstname} 
-                  description={data.description} 
-                  interests={data.interests}
-                />;
-              case 'quizzes':
-                return <Studies
-                  type={params.type}
-                  content={data.quizzes}
-                />;
-              case 'flashcards':
-                return <Studies
-                  type={params.type}
-                  content={data.flashcards}
-                />;
-              default:
-                return (
-                  <h1 className="font-extrabold text-center text-2xl">
-                    An unknown error occurred
-                  </h1>
-                );
-            }
-          })()
-        }
+        stats={data.stats}
+        setShowModal={setShowModal}
+      />
+      <SelectVariant />
+      {
+        (() => {
+          switch(params.type) {
+            case 'about me':
+              return <About 
+                firstname={data.firstname} 
+                description={data.description} 
+                interests={data.interests}
+              />;
+            case 'quizzes':
+              return <Studies
+                type={params.type}
+                content={data.quizzes}
+              />;
+            case 'flashcards':
+              return <Studies
+                type={params.type}
+                content={data.flashcards}
+              />;
+            default:
+              return (
+                <h1 className="font-extrabold text-center text-2xl mt-24">
+                  An unknown error occurred
+                </h1>
+              );
+          }
+        })()
+      }
       <Recommendations />
+      {
+        (() => {
+          switch(showModal) {
+            case 1:
+              return (
+                <FollowingModal 
+                  handleCloseModal={handleCloseModal}
+                />
+              )
+            default:
+              return null;
+          }
+        })()
+      }
     </div>
   )
 }
