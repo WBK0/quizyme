@@ -8,6 +8,7 @@ import Recommendations from "@/components/Recommendations";
 import Studies from "./Studies";
 import { useEffect, useState } from "react";
 import FollowingModal from "./FollowingModal";
+import StudiedModal from "./StudiedModal";
 
 const data = {
   firstname: 'Bartłomiej',
@@ -127,6 +128,20 @@ const page = () => {
     }
   }, [params.type])
 
+  const closeModalOnEscape = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleCloseModal();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', closeModalOnEscape);
+
+    return () => {
+      document.removeEventListener('keydown', closeModalOnEscape);
+    }
+  }, [])
+
   return (
     <div className="mx-auto px-3">
       <User 
@@ -172,8 +187,31 @@ const page = () => {
           switch(showModal) {
             case 1:
               return (
+                <StudiedModal 
+                  handleCloseModal={handleCloseModal}
+                  variant="quized"
+                />
+              )
+            case 2:
+              return (
+                <StudiedModal 
+                  handleCloseModal={handleCloseModal}
+                  variant="learned"
+                />
+              )
+            case 3:
+              return(
                 <FollowingModal 
                   handleCloseModal={handleCloseModal}
+                  variant="followers"
+                  
+                />
+              )
+            case 4:
+              return (
+                <FollowingModal 
+                  handleCloseModal={handleCloseModal}
+                  variant="following"
                 />
               )
             default:
