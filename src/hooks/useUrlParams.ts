@@ -14,9 +14,17 @@ const useUrlParams = () => {
     return paramsObj;
   }
 
-  const changeParams = (param: string, value: string) => {
+  const changeParam = (param: string, value: string) => {
     const params = new URLSearchParams(searchParams);
     params.set(param, value);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
+  const changeParams = (paramsObj: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams);
+    for (const [key, value] of Object.entries(paramsObj)) {
+      params.set(key, value);
+    }
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -26,7 +34,7 @@ const useUrlParams = () => {
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  return { changeParams, getParams, deleteParams }
+  return { changeParam, getParams, deleteParams, changeParams }
 }
 
 export default useUrlParams;

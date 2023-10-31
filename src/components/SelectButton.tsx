@@ -2,20 +2,20 @@
 import { useEffect, useState } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
 
-const SelectButton = ({ options } : {options : string[]}) => {
-  const { changeParams, getParams } = useUrlParams();
+const SelectButton = ({ options, paramsName } : {options : string[], paramsName?: string}) => {
+  const { changeParam, getParams } = useUrlParams();
   const params = getParams();
-  const [type, setType] = useState<string>(params.type || 'quizzes');
+  const [type, setType] = useState<string>(params[paramsName || 'type'] || 'quizzes');
 
   const handleClick = (e : React.MouseEvent<HTMLButtonElement>) => {
 
     const target = e.target as HTMLButtonElement; // Get information about button
 
-    changeParams('type', target.innerText.toLowerCase());
+    changeParam(paramsName || 'type', target.innerText.toLowerCase());
   }
 
   useEffect(() => {
-    setType(params.type || 'quizzes')
+    setType(params[paramsName || 'type'] || 'quizzes')
   }, [params])
 
   return (

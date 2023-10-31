@@ -6,7 +6,7 @@ type UserProps = {
   username: string;
 }
 
-const User = ({ fullname, username } : UserProps) => {
+const UserProfileCard = ({ fullname, username } : UserProps) => {
   return (
     <div className="flex flex-col items-center">
       <Image src={userPhoto} alt="user image" width={96} height={96} />
@@ -15,4 +15,4 @@ const User = ({ fullname, username } : UserProps) => {
     </div>
   )
 }
-export default User;
+export default UserProfileCard;

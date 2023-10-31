@@ -2,13 +2,13 @@
 import useUrlParams from "@/hooks/useUrlParams";
 import SelectVariant from "./SelectVariant";
 import Stats from "./Stats";
-import User from "./User";
 import About from "./About";
 import Recommendations from "@/components/Recommendations";
 import Studies from "./Studies";
 import { useEffect, useState } from "react";
 import FollowingModal from "./FollowingModal";
 import StudiedModal from "./StudiedModal";
+import UserProfileCard from "@/components/UserProfileCard";
 
 const data = {
   firstname: 'Bartłomiej',
@@ -119,12 +119,12 @@ const page = () => {
     setShowModal(0);
   }
 
-  const { getParams, changeParams } = useUrlParams();
+  const { getParams, changeParam } = useUrlParams();
   const params = getParams();
 
   useEffect(() => {
     if (!params.type) {
-      changeParams('type', 'about me');
+      changeParam('type', 'about me');
     }
   }, [params.type])
 
@@ -144,7 +144,7 @@ const page = () => {
 
   return (
     <div className="mx-auto px-3">
-      <User 
+      <UserProfileCard 
         fullname={data.firstname + " " + data.lastname}
         username={data.username}
       />

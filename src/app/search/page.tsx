@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
 
 const Search = () => {
-  const { changeParams, getParams, deleteParams } = useUrlParams();
+  const { changeParam, getParams, deleteParams } = useUrlParams();
   
   const params = getParams();
 
@@ -19,7 +19,7 @@ const Search = () => {
     if (params.type) {
       setLocalStorageType(params.type || 'quizzes');
     }else{
-      changeParams('type', localStorageType);
+      changeParam('type', localStorageType);
     }
   }, [params.type])
 
