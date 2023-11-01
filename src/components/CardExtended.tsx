@@ -8,9 +8,13 @@ type CardExtendedProps = {
   type: string;
   topic: string;
   authorId: string;
+  showDelete?: boolean;
+  invitedBy?: string;
+  scored?: number;
+  passed?: number;
 }
 
-const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, authorId, invitedBy, showDelete } : CardExtendedProps) => {
   return (
     <div className='flex flex-col sm:flex-row gap-8 mt-12'>
       <Card
@@ -22,9 +26,21 @@ const CardExtended = ({ to, image, color, type, topic, authorId } : CardExtended
         authorId={authorId}
         hideText={true}
       />
-      <div className='flex-1 flex justify-between flex-col md:py-3'>
+      <div className='flex-1 flex justify-between flex-col md:py-3 relative'>
+        {
+          showDelete && (
+            <button className='absolute right-0 font-black text-lg top-0'>
+              X
+            </button>
+          )
+        }
         <div>
-          <h2 className='font-bold text-lg'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black'>{topic}</span></h2>
+          {
+            invitedBy && (
+              <h6 className='font-semibold pb-2'>Invited by <span className='font-black' style={{color: `var(--${color})`}}>{invitedBy}</span></h6>
+            )
+          }
+          <h2 className='font-bold text-lg pr-6'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black '>{topic}</span></h2>
           <h6 className='text-gray-300 mt-1 text-sm'>#cosmos #moon #universe #earth</h6>
         </div>
         <div>
