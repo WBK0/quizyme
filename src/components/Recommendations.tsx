@@ -12,6 +12,7 @@ const Recommendations = () => {
             type="quiz"
             topic="Cosmos"
             authorId="1"
+            quantity={18}
           />
           <Card 
             image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
@@ -20,6 +21,7 @@ const Recommendations = () => {
             type="quiz"
             topic="Cosmos"
             authorId="1"
+            quantity={18}
           />
           <Card 
             image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
@@ -28,6 +30,7 @@ const Recommendations = () => {
             type="quiz"
             topic="Cosmos"
             authorId="1"
+            quantity={18}
           />
         </div>
     </div>

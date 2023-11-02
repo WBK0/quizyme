@@ -9,12 +9,13 @@ type CardProps = {
   type: string;
   topic: string;
   authorId: string;
-  hideText?: boolean
+  hideText?: boolean;
+  quantity: number;
 }
 
 {/* Temporarily, the data is fixed */}
 
-const Card = ({to, image, color, type, topic, authorId, hideText} : CardProps) => {
+const Card = ({to, image, color, type, topic, authorId, quantity, hideText} : CardProps) => {
   return (
     <Link href={to} className="flex-1">
       <div className="flex justify-center w-full hover:scale-105 duration-300 ">
@@ -24,7 +25,7 @@ const Card = ({to, image, color, type, topic, authorId, hideText} : CardProps) =
             <p>Bartłomiej</p>
           </div>
           <div className="absolute right-0 top-0 px-6 rounded-tr-xl rounded-bl-2xl text-white text-md font-bold py-0.5" style={{backgroundColor: `var(--${color})`}}>
-            18 {type == 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
+            {quantity} {type == 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
           </div>
         </div>
       </div>
