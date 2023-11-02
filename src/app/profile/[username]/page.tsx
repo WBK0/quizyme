@@ -28,42 +28,48 @@ const data = {
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "quiz",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
   ],
   flashcards: [
@@ -72,42 +78,48 @@ const data = {
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
       to: "/",
       type: "flashcards",
       topic: "Cosmos",
-      authorId: "1"
+      authorId: "1",
+      quantity: 18
     },
   ]
 }

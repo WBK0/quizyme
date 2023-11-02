@@ -79,7 +79,7 @@ const data = {
   ]
 }
 
-const Invitations = ({ type } : {type: 'quizzes' | 'flashcards'}) => {
+const Wishlist = ({ type } : {type : 'quizzes' | 'flashcards'}) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
 
   return (
@@ -94,8 +94,6 @@ const Invitations = ({ type } : {type: 'quizzes' | 'flashcards'}) => {
             type={card.type}
             topic={card.topic}
             authorId={card.authorId}
-            showDelete={true}
-            invitedBy={card.invitedBy}
             quantity={card.quantity}
           />
         ))
@@ -103,4 +101,4 @@ const Invitations = ({ type } : {type: 'quizzes' | 'flashcards'}) => {
     </div>
   )
 }
-export default Invitations;
+export default Wishlist;

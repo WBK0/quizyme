@@ -14,6 +14,7 @@ const TopFlashcards = () => {
           type="flashcards"
           topic="Cosmos"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg"
@@ -22,6 +23,7 @@ const TopFlashcards = () => {
           type="flashcards"
           topic="Forest"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2015/03/16/10/59/sunset-675847_1280.jpg"
@@ -30,6 +32,7 @@ const TopFlashcards = () => {
           type="flashcards"
           topic="Boats"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2015/12/07/10/24/go-kart-1080492_1280.jpg"
@@ -38,6 +41,7 @@ const TopFlashcards = () => {
           type="flashcards"
           topic="Karting"
           authorId="1"
+          quantity={18}
         />
       </div>
       <Link href="/" className="flex justify-center w-full mt-6">

@@ -11,6 +11,7 @@ const SearchResults = () => {
         type="quiz"
         topic="Cosmos"
         authorId="1"
+        quantity={18}
       />
       <CardExtended
         image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
@@ -19,6 +20,7 @@ const SearchResults = () => {
         type="quiz"
         topic="Cosmos"
         authorId="1"
+        quantity={18}
       />
       <CardExtended
         image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
@@ -27,6 +29,7 @@ const SearchResults = () => {
         type="quiz"
         topic="Cosmos"
         authorId="1"
+        quantity={18}
       />
       <CardExtended
         image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
@@ -35,6 +38,7 @@ const SearchResults = () => {
         type="quiz"
         topic="Cosmos"
         authorId="1"
+        quantity={18}
       />
       <h3 className='font-black text-xl text-center mt-24'>
         Sorry, we couldn't find any more quizzes matching your search results 

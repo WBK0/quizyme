@@ -9,7 +9,9 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      scored: 4534,
+      passed: 15
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -18,7 +20,9 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      scored: 4534,
+      passed: 15
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -27,7 +31,9 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      scored: 4534,
+      passed: 15
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -36,7 +42,9 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      scored: 4534,
+      passed: 15
     }
   ],
   flashcards: [
@@ -47,7 +55,8 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      status: 'Learned'
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -56,7 +65,8 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      status: 'Learning'
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -65,7 +75,8 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      status: 'Learning'
     },
     {
       image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
@@ -74,12 +85,13 @@ const data = {
       topic: "Cosmos",
       authorId: "1",
       invitedBy: "Adam Kowalski",
-      quantity: 18
+      quantity: 18,
+      status: 'Learning'
     }
   ]
 }
 
-const Invitations = ({ type } : {type: 'quizzes' | 'flashcards'}) => {
+const Results = ({ type } : { type: 'quizzes' | 'flashcards'}) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
 
   return (
@@ -94,13 +106,15 @@ const Invitations = ({ type } : {type: 'quizzes' | 'flashcards'}) => {
             type={card.type}
             topic={card.topic}
             authorId={card.authorId}
-            showDelete={true}
-            invitedBy={card.invitedBy}
             quantity={card.quantity}
+            passed={(card as any).passed}
+            scored={(card as any).scored}
+            status={(card as any).status}
           />
         ))
       }   
+      <h2 className="mt-24 text-center font-black text-xl">Sorry, we couldn't find any more {type} matching your search results </h2>
     </div>
   )
 }
-export default Invitations;
+export default Results;

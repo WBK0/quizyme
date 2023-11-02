@@ -4,6 +4,8 @@ import SelectVariants from "./SelectVariants";
 import useUrlParams from "@/hooks/useUrlParams";
 import Invitations from "./Invitations";
 import Searchbar from "@/components/Searchbar";
+import Wishlist from "./Wishlist";
+import Results from "./Results";
 
 const UserSpace = () => {
   const { getParams } = useUrlParams();
@@ -21,9 +23,25 @@ const UserSpace = () => {
         <Searchbar /> 
       </div>
       {
-        params.option === 'invitations' && (
-          <Invitations type={params.type} />
-        )
+        (() => {
+          console.log(params.option)
+          switch (params.option) {
+            case 'invitations':
+              return(
+                <Invitations type={params.type} />
+              )
+            case 'wishlist':
+              return(
+                <Wishlist type={params.type} />
+              )
+            case 'my results':
+              return(
+                <Results type={params.type} />
+              )
+            default:
+              return null;
+          }
+        })()
       }
     </div>
   )

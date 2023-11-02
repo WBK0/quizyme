@@ -14,6 +14,7 @@ const TopQuizzes = () => {
           type="quiz"
           topic="Cosmos"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2014/12/22/10/04/lions-577104_1280.jpg"
@@ -22,6 +23,7 @@ const TopQuizzes = () => {
           type="quiz"
           topic="Africa"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2016/11/29/02/05/audience-1866738_1280.jpg"
@@ -30,6 +32,7 @@ const TopQuizzes = () => {
           type="quiz"
           topic="Football"
           authorId="1"
+          quantity={18}
         />
         <Card 
           image="https://cdn.pixabay.com/photo/2016/04/07/06/53/bmw-1313343_640.jpg"
@@ -38,6 +41,7 @@ const TopQuizzes = () => {
           type="quiz"
           topic="Motorcycles"
           authorId="1"
+          quantity={18}
         />
       </div>
       <Link href="/" className="flex justify-center w-full mt-6">

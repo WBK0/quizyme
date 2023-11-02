@@ -12,42 +12,48 @@ const data = [
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   },
   {
     image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   },
   {
     image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   },
   {
     image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   },
   {
     image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   },
   {
     image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
     to: "/",
     type: "quiz",
     topic: "Cosmos",
-    authorId: "1"
+    authorId: "1",
+    quantity: 18
   }
 ]
 
@@ -76,6 +82,7 @@ const StudiedModal = ({ handleCloseModal, variant} : StudiedModalProps) => {
                     type={user.type}
                     topic={user.topic}
                     authorId={user.authorId}
+                    quantity={user.quantity}
                   />
                 ))
               }   

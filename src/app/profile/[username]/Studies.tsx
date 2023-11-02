@@ -8,6 +8,7 @@ type StudiesProps = {
     type: string;
     topic: string;
     authorId: string;
+    quantity: number;
   }[];
 }
 
@@ -30,6 +31,7 @@ const Studies = ({ type, content } : StudiesProps) => {
                   type={value.type}
                   topic={value.topic}
                   authorId={value.authorId}
+                  quantity={value.quantity}
                 />
               ))}
             </div>
@@ -44,4 +46,4 @@ const Studies = ({ type, content } : StudiesProps) => {
     </div>
   )
 }
-export default Studies
+export default Studies;
