@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import '../styles/globals.css';
+import '@/styles/globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
-import { SessionProvider } from 'next-auth/react';
 import UserProvider from '@/providers/UserProvider';
 
 export const metadata: Metadata = {
