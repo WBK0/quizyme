@@ -38,3 +38,12 @@ body{
 .scroll-sm::-webkit-scrollbar-track {
   background-color: #f1f1f1;
 }
+
+/*
+  Change toastify styles
+*/
+
+.Toastify__toast {
+  border-radius: 16px; 
+  min-height: 60px;
+}
