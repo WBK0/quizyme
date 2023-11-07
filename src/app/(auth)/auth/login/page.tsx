@@ -3,6 +3,7 @@ import logo from '@/public/logo.svg';
 import google from '@/public/google.svg';
 import github from '@/public/github.svg';
 import Link from "next/link";
+import Form from "./Form";
 
 const Login = () => {
   return (
@@ -26,23 +27,7 @@ const Login = () => {
         </button>
       </div>
       <h2 className="text-center font-black my-2">OR</h2>
-      <div className="flex flex-col gap-5">
-        <input 
-          type="text"
-          placeholder="Email"
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-lightblue"
-        />
-        <input 
-          type="password"
-          placeholder="Password"
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-lightblue"
-        />
-        <button
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
-        >
-          Login
-        </button>
-      </div>
+      <Form />
       <Link 
         href="/auth/register"
         className="text-center font-bold text-sm text-gray-500 hover:text-black"
