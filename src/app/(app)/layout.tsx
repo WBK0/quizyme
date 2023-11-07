@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import UserProvider from '@/providers/UserProvider';
+import ToastProvider from '@/providers/ToastProvider';
 
 export const metadata: Metadata = {
   title: 'QuizyMe',
@@ -18,11 +19,13 @@ export default function RootLayout({
     <html lang="en">
       <UserProvider>
         <body>
-          <Navbar />
-          <div className='container mx-auto pt-28 min-h-screen'>
-            {children}
-          </div>
-          <Footer />
+          <ToastProvider>
+            <Navbar />
+            <div className='container mx-auto pt-28 min-h-screen'>
+              {children}
+            </div>
+            <Footer />
+          </ToastProvider>
         </body>
       </UserProvider>
     </html>
