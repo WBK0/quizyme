@@ -5,6 +5,7 @@ import * as yup from "yup";
 import AuthInput from "@/components/Auth/AuthInput";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 const schema = yup.object({
   email: yup.string()
@@ -27,7 +28,8 @@ type FormData = {
 };
 
 const Form = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
+
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
@@ -58,6 +60,9 @@ const Form = () => {
           pending: 'Sending form...',
           success: 'User created successfully!',
           error: 'User already exists!'
+        },
+        {
+          hideProgressBar: true,
         }
       )
 
@@ -91,9 +96,8 @@ const Form = () => {
       />
       <button
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
-        disabled={isSubmitting}
       >
-        {isSubmitting ? 'Loading...' : 'Register'}
+        Register
       </button>
     </form>
   )

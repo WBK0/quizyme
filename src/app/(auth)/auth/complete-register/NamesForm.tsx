@@ -6,13 +6,15 @@ import * as yup from "yup";
 
 const schema = yup.object({
   firstname: yup.string()
-    .email('Invalid email format')
-    .required('Email is required'),
+    .min(2, 'Firstname must be at least 2 characters')
+    .max(20, 'Firstname must be at most 20 characters')
+    .matches(/^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$/, 'Firstname must contain only letters')
+    .required('Firstname is required'),
   lastname: yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(24, 'Password must not exceed 24 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number')
-    .required('Password is required'),
+    .min(2, 'Lastname must be at least 2 characters')
+    .max(20, 'Lastname must be at most 20 characters')
+    .matches(/^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]+$/, 'Lastname must contain only letters')
+    .required('Lastname is required'),
 }).required('Please fill in all required fields');
 
 type FormData = {
@@ -20,16 +22,16 @@ type FormData = {
   lastname: string;
 };
 
-const NamesForm = () => {
+const NamesForm = ({ nextStep } : { nextStep: () => void}) => {
   
   const onSubmit = () => {
-
+    nextStep();
   }
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-5 max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
       <AuthInput 
         name="firstname"
         placeholder="Firstname"
@@ -45,9 +47,9 @@ const NamesForm = () => {
         error={errors.lastname?.message}
       />
       <button
-      className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
+        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
       >
-      Next step
+        Next step
       </button>
     </form>
   )
