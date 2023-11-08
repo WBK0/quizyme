@@ -49,6 +49,9 @@ const Form = () => {
           pending: 'Sending form...',
           success: 'User logged in successfully',
           error: 'Email or password is incorrect'
+        },
+        {
+          hideProgressBar: true,
         }
       )
     } catch (error) {
