@@ -43,11 +43,18 @@ const AboutForm = ({ nextStep } : { nextStep: () => void}) => {
         </div>
       </div>
       
-      <button
-        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
-      >
-        Next step
-      </button>
+      <div>
+        <button
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
+        >
+          Next step
+        </button>
+        <button
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+        >
+          Previous step
+        </button>
+      </div>
     </form>
   )
 }

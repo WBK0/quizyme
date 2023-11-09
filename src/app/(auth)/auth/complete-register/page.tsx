@@ -16,7 +16,7 @@ const CompleteRegister = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto flex h-screen flex-col justify-center px-3 gap-4 relative">
+    <div className="max-w-lg mx-auto flex min-h-screen flex-col justify-center px-3 gap-4 relative py-16">
       <div className='absolute top-6 w-full left-0'>
         <div className='w-2/3 max-w-sm md:w-full bg-gray-300 h-4 mx-auto rounded-full relative'>
           <div className={`absolute left-0 h-4 bg-green rounded-xl duration-500`  } style={{width: `${((step + 1) * 100) / 4}%`}}>
@@ -26,7 +26,7 @@ const CompleteRegister = () => {
       <Image src={logo} width={150} height={150} alt="logo"
         className="mx-auto mb-4"
       />
-      <h1 className="font-black text-4xl text-center">Complete profile</h1>
+      <h1 className="font-black text-4xl text-center">Select interests</h1>
       <div className='mt-6'>
         {
           (() => {
