@@ -6,12 +6,32 @@ import NamesForm from './NamesForm';
 import UsernameForm from './UsernameForm';
 import AboutForm from './AboutForm';
 import InterestForm from './InterestForm';
+import ImageForm from './ImageForm';
 
+type FormData = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  bio?: string;
+  interests?: string;
+  image?: File;
+};
 
 const CompleteRegister = () => {
   const [step, setStep] = useState<number>(0);
+  const [formData, setFormData] = useState<FormData | null>({
+    firstname: '',
+    lastname: '',
+    username: '',
+    bio: '',
+    interests: '',
+    image: undefined
+  });
 
-  const nextStep = () => {
+  console.log(formData);  
+
+  const nextStep = (data : Partial<FormData>) => {
+    setFormData({...formData, ...data} as FormData);
     setStep(step + 1);
   }
 
@@ -19,7 +39,7 @@ const CompleteRegister = () => {
     <div className="max-w-lg mx-auto flex min-h-screen flex-col justify-center px-3 gap-4 relative py-16">
       <div className='absolute top-6 w-full left-0'>
         <div className='w-2/3 max-w-sm md:w-full bg-gray-300 h-4 mx-auto rounded-full relative'>
-          <div className={`absolute left-0 h-4 bg-green rounded-xl duration-500`  } style={{width: `${((step + 1) * 100) / 4}%`}}>
+          <div className={`absolute left-0 h-4 bg-green rounded-xl duration-500`} style={{width: `${((step + 1) * 100) / 5}%`}}>
           </div>
         </div>
       </div>
@@ -45,11 +65,17 @@ const CompleteRegister = () => {
                 )
               case 2:
                 return(
+                  <ImageForm
+                    nextStep={nextStep}
+                  />
+                )
+              case 3:
+                return(
                   <AboutForm
                     nextStep={nextStep}
                   />
                 )
-              case 3: 
+              case 4: 
                 return(
                   <InterestForm
                     nextStep={nextStep}
@@ -62,9 +88,7 @@ const CompleteRegister = () => {
               }
           })()
         }
-        
       </div>
-      
     </div>
   )
 }

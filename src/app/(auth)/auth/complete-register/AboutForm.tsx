@@ -14,10 +14,12 @@ type FormData = {
   bio?: string;
 };
 
-const AboutForm = ({ nextStep } : { nextStep: () => void}) => {
+const AboutForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
   
-  const onSubmit = () => {
-    nextStep();
+  const onSubmit = (data: FormData) => {
+    nextStep({
+      bio: data.bio
+    });
   }
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });

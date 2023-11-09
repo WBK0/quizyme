@@ -15,11 +15,13 @@ type FormData = {
   username: string;
 };
 
-const UsernameForm = ({ nextStep } : { nextStep: () => void }) => {
+const UsernameForm = ({ nextStep } : { nextStep: (data : {}) => void }) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
   
-  const onSubmit = () => {
-    nextStep();
+  const onSubmit = (data : FormData) => {
+    nextStep({
+      username: data.username.replace(/ /g, '_')
+    });
   }
 
   return (

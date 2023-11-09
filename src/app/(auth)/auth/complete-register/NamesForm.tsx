@@ -22,10 +22,13 @@ type FormData = {
   lastname: string;
 };
 
-const NamesForm = ({ nextStep } : { nextStep: () => void}) => {
+const NamesForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
   
-  const onSubmit = () => {
-    nextStep();
+  const onSubmit = (data : FormData) => {
+    nextStep({
+      firstname: data.firstname,
+      lastname: data.lastname
+    });
   }
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
