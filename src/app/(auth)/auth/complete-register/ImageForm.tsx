@@ -16,21 +16,21 @@ const schema = yup.object({
 }).required('Please fill in all required fields');
 
 type FormData = {
-  image?: File;
+  image?: File[];
   [key: string]: any;
 };
 
 const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => void, previousStep: () => void, value: File }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(value);
+  const [selectedImage, setSelectedImage] = useState<File | null>(value || null);
 
   const onSubmit = (data: FormData) => {
     nextStep({
-      image: data.image[0] || defaultPicture
+      image: data.image?.[0] ?? null
     });
   }
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) as Resolver });
-
+  
   useEffect(() => {
     toast.error(errors.image?.message);
   }, [errors])
@@ -54,14 +54,20 @@ const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => 
           <div className='w-full h-full bg-black/0 hover:bg-black/75 duration-300 absolute rounded-full group'>
             <Image src={brush} width={32} height={32} alt="brush" className="mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white w-0 h-0 group-hover:w-12 group-hover:h-12 duration-300" />
           </div>
-          <Image src={selectedImage && URL.createObjectURL(selectedImage) || defaultPicture} width={128} height={128} alt="profile" className="rounded-full mx-auto w-32 h-32" />
+          <Image
+            src={selectedImage ? URL.createObjectURL(selectedImage) : defaultPicture}
+            width={128}
+            height={128}
+            alt="profile"
+            className="rounded-full mx-auto w-32 h-32"
+          />          
           <input
             id="dropzone-file"
             type="file"
             className="hidden"
             accept='image/*'
             {...register('image')}
-            
+          
           />
         </label>
       </div>

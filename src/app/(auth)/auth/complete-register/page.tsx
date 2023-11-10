@@ -8,12 +8,12 @@ import AboutForm from './AboutForm';
 import InterestForm from './InterestForm';
 import ImageForm from './ImageForm';
 
-type FormData = {
+export type FormData = {
   firstname: string;
   lastname: string;
   username: string;
-  bio?: string;
-  interests?: string;
+  bio: string;
+  interests: string[];
   image?: any;
 };
 
@@ -24,7 +24,7 @@ const CompleteRegister = () => {
     lastname: '',
     username: '',
     bio: '',
-    interests: '',
+    interests: [],
     image: null
   });
 
@@ -83,6 +83,7 @@ const CompleteRegister = () => {
                   <AboutForm
                     nextStep={nextStep}
                     previousStep={previousStep}
+                    value={formData.bio}
                   />
                 )
               case 4: 
@@ -90,6 +91,7 @@ const CompleteRegister = () => {
                   <InterestForm
                     nextStep={nextStep}
                     previousStep={previousStep}
+                    values={formData}
                   />
                 )
               default:

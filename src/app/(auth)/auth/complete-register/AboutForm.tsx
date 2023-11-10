@@ -14,9 +14,10 @@ type FormData = {
   bio?: string;
 };
 
-const AboutForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
+const AboutForm = ({ nextStep, previousStep, value } : { nextStep: (data: {}) => void, previousStep: (data: {}) => void, value: string}) => {
   
   const onSubmit = (data: FormData) => {
+    console.log(data.bio)
     nextStep({
       bio: data.bio
     });
@@ -32,6 +33,7 @@ const AboutForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
           placeholder="Tell something about yourself..."
           {...register("bio")}
           rows={6}
+          defaultValue={value}
         />
         <div className="group">
           {errors.bio?.message && 
@@ -53,6 +55,7 @@ const AboutForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+          onClick={previousStep}
         >
           Previous step
         </button>
