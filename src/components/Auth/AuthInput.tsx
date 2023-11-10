@@ -10,9 +10,10 @@ interface AuthInputProps {
   error?: string;
   placeholder: string;
   type: string;
+  defaultValue?: string;
 }
 
-const AuthInput = ({ register, name, error, placeholder, type} : AuthInputProps) => {
+const AuthInput = ({ register, name, error, placeholder, type, defaultValue } : AuthInputProps) => {
   const [dynamicType, setDynamicType] = useState(type);
 
   const handleChangeType = () => {
@@ -28,6 +29,7 @@ const AuthInput = ({ register, name, error, placeholder, type} : AuthInputProps)
       <input 
         type={dynamicType}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         {...register(name)}
         className={`w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-black ${error && 'ring-2 ring-red'}`}
       >

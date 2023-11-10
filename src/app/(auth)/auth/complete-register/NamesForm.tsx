@@ -22,7 +22,7 @@ type FormData = {
   lastname: string;
 };
 
-const NamesForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
+const NamesForm = ({ nextStep, values } : { nextStep: (data: {}) => void, values: { firstname: string, lastname: string }}) => {
   
   const onSubmit = (data : FormData) => {
     nextStep({
@@ -41,6 +41,7 @@ const NamesForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
         type="text"
         register={register}
         error={errors.firstname?.message}
+        defaultValue={values.firstname}
       />
       <AuthInput 
         name="lastname"
@@ -48,6 +49,7 @@ const NamesForm = ({ nextStep } : { nextStep: (data: {}) => void}) => {
         type="text"
         register={register}
         error={errors.lastname?.message}
+        defaultValue={values.lastname}
       />
       <button
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"

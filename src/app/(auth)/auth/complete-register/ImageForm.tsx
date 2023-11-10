@@ -20,12 +20,12 @@ type FormData = {
   [key: string]: any;
 };
 
-const ImageForm = ({ nextStep }: { nextStep: (data: {}) => void }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => void, previousStep: () => void, value: File }) => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(value);
 
   const onSubmit = (data: FormData) => {
     nextStep({
-      image: data.image[0]
+      image: data.image[0] || defaultPicture
     });
   }
 
@@ -36,7 +36,8 @@ const ImageForm = ({ nextStep }: { nextStep: (data: {}) => void }) => {
   }, [errors])
 
   useEffect(() => {
-    let file = watch('image') as File[] | undefined;
+    let file = watch('image') as File[];
+    console.log(file[0]);
 
     if (file && file[0]) {
       setSelectedImage(file[0]);
@@ -59,7 +60,6 @@ const ImageForm = ({ nextStep }: { nextStep: (data: {}) => void }) => {
             type="file"
             className="hidden"
             accept='image/*'
-           
             {...register('image')}
             
           />
@@ -88,6 +88,7 @@ const ImageForm = ({ nextStep }: { nextStep: (data: {}) => void }) => {
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+          onClick={previousStep}
         >
           Previous step
         </button>

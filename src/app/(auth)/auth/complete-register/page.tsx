@@ -14,18 +14,18 @@ type FormData = {
   username: string;
   bio?: string;
   interests?: string;
-  image?: File;
+  image?: any;
 };
 
 const CompleteRegister = () => {
   const [step, setStep] = useState<number>(0);
-  const [formData, setFormData] = useState<FormData | null>({
+  const [formData, setFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
     username: '',
     bio: '',
     interests: '',
-    image: undefined
+    image: null
   });
 
   console.log(formData);  
@@ -33,6 +33,10 @@ const CompleteRegister = () => {
   const nextStep = (data : Partial<FormData>) => {
     setFormData({...formData, ...data} as FormData);
     setStep(step + 1);
+  }
+
+  const previousStep = () => {
+    setStep(step - 1);
   }
 
   return (
@@ -55,34 +59,41 @@ const CompleteRegister = () => {
                 return(
                   <NamesForm 
                     nextStep={nextStep}
+                    values={{firstname: formData.firstname, lastname: formData.lastname}}
                   />                
                 )
               case 1: 
                 return(
                   <UsernameForm 
                     nextStep={nextStep}
+                    previousStep={previousStep}
+                    value={formData.username}
                   />
                 )
               case 2:
                 return(
                   <ImageForm
                     nextStep={nextStep}
+                    previousStep={previousStep}
+                    value={formData.image}
                   />
                 )
               case 3:
                 return(
                   <AboutForm
                     nextStep={nextStep}
+                    previousStep={previousStep}
                   />
                 )
               case 4: 
                 return(
                   <InterestForm
                     nextStep={nextStep}
+                    previousStep={previousStep}
                   />
                 )
               default:
-                return(
+                return (
                   null
                 )  
               }

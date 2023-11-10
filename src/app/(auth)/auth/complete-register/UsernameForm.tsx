@@ -15,7 +15,7 @@ type FormData = {
   username: string;
 };
 
-const UsernameForm = ({ nextStep } : { nextStep: (data : {}) => void }) => {
+const UsernameForm = ({ nextStep, previousStep, value } : { nextStep: (data : {}) => void, previousStep: () => void, value : string }) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
   
   const onSubmit = (data : FormData) => {
@@ -33,6 +33,7 @@ const UsernameForm = ({ nextStep } : { nextStep: (data : {}) => void }) => {
         name="username"
         placeholder="Username"
         type="text"
+        defaultValue={value}
         register={register}
         error={errors.username?.message}
       />
@@ -44,6 +45,7 @@ const UsernameForm = ({ nextStep } : { nextStep: (data : {}) => void }) => {
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+          onClick={previousStep}
         >
           Previous step
         </button>
