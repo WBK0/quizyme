@@ -28,8 +28,6 @@ const CompleteRegister = () => {
     image: null
   });
 
-  console.log(formData);  
-
   const nextStep = (data : Partial<FormData>) => {
     setFormData({...formData, ...data} as FormData);
     setStep(step + 1);
@@ -50,7 +48,21 @@ const CompleteRegister = () => {
       <Image src={logo} width={150} height={150} alt="logo"
         className="mx-auto mb-4"
       />
-      <h1 className="font-black text-4xl text-center">Select interests</h1>
+      <h1 className="font-black text-4xl text-center">
+        {
+          step === 0
+          ? 'Add your name'
+          : step === 1
+          ? 'Add your username'
+          : step === 2
+          ? 'Add your profile image'
+          : step === 3
+          ? 'Add your bio'
+          : step === 4
+          ? 'Add your interests'
+          : 'Complete Register'
+        }
+      </h1>
       <div className='mt-6'>
         {
           (() => {

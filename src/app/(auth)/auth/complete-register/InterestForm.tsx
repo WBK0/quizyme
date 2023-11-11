@@ -2,6 +2,7 @@ import Searchbar from "@/components/Searchbar";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormData } from './page';
+import submitCompleteRegisterForm from "./submitForm";
 
 const interests = ['✈️ Traveling', '🏎️ Racing', '⚽ Sports', '📘 Study', '🛠️ Crafts', '🖥️ IT', '✈️ Traveling1', '🏎️ Racing1', '⚽ Sports1', '📘 Study1', '🛠️ Crafts1', '🖥️ IT1', '✈️ Traveling2', '🏎️ Racing2', '⚽ Sports2', '📘 Study2', '🛠️ Crafts2', '🖥️ IT2', '✈️ Traveling3', '🏎️ Racing3', '⚽ Sports3', '📘 Study3', '🛠️ Crafts3', '🖥️ IT3', '✈️ Traveling4', '🏎️ Racing4', '⚽ Sports4', '📘 Study4', '🛠️ Crafts4', '🖥️ IT4', '✈️ Traveling5', '🏎️ Racing5', '⚽ Sports5', '📘 Study5', '🛠️ Crafts5', '🖥️ IT5'];
 
@@ -11,7 +12,7 @@ const InterestForm = ({ nextStep, previousStep, values } : { nextStep: (data: {}
   const handleSubmit = (e : React.FormEvent) => {
     e.preventDefault();
     values = {...values, interests: selectedInterests};
-    console.log(values)
+    submitCompleteRegisterForm(values);
   }
 
   const handleAddInterest = (interest: string) => {
