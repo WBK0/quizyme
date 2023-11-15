@@ -39,11 +39,11 @@ export const authOptions : AuthOptions = {
         if (!user || !(await compare(credentials.password, user.password))) {
           return null;
         }
-        
+
         return {
           email: user.email,
           id: user.id,
-          isComplete: user.isRegisterComplete,
+          isComplete: user.isComplete,
         };
       },
     }),
@@ -55,7 +55,6 @@ export const authOptions : AuthOptions = {
   callbacks: {
     async signIn({ user, account } : { user: any, account: any }) {        
       try {
-        console.log(user, account)
         const accountData = await prisma.account.findFirst({
           where: {
             user: {
@@ -82,7 +81,7 @@ export const authOptions : AuthOptions = {
         },
       };
     },
-    jwt: async ({ token, user, trigger }) => {
+    jwt: async ({ token, user, trigger } ) => {
       if(trigger === 'update'){
         const dbUser = await prisma.user.findUnique({
           where: {
@@ -92,14 +91,15 @@ export const authOptions : AuthOptions = {
 
         return{
           ...token,
-          isComplete: dbUser?.isRegisterComplete
+          isComplete: dbUser?.isComplete
         }
       }
+
       if (user) {
         return {
           ...token,
           id: user.id,
-          isComplete: user.isComplete
+          isComplete: token.isComplete
         };
       }
       

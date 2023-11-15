@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import logo from '@/public/logo.svg';
 import NamesForm from './NamesForm';
@@ -22,6 +22,8 @@ export type FormData = {
 const CompleteRegister = () => {
   const { data, status } = useSession();
   const router = useRouter();
+
+  console.log(data);
 
   if(status === 'unauthenticated'){
     router.push('/auth/login');

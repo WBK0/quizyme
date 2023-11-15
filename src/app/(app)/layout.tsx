@@ -21,7 +21,7 @@ export default async function RootLayout ({
 
   const session = await getServerSession(authOptions);
 
-  if(!session?.user.isComplete){
+  if(session && !session?.user.isComplete){
     redirect('/auth/complete-register')
   }
 

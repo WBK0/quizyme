@@ -55,7 +55,7 @@ export const POST = async (req: Request) => {
     }
   });
 
-  if(!user || user.isRegisterComplete) {
+  if(!user || user.isComplete) {
     return new Response(
       JSON.stringify({
         status: "error",
@@ -112,7 +112,7 @@ export const POST = async (req: Request) => {
       image: image,
       bio: typeof bio === 'string' ? bio : null,
       interests: interests,
-      isRegisterComplete: true
+      isComplete: true
     }
   });
 

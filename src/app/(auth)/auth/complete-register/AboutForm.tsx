@@ -17,7 +17,6 @@ type FormData = {
 const AboutForm = ({ nextStep, previousStep, value } : { nextStep: (data: {}) => void, previousStep: (data: {}) => void, value: string}) => {
   
   const onSubmit = (data: FormData) => {
-    console.log(data.bio)
     nextStep({
       bio: data.bio
     });
