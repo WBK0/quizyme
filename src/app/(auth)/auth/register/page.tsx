@@ -2,10 +2,17 @@ import Image from "next/image";
 import logo from '@/public/logo.svg';
 import Link from "next/link";
 import Form from "./Form";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
-const Register = () => {
+const Register = async () => {
+  const session = await getServerSession(authOptions);
 
+  if(session?.user){
+    redirect('/');
+  }
 
   return (
     <div className="max-w-sm mx-auto flex h-screen flex-col justify-center px-3 gap-4">

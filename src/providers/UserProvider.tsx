@@ -7,10 +7,12 @@ interface ProviderProps {
   session?: Session;
 }
 
-const UserProvider = ({ children, session } : ProviderProps) => (
-  <SessionProvider session={session}>
-    {children}
-  </SessionProvider>
-)
+const UserProvider = ({ children, session } : ProviderProps) => {
+  return(
+    <SessionProvider session={session}>
+      {children}
+    </SessionProvider>
+  )
+}
 
 export default UserProvider;

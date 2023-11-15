@@ -4,8 +4,17 @@ import google from '@/public/google.svg';
 import github from '@/public/github.svg';
 import Link from "next/link";
 import Form from "./Form";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-const Login = () => {
+const Login = async () => {
+  const session = await getServerSession(authOptions);
+
+  if(session?.user){
+    redirect('/');
+  }
+
   return (
     <div className="max-w-sm mx-auto flex h-screen flex-col justify-center px-3 gap-4">
       <Image src={logo} width={150} height={150} alt="logo"

@@ -7,6 +7,8 @@ import UsernameForm from './UsernameForm';
 import AboutForm from './AboutForm';
 import InterestForm from './InterestForm';
 import ImageForm from './ImageForm';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export type FormData = {
   firstname: string;
@@ -18,6 +20,15 @@ export type FormData = {
 };
 
 const CompleteRegister = () => {
+  const { data, status } = useSession();
+  const router = useRouter();
+
+  if(status === 'unauthenticated'){
+    router.push('/auth/login');
+  }else if(data?.user.isComplete){
+    router.push('/');
+  }
+
   const [step, setStep] = useState<number>(0);
   const [formData, setFormData] = useState<FormData>({
     firstname: '',
