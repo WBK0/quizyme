@@ -86,7 +86,7 @@ export const authOptions : AuthOptions = {
       if(trigger === 'update'){
         const dbUser = await prisma.user.findUnique({
           where: {
-            id: token.id
+            id: token.id as string
           }
         });
 

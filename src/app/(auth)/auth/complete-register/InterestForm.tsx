@@ -3,16 +3,21 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormData } from './page';
 import submitCompleteRegisterForm from "./submitForm";
+import { useRouter } from 'next/navigation';
 
 const interests = ['✈️ Traveling', '🏎️ Racing', '⚽ Sports', '📘 Study', '🛠️ Crafts', '🖥️ IT', '✈️ Traveling1', '🏎️ Racing1', '⚽ Sports1', '📘 Study1', '🛠️ Crafts1', '🖥️ IT1', '✈️ Traveling2', '🏎️ Racing2', '⚽ Sports2', '📘 Study2', '🛠️ Crafts2', '🖥️ IT2', '✈️ Traveling3', '🏎️ Racing3', '⚽ Sports3', '📘 Study3', '🛠️ Crafts3', '🖥️ IT3', '✈️ Traveling4', '🏎️ Racing4', '⚽ Sports4', '📘 Study4', '🛠️ Crafts4', '🖥️ IT4', '✈️ Traveling5', '🏎️ Racing5', '⚽ Sports5', '📘 Study5', '🛠️ Crafts5', '🖥️ IT5'];
 
 const InterestForm = ({ nextStep, previousStep, values } : { nextStep: (data: {}) => void, previousStep: () => void, values: FormData}) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const router = useRouter()
 
-  const handleSubmit = (e : React.FormEvent) => {
+  const handleSubmit = async (e : React.FormEvent) => {
     e.preventDefault();
     values = {...values, interests: selectedInterests};
-    submitCompleteRegisterForm(values);
+    const submittedForm = await submitCompleteRegisterForm(values);
+    if(submittedForm){
+      router.push('/auth/complete-register/callback');
+    }
   }
 
   const handleAddInterest = (interest: string) => {

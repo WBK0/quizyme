@@ -16,15 +16,13 @@ const submitCompleteRegisterForm = async (values: any) => {
     const json = await res.json();
 
     if (json.status === "error") {
-      // setErrors({ email: json.message });
-    } else {
-      // router.push("/dashboard");
+      throw new Error('Unknown error')
     }
-    console.log(json)
+
+    return true;
   } catch (error) {
     console.log(error);
-  } finally {
-    // setSubmitting(false);
+    return false;
   }
 }
 

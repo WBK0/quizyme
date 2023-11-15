@@ -112,13 +112,11 @@ export const POST = async (req: Request) => {
       image: image,
       bio: typeof bio === 'string' ? bio : null,
       interests: interests,
-      // isRegisterComplete: true
+      isRegisterComplete: true
     }
   });
 
   console.log(session.user.isComplete)
-
-  // session.user.isComplete = true;
 
   console.log(session.user.isComplete)
 
