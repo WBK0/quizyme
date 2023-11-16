@@ -40,6 +40,8 @@ export const authOptions : AuthOptions = {
           return null;
         }
 
+        console.log('login', user)
+
         return {
           email: user.email,
           id: user.id,
@@ -72,6 +74,8 @@ export const authOptions : AuthOptions = {
       }
     },
     session: ({ session, token }) => {
+      console.log('session', session, token)
+
       return {
         ...session,
         user: {
@@ -82,6 +86,8 @@ export const authOptions : AuthOptions = {
       };
     },
     jwt: async ({ token, user, trigger } ) => {
+      // console.log('jwt', token, user, trigger)
+
       if(trigger === 'update'){
         const dbUser = await prisma.user.findUnique({
           where: {
@@ -99,7 +105,7 @@ export const authOptions : AuthOptions = {
         return {
           ...token,
           id: user.id,
-          isComplete: token.isComplete
+          isComplete: user.isComplete
         };
       }
       

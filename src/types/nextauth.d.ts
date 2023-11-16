@@ -9,7 +9,7 @@ declare module "next-auth" {
     } & DefaultSession["user"]
   }
 
-  interface Adapter{
-    isComplate: boolean;
+  interface User {
+    isComplete?: boolean,
   }
 }
