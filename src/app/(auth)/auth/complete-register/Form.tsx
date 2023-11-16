@@ -1,6 +1,5 @@
 "use client";
-
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { CompleteRegisterContext } from "./CompleteRegisterProvider";
 import AboutForm from "./components/AboutForm";
 import ImageForm from "./components/ImageForm";
@@ -8,26 +7,8 @@ import InterestForm from "./components/InterestForm";
 import NamesForm from "./components/NamesForm";
 import UsernameForm from "./components/UsernameForm";
 
-export type FormData = {
-  firstname: string;
-  lastname: string;
-  username: string;
-  bio: string;
-  interests: string[];
-  image?: any;
-};
-
 const Form = () => {
-  const { step, setStep } = useContext(CompleteRegisterContext);
-
-  const nextStep = (data : Partial<FormData>) => {
-    setStep(step + 1);
-  }
-
-  const previousStep = () => {
-    setStep(step - 1);
-  }
-  
+  const { step } = useContext(CompleteRegisterContext);
   return (
     <>
       <h1 className="font-black text-4xl text-center">
@@ -72,9 +53,6 @@ const Form = () => {
               case 4: 
                 return(
                   <InterestForm
-                    nextStep={nextStep}
-                    previousStep={previousStep}
-                    values={formData}
                   />
                 )
               default:

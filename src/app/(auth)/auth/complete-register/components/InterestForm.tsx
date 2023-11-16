@@ -1,7 +1,6 @@
 import Searchbar from "@/components/Searchbar";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { FormData } from '../Form'
 import submitCompleteRegisterForm from "../submitForm";
 import { useRouter } from 'next/navigation';
 import { CompleteRegisterContext } from "../CompleteRegisterProvider";
