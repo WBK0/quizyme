@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/Auth/AuthInput';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
   username: yup.string()
@@ -15,13 +16,16 @@ type FormData = {
   username: string;
 };
 
-const UsernameForm = ({ nextStep, previousStep, value } : { nextStep: (data : {}) => void, previousStep: () => void, value : string }) => {
+const UsernameForm = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
-  
+
+  const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
+
   const onSubmit = (data : FormData) => {
-    nextStep({
+    handleChangeForm({
       username: data.username.replace(/ /g, '_')
-    });
+    })
+    setStep(step + 1)
   }
 
   return (
@@ -33,7 +37,7 @@ const UsernameForm = ({ nextStep, previousStep, value } : { nextStep: (data : {}
         name="username"
         placeholder="Username"
         type="text"
-        defaultValue={value}
+        defaultValue={formValues.username}
         register={register}
         error={errors.username?.message}
       />
@@ -45,7 +49,7 @@ const UsernameForm = ({ nextStep, previousStep, value } : { nextStep: (data : {}
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
-          onClick={previousStep}
+          onClick={() => setStep(step - 1)}
         >
           Previous step
         </button>

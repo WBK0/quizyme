@@ -4,8 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import defaultPicture from '@/public/defaultPicture.png';
 import brush from '@/public/brush.svg';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
   image: yup.mixed().test(
@@ -20,13 +21,16 @@ type FormData = {
   [key: string]: any;
 };
 
-const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => void, previousStep: () => void, value: File }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(value || null);
+const ImageForm = () => {
+  const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
 
-  const onSubmit = (data: FormData) => {
-    nextStep({
+  const [selectedImage, setSelectedImage] = useState<File | null>(formValues?.image || null);
+
+  const onSubmit = (data : FormData) => {
+    handleChangeForm({
       image: data.image?.[0] ?? null
-    });
+    })
+    setStep(step + 1)
   }
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) as Resolver });
@@ -37,7 +41,6 @@ const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => 
 
   useEffect(() => {
     let file = watch('image') as File[];
-    console.log(file[0]);
 
     if (file && file[0]) {
       setSelectedImage(file[0]);
@@ -94,7 +97,7 @@ const ImageForm = ({ nextStep, previousStep, value }: { nextStep: (data: {}) => 
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
-          onClick={previousStep}
+          onClick={() => setStep(step - 1)}
         >
           Previous step
         </button>

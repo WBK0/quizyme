@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/Auth/AuthInput';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
   firstname: yup.string()
@@ -22,13 +23,15 @@ type FormData = {
   lastname: string;
 };
 
-const NamesForm = ({ nextStep, values } : { nextStep: (data: {}) => void, values: { firstname: string, lastname: string }}) => {
-  
+const NamesForm = () => {
+  const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
+
   const onSubmit = (data : FormData) => {
-    nextStep({
+    handleChangeForm({
       firstname: data.firstname,
       lastname: data.lastname
-    });
+    })
+    setStep(step + 1)
   }
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
@@ -41,7 +44,7 @@ const NamesForm = ({ nextStep, values } : { nextStep: (data: {}) => void, values
         type="text"
         register={register}
         error={errors.firstname?.message}
-        defaultValue={values.firstname}
+        defaultValue={formValues.firstname}
       />
       <AuthInput 
         name="lastname"
@@ -49,7 +52,7 @@ const NamesForm = ({ nextStep, values } : { nextStep: (data: {}) => void, values
         type="text"
         register={register}
         error={errors.lastname?.message}
-        defaultValue={values.lastname}
+        defaultValue={formValues.lastname}
       />
       <button
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"

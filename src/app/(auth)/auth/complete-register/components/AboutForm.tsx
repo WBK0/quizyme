@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import caution from '@/public/caution.png';
+import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
   bio: yup.string()
@@ -14,12 +15,14 @@ type FormData = {
   bio?: string;
 };
 
-const AboutForm = ({ nextStep, previousStep, value } : { nextStep: (data: {}) => void, previousStep: (data: {}) => void, value: string}) => {
-  
-  const onSubmit = (data: FormData) => {
-    nextStep({
+const AboutForm = () => {
+  const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
+
+  const onSubmit = (data : FormData) => {
+    handleChangeForm({
       bio: data.bio
-    });
+    })
+    setStep(step + 1)
   }
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
@@ -32,7 +35,7 @@ const AboutForm = ({ nextStep, previousStep, value } : { nextStep: (data: {}) =>
           placeholder="Tell something about yourself..."
           {...register("bio")}
           rows={6}
-          defaultValue={value}
+          defaultValue={formValues.bio}
         />
         <div className="group">
           {errors.bio?.message && 
@@ -54,7 +57,7 @@ const AboutForm = ({ nextStep, previousStep, value } : { nextStep: (data: {}) =>
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
-          onClick={previousStep}
+          onClick={() => setStep(step - 1)}
         >
           Previous step
         </button>

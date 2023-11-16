@@ -1,20 +1,23 @@
 import Searchbar from "@/components/Searchbar";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { FormData } from './page';
-import submitCompleteRegisterForm from "./submitForm";
+import { FormData } from '../Form'
+import submitCompleteRegisterForm from "../submitForm";
 import { useRouter } from 'next/navigation';
+import { CompleteRegisterContext } from "../CompleteRegisterProvider";
 
 const interests = ['✈️ Traveling', '🏎️ Racing', '⚽ Sports', '📘 Study', '🛠️ Crafts', '🖥️ IT', '✈️ Traveling1', '🏎️ Racing1', '⚽ Sports1', '📘 Study1', '🛠️ Crafts1', '🖥️ IT1', '✈️ Traveling2', '🏎️ Racing2', '⚽ Sports2', '📘 Study2', '🛠️ Crafts2', '🖥️ IT2', '✈️ Traveling3', '🏎️ Racing3', '⚽ Sports3', '📘 Study3', '🛠️ Crafts3', '🖥️ IT3', '✈️ Traveling4', '🏎️ Racing4', '⚽ Sports4', '📘 Study4', '🛠️ Crafts4', '🖥️ IT4', '✈️ Traveling5', '🏎️ Racing5', '⚽ Sports5', '📘 Study5', '🛠️ Crafts5', '🖥️ IT5'];
 
-const InterestForm = ({ nextStep, previousStep, values } : { nextStep: (data: {}) => void, previousStep: () => void, values: FormData}) => {
+const InterestForm = () => {
+  const { formValues, setStep, step } = useContext(CompleteRegisterContext);
+  
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const router = useRouter()
 
   const handleSubmit = async (e : React.FormEvent) => {
     e.preventDefault();
-    values = {...values, interests: selectedInterests};
-    const submittedForm = await submitCompleteRegisterForm(values);
+    let tempValues = {...formValues, interests: selectedInterests};
+    const submittedForm = await submitCompleteRegisterForm(tempValues);
     if(submittedForm){
       router.push('/auth/complete-register/callback');
     }
@@ -69,7 +72,7 @@ const InterestForm = ({ nextStep, previousStep, values } : { nextStep: (data: {}
         </button>
         <button
           className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
-          onClick={previousStep}
+          onClick={() => setStep(step - 1)}
         >
           Previous step
         </button>
