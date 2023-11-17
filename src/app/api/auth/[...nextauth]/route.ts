@@ -2,6 +2,7 @@ import { connectToDB } from "@/utils/database";
 import NextAuth, { AuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import { compare } from 'bcryptjs';
@@ -40,7 +41,6 @@ export const authOptions : AuthOptions = {
           return null;
         }
 
-        console.log('login', user)
 
         return {
           email: user.email,
@@ -53,10 +53,24 @@ export const authOptions : AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+    })
   ],
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/login", 
+    newUser: "/auth/complete-register",
+  },
   callbacks: {
-    async signIn({ user, account } : { user: any, account: any }) {        
+    async signIn({ user, account } : { user: any, account: any }) {  
+      console.log(user, account)      
       try {
+        if(!user.email && account.provider === 'credentials'){
+          throw new Error("Email is required to sign in. Set up your email in your github profile to public and try again.");
+        }
+
         const accountData = await prisma.account.findFirst({
           where: {
             user: {
@@ -74,8 +88,6 @@ export const authOptions : AuthOptions = {
       }
     },
     session: ({ session, token }) => {
-      console.log('session', session, token)
-
       return {
         ...session,
         user: {
@@ -86,7 +98,6 @@ export const authOptions : AuthOptions = {
       };
     },
     jwt: async ({ token, user, trigger } ) => {
-      // console.log('jwt', token, user, trigger)
 
       if(trigger === 'update'){
         const dbUser = await prisma.user.findUnique({

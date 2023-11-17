@@ -1,12 +1,11 @@
 import Image from "next/image";
 import logo from '@/public/logo.svg';
-import google from '@/public/google.svg';
-import github from '@/public/github.svg';
 import Link from "next/link";
 import Form from "./Form";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import LoginViaProvider from "./LoginViaProvider";
 
 const Login = async () => {
   const session = await getServerSession(authOptions);
@@ -21,20 +20,7 @@ const Login = async () => {
         className="mx-auto mb-4"
       />
       <h1 className="font-black text-4xl text-center">Login</h1>
-      <div className="mt-4">
-        <button className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full mb-3 font-bold relative h-10">
-          <i className="absolute left-5 top-1">
-            <Image src={google} width={32} height={32} alt="google" />
-          </i>
-          <span>Login with Google</span>
-        </button>
-        <button className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full font-bold relative h-10">
-          <i className="absolute left-5 top-1">
-            <Image src={github} width={32} height={32} alt="google" />
-          </i>
-          <span>Login with Github</span>
-        </button>
-      </div>
+      <LoginViaProvider />
       <h2 className="text-center font-black my-2">OR</h2>
       <Form />
       <Link 
