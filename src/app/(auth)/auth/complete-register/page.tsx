@@ -7,7 +7,6 @@ import CompleteRegisterProvider from './CompleteRegisterProvider';
 import Form from './Form';
 import ProgressBar from './components/ProgressBar';
 
-
 const CompleteRegister = async () => {
   const session = await getServerSession(authOptions);
 
@@ -16,7 +15,7 @@ const CompleteRegister = async () => {
   }
 
   return (
-    <CompleteRegisterProvider>
+    <CompleteRegisterProvider session={session}>
       <div className="max-w-lg mx-auto flex min-h-screen flex-col justify-center px-3 gap-4 relative py-16">
         <ProgressBar />
         <Image src={logo} width={150} height={150} alt="logo"

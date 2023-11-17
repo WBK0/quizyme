@@ -25,13 +25,13 @@ const AuthInput = ({ register, name, error, placeholder, type, defaultValue } : 
   }
 
   return (
-    <div className="relative">  
+    <div className="relative">
       <input 
         type={dynamicType}
         placeholder={placeholder}
         defaultValue={defaultValue}
         {...register(name)}
-        className={`w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-black ${error && 'ring-2 ring-red'}`}
+        className={`w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-black ${error ? 'ring-2 ring-red' : ''}`}
       >
       </input>
       <div className="group">

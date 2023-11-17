@@ -116,11 +116,6 @@ export const POST = async (req: Request) => {
     }
   });
 
-  console.log(session.user.isComplete)
-
-  console.log(session.user.isComplete)
-
-
   return new Response(
     JSON.stringify({
       status: "success",

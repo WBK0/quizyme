@@ -1,4 +1,5 @@
 "use client"
+import { Session } from "next-auth";
 import React, { createContext, useState } from "react";
 
 export type FormData = {
@@ -17,16 +18,16 @@ export const CompleteRegisterContext = createContext({
   handleChangeForm: (values: Partial<FormData>) => {}
 })
 
-const CompleteRegisterProvider = ({ children } : { children: React.ReactNode}) => {
+const CompleteRegisterProvider = ({ children, session } : { children: React.ReactNode, session: Session | null}) => {
   const [step, setStep] = useState(0);
   const [formValues, setFormValues] = useState<FormData>({
-    firstname: '',
-    lastname: '',
+    firstname: session?.user.name.split(' ')[0] ?? '',
+    lastname: session?.user.name.split(' ')[1] ?? '',
     username: '',
     bio: '',
     interests: [],
-    image: null
-  })
+    image: session?.user.image ?? null
+  }) 
 
   const handleChangeForm = (values: Partial<FormData>) => {
     setFormValues({...formValues, ...values});

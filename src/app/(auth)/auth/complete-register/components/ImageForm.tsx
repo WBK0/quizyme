@@ -28,7 +28,7 @@ const ImageForm = () => {
 
   const onSubmit = (data : FormData) => {
     handleChangeForm({
-      image: data.image?.[0] ?? null
+      image: data.image?.[0] ?? selectedImage
     })
     setStep(step + 1)
   }
@@ -58,7 +58,7 @@ const ImageForm = () => {
             <Image src={brush} width={32} height={32} alt="brush" className="mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white w-0 h-0 group-hover:w-12 group-hover:h-12 duration-300" />
           </div>
           <Image
-            src={selectedImage ? URL.createObjectURL(selectedImage) : defaultPicture}
+            src={typeof selectedImage == 'string' ? selectedImage : selectedImage ? URL.createObjectURL(selectedImage) : defaultPicture}
             width={128}
             height={128}
             alt="profile"
@@ -70,7 +70,6 @@ const ImageForm = () => {
             className="hidden"
             accept='image/*'
             {...register('image')}
-          
           />
         </label>
       </div>
