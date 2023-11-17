@@ -95,6 +95,25 @@ export const POST = async (req: Request) => {
     );
   }
 
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      username: {
+        equals: username.toString(),
+        mode: 'insensitive',
+      },
+    },
+  });
+
+  if (existingUser) {
+    return new Response(
+      JSON.stringify({
+        status: "error",
+        message: 'Username is already taken',
+      }),
+      { status: 400 }
+    );
+  }
+
   if (typeof image == 'string') {
     image = 'defaultPicture.png';
   }else{
