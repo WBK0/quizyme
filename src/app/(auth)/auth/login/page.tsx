@@ -6,13 +6,16 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import LoginViaProvider from "./LoginViaProvider";
+import { toast } from "react-toastify";
+import ErrorOnLogin from "./ErrorOnLogin";
 
-const Login = async () => {
+const Login = async ({ searchParams } : { searchParams: { error?: string }}) => {
   const session = await getServerSession(authOptions);
 
   if(session?.user){
     redirect('/');
   }
+
 
   return (
     <div className="max-w-sm mx-auto flex h-screen flex-col justify-center px-3 gap-4">
@@ -29,6 +32,11 @@ const Login = async () => {
       >
         Don't have an account? Register!
       </Link>
+      {
+        searchParams.error
+        ? <ErrorOnLogin error={searchParams.error} />
+        : null
+      }
     </div>
   )
 }
