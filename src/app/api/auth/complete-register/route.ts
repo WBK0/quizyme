@@ -55,6 +55,8 @@ export const POST = async (req: Request) => {
     }
   });
 
+  console.log(user)
+
   if(!user || user.isComplete) {
     return new Response(
       JSON.stringify({

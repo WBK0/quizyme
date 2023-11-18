@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 const submitCompleteRegisterForm = async (values: any) => {
   try {
     let formData = new FormData();
@@ -16,11 +18,14 @@ const submitCompleteRegisterForm = async (values: any) => {
     const json = await res.json();
 
     if (json.status === "error") {
-      throw new Error('Unknown error')
+      throw new Error(json.message)
     }
 
     return true;
-  } catch (error) {
+  } catch (error : unknown) {
+    if(error instanceof Error) {
+      toast.error(error.message);
+    }
     console.log(error);
     return false;
   }
