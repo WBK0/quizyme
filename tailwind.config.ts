@@ -40,6 +40,7 @@ const config: Config = {
         800: '#1F2937',
         900: '#111827',
       },
+      'blue' : '#0A66C2',
       'green-gradient': '#D6EADA',
       'yellow-gradient': '#F6EFD5'
     },
