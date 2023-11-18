@@ -23,7 +23,7 @@ type FormData = {
   password: string;
 };
 
-const Form = () => {
+const Form = ({ callbackUrl } : { callbackUrl?: string}) => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: yupResolver(schema) });
 
   const router = useRouter();
@@ -42,7 +42,7 @@ const Form = () => {
             throw new Error('An error occurred while sending the form');
           }
           setTimeout(() => {
-            router.push('/');
+            router.push(callbackUrl || '/');
           }, 3000);
         },
         {

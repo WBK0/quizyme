@@ -6,16 +6,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import LoginViaProvider from "./LoginViaProvider";
-import { toast } from "react-toastify";
 import ErrorOnLogin from "./ErrorOnLogin";
 
-const Login = async ({ searchParams } : { searchParams: { error?: string }}) => {
+const Login = async ({ searchParams } : { searchParams: { error?: string, callbackUrl?: string }}) => {
   const session = await getServerSession(authOptions);
 
   if(session?.user){
     redirect('/');
   }
-
 
   return (
     <div className="max-w-sm mx-auto flex h-screen flex-col justify-center px-3 gap-4">
@@ -25,7 +23,9 @@ const Login = async ({ searchParams } : { searchParams: { error?: string }}) => 
       <h1 className="font-black text-4xl text-center">Login</h1>
       <LoginViaProvider />
       <h2 className="text-center font-black my-2">OR</h2>
-      <Form />
+      <Form 
+        callbackUrl={searchParams?.callbackUrl}
+      />
       <Link 
         href="/auth/register"
         className="text-center font-bold text-sm text-gray-500 hover:text-black"
