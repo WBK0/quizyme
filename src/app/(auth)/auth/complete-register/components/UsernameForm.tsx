@@ -1,9 +1,14 @@
-import React, { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form';
 import AuthInput from '@/components/Auth/AuthInput';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CompleteRegisterContext } from '../CompleteRegisterProvider';
+import { toast } from 'react-toastify';
+
+type FormData = {
+  username: string;
+};
 
 const schema = yup.object({
   username: yup.string()
@@ -12,20 +17,54 @@ const schema = yup.object({
     .required('Username is required'),
 }).required('Please fill in all required fields');
 
-type FormData = {
-  username: string;
-};
-
 const UsernameForm = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({ resolver: yupResolver(schema) });
 
   const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
 
-  const onSubmit = (data : FormData) => {
-    handleChangeForm({
-      username: data.username.replace(/ /g, '_')
-    })
-    setStep(step + 1)
+  const validateUsername = async (value: string) => {
+    try {
+      const result = await toast.promise(
+        async () => {
+          const response = await fetch(`/api/auth/complete-register/check-username/${value.replace(/ /g, '_')}`);
+          
+          if (!response.ok) {
+            throw new Error('An error occurred while checking username availability');
+          }
+          
+          return response;
+        },
+        {
+          pending: 'Checking username availability...',
+          success: 'Username is available! 🎉',
+          error: 'Username is already taken 😢'
+        },
+        {
+          hideProgressBar: true,
+          autoClose: 1500
+        }
+      );
+
+      return result?.ok ?? false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  const onSubmit = async (data : FormData) => {
+    try {
+      const isUsernameAvailable = await validateUsername(data.username);
+      if(!isUsernameAvailable){
+        throw new Error('Username is already taken');
+      }
+      handleChangeForm({
+        username: data.username.replace(/ /g, '_')
+      })
+      setStep(step + 1)
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
