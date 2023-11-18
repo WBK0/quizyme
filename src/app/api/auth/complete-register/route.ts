@@ -55,8 +55,6 @@ export const POST = async (req: Request) => {
     }
   });
 
-  console.log(user)
-
   if(!user || user.isComplete) {
     return new Response(
       JSON.stringify({
@@ -116,9 +114,9 @@ export const POST = async (req: Request) => {
     );
   }
 
-  if (typeof image == 'string') {
+  if (image == 'null') {
     image = 'defaultPicture.png';
-  }else{
+  }else if(typeof image !== 'string'){
     const savedImage = await saveImage(image as File);
     image = savedImage;
   }

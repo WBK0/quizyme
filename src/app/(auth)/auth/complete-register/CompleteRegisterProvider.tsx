@@ -21,8 +21,8 @@ export const CompleteRegisterContext = createContext({
 const CompleteRegisterProvider = ({ children, session } : { children: React.ReactNode, session: Session | null}) => {
   const [step, setStep] = useState(0);
   const [formValues, setFormValues] = useState<FormData>({
-    firstname: session?.user.name.split(' ')[0] ?? '',
-    lastname: session?.user.name.split(' ')[1] ?? '',
+    firstname: session?.user?.name?.split(' ')[0] ?? '',
+    lastname: session?.user?.name?.split(' ')[1] ?? '',
     username: '',
     bio: '',
     interests: [],
