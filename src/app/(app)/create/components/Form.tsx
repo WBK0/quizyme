@@ -1,5 +1,4 @@
 "use client";
-
 import SelectInput from "@/components/Create/SelectInput";
 import Tags from "./Tags";
 
@@ -40,6 +39,7 @@ const Form = ({ type } : { type: string}) => {
       >
         ADD {type === 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
       </button>
+      
     </div>
   );
 };
