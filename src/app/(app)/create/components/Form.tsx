@@ -3,7 +3,7 @@
 import SelectInput from "@/components/Create/SelectInput";
 import Tags from "./Tags";
 
-const Form = () => {
+const Form = ({ type } : { type: string}) => {
   return (
     <div className="flex flex-wrap flex-col">
       <input
@@ -25,16 +25,20 @@ const Form = () => {
         options={["Public", "Code only"]}
         defaultValue="Public"
       />
-      <SelectInput
-        title="Points"
-        options={["Based on answer time", "Constant", "Disabled"]}
-        defaultValue="Based on answer time"
-      />
+      {
+        type === 'quiz' && (
+          <SelectInput
+            title="Points"
+            options={["Based on answer time", "Constant", "Disabled"]}
+            defaultValue="Based on answer time"
+          />
+        )
+      }      
       <Tags />
       <button
         className="mx-auto rounded-full px-8 py-3 outline-none font-bold text-lg bg-black text-white mt-16 box-shadow shadow-small shadow-blue hover:scale-105 duration-300"
       >
-        ADD QUESTIONS
+        ADD {type === 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
       </button>
     </div>
   );

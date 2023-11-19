@@ -19,7 +19,9 @@ const Tags = () => {
       return;
     } 
 
-    if (tagInput.trim() !== "" && !tags.includes(tagInput)) {
+    console.log()
+
+    if (tagInput.trim() !== "" && tags.findIndex(element => element.toLowerCase() === tagInput.toLowerCase()) === -1) {
       setTags([...tags, tagInput]);
 
       setTagInput("");

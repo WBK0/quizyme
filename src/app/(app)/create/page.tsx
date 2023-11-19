@@ -1,9 +1,20 @@
+"use client";
 import SelectButton from "@/components/SelectButton";
 import camera from '@/public/camera.svg';
 import Image from "next/image";
 import Form from "./components/Form";
+import useUrlParams from "@/hooks/useUrlParams";
+import { useEffect } from "react";
 
 const CreatePage = () => {
+  const { getParams, changeParam } = useUrlParams();
+
+  useEffect(() => {
+    if(!getParams().type){
+      changeParam('type', 'quiz');
+    }
+  }, []);
+
   return (
     <div className="px-3 max-w-3xl mx-auto">
       <SelectButton
@@ -20,7 +31,9 @@ const CreatePage = () => {
           </h3>
         </div>
       </div>
-      <Form />
+      <Form
+        type={getParams().type}
+      />
     </div>
   )
 }

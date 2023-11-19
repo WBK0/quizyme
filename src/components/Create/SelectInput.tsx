@@ -54,7 +54,7 @@ const SelectInput = ({ title, options, defaultValue } : SelectInputProps) => {
               options.map((option : string, index : number) => (
                 <div
                   key={index}
-                  className="px-4 py-2 cursor-pointer font-semibold"
+                  className="px-4 py-2 cursor-pointer font-semibold hover:text-blue"
                   onClick={() => handleOptionClick(option)}
                 >
                   {option}
