@@ -1,11 +1,13 @@
-import Searchbar from "@/components/Searchbar";
 import SelectButton from "@/components/SelectButton";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect } from "react";
-import ModalResults from "./ModalResults";
+import ModalOnline from "./ModalOnline";
+import ModalLocal from "./ModalLocal";
 
 const PictureModal = ({ handleCloseModal } : {handleCloseModal: () => void;}) => {
   const { getParams, changeParam } = useUrlParams();
+
+  console.log(getParams().modalType)
 
   useEffect(() => {
     if(!getParams().modalType){
@@ -24,11 +26,13 @@ const PictureModal = ({ handleCloseModal } : {handleCloseModal: () => void;}) =>
                 options={['online', 'my computer']}
                 paramsName="modalType"
               />
-              <div className="max-w-xl mx-auto mt-6">
-                <Searchbar />
-              </div>
             </div>
-            <ModalResults />
+            {
+              getParams().modalType === 'online'
+              ? <ModalOnline />
+              : <ModalLocal />
+            }
+            
             
           </div>
         </div>
