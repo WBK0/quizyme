@@ -5,7 +5,6 @@ import * as yup from "yup";
 import AuthInput from "@/components/Auth/AuthInput";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
 
 const schema = yup.object({
   email: yup.string()

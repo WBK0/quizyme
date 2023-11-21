@@ -6,7 +6,14 @@ type Result = {
   webformatURL: string;
 }[]
 
-const ModalOnline = () => {
+type ModalOnlineProps = {
+  value: {
+    mainImage: string;
+  };
+  setValue: (value: {}) => void;
+}
+
+const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
   const [results, setResults] = useState<Result>([]);
 
   const getResults = async () => {
