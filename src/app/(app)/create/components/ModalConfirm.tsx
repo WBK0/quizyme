@@ -1,4 +1,6 @@
+import Spinner from "@/components/Loading/Spinner";
 import Image from "next/image";
+import { useState } from "react";
 
 type ModalConfirmProps = {
   value: {
@@ -8,6 +10,13 @@ type ModalConfirmProps = {
 }
 
 const ModalConfirm = ({ value, setValue } : ModalConfirmProps) => {
+  const [loading, setLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    console.log('xd')
+    setLoading(false);
+  }
+
   const handleDecline = async () => {
     try {
       const filename = value.mainImage.split('/').pop();
@@ -28,20 +37,39 @@ const ModalConfirm = ({ value, setValue } : ModalConfirmProps) => {
 
   return (
     <div className="max-w-2xl flex flex-col justify-center h-full">
-      <Image src={value.mainImage} alt="image" width={1000} height={1000} className="rounded-xl aspect-video" />
-      <div className="flex justify-center gap-6 mt-12">
-        <button
-          className="bg-black text-white shadow-small shadow-red px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
-          onClick={() => handleDecline()}
-        >
-          Decline
-        </button>  
-        <button
-          className="bg-black text-white shadow-small shadow-green px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
-        >
-          Accept
-        </button> 
-      </div>      
+      {
+        loading && (
+          <div className="mx-auto">
+            <Spinner />
+          </div>
+        )
+      }
+      <Image 
+        src={value.mainImage} 
+        alt="image" 
+        width={680} 
+        height={380} 
+        className={`rounded-xl aspect-video ${loading ? 'w-1' : 'w-full'}`} 
+        onLoadingComplete={handleImageLoad}
+      />
+      {
+        !loading && (
+          <div className="flex justify-center gap-6 mt-12">
+            <button
+              className="bg-black text-white shadow-small shadow-red px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
+              onClick={() => handleDecline()}
+            >
+              Decline
+            </button>  
+            <button
+              className="bg-black text-white shadow-small shadow-green px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
+            >
+              Accept
+            </button> 
+          </div>     
+        )
+      }
+       
     </div>
   )
 }

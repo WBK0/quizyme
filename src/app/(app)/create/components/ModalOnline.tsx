@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Searchbar from "@/components/Searchbar";
+import Spinner from "@/components/Loading/Spinner";
 
 type Result = {
   webformatURL: string;
@@ -51,12 +52,7 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
           />
         ))
         :
-        <div className='flex space-x-2 justify-center items-center bg-white'>
-          <span className='sr-only'>Loading...</span>
-          <div className='h-4 w-4 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-          <div className='h-4 w-4 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-          <div className='h-4 w-4 bg-black rounded-full animate-bounce'></div>
-        </div>
+          <Spinner />
         }
       </div>
     </>
