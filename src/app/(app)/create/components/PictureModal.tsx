@@ -39,7 +39,7 @@ const PictureModal = ({ handleCloseModal } : {handleCloseModal: () => void;}) =>
                 ? <ModalOnline value={value} setValue={setValue} />
                 : <ModalLocal value={value} setValue={setValue} />
               :
-                <ModalConfirm value={value} setValue={setValue} />
+                <ModalConfirm value={value} setValue={setValue} handleCloseModal={handleCloseModal} />
             }
           </div>
         </div>

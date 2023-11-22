@@ -7,13 +7,13 @@ type ModalConfirmProps = {
     mainImage: string;
   };
   setValue: (value: {}) => void;
+  handleCloseModal: () => void;
 }
 
-const ModalConfirm = ({ value, setValue } : ModalConfirmProps) => {
+const ModalConfirm = ({ value, setValue, handleCloseModal } : ModalConfirmProps) => {
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {
-    console.log('xd')
     setLoading(false);
   }
 
@@ -31,8 +31,12 @@ const ModalConfirm = ({ value, setValue } : ModalConfirmProps) => {
         })
       }
     } catch (error) {
-      
+      console.log(error)
     }
+  }
+
+  const handleAccept = async () => {
+    handleCloseModal();
   }
 
   return (
@@ -63,6 +67,7 @@ const ModalConfirm = ({ value, setValue } : ModalConfirmProps) => {
             </button>  
             <button
               className="bg-black text-white shadow-small shadow-green px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
+              onClick={() => handleAccept()}
             >
               Accept
             </button> 
