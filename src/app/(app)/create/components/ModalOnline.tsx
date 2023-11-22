@@ -5,6 +5,7 @@ import Spinner from "@/components/Loading/Spinner";
 
 type Result = {
   webformatURL: string;
+  largeImageURL: string;
 }[]
 
 type ModalOnlineProps = {
@@ -87,7 +88,7 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
               sizes="100%"
               alt="result" 
               className="rounded-xl"
-              onClick={() => handleClick(result.webformatURL)}
+              onClick={() => handleClick(result.largeImageURL)}
             />
           </div>
         ))

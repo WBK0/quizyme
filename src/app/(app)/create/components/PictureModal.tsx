@@ -2,13 +2,20 @@ import SelectButton from "@/components/SelectButton";
 import { useEffect } from "react";
 import ModalOnline from "./ModalOnline";
 import ModalLocal from "./ModalLocal";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useUrlParams from "@/hooks/useUrlParams";
 import ModalConfirm from "./ModalConfirm";
 
-const PictureModal = ({ handleCloseModal } : {handleCloseModal: () => void;}) => {
+type PictureModalProps = {
+  handleCloseModal: () => void;
+  value: {
+    mainImage: string;
+  };
+  setValue: (value: {}) => void;  
+}
+
+
+const PictureModal = ({ handleCloseModal, value, setValue } : PictureModalProps) => {
   const { getParams, changeParam } = useUrlParams();
-  const [value, setValue] = useLocalStorage('create-form', {});
 
   useEffect(() => {
     if (!getParams().modalType) {
