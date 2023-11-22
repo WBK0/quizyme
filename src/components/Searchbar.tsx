@@ -3,7 +3,11 @@ import Image from "next/image";
 import loupe from '@/public/loupe.svg';
 import { useRef } from "react";
 
-const Searchbar = () => {
+type SearchbarProps = {
+  onChange?: (value: string) => void;
+}
+
+const Searchbar = ({ onChange } : SearchbarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   return (
@@ -14,6 +18,7 @@ const Searchbar = () => {
         placeholder="Search..."
         className="w-full bg-transparent outline-none placeholder-gray-400 font-bold text-xl mr-4"
         ref={inputRef}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
       />
     </div>
   )
