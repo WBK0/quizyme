@@ -17,6 +17,10 @@ type ModalOnlineProps = {
 
 const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
   const [results, setResults] = useState<Result>([]);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [isImageMax, setIsImageMax] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   let timeoutId : NodeJS.Timeout;
 
@@ -26,8 +30,9 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
     }
   
     timeoutId = setTimeout(() => {
-      getResults(e);
-      console.log(e);
+      setQuery(e);
+      setPage(1);
+      setResults([]);
     }, 1200);
   };
 
@@ -47,24 +52,42 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
     setValue({
       ...value,
       mainImage: json.url
-    })
-
-  }
-
-  const getResults = async (query ?: string) => {
-    const response = await fetch('/api/pixabay', {
-      method: 'POST',
-      body: JSON.stringify({
-        query: query ? query : ''
-      })
-    })
-    const json = await response.json();
-    setResults(json.hits);
+    });
   }
 
   useEffect(() => {
-    getResults();
-  }, [])
+    const fetchData = async () => {
+      setIsImageMax(false);
+      const response = await fetch('/api/pixabay', {
+        method: 'POST',
+        body: JSON.stringify({
+          query: query ? query : '',
+          page: page ? page : 1,
+        }),
+      });
+      let json = await response.json();
+
+      const newResults = results.concat(json.hits);
+
+      if(json.hits.length < 21){
+        setIsImageMax(true);
+      }
+
+      setResults(newResults)
+      setLoading(false);
+    };
+    fetchData();
+  }, [query, page]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if(page * 21 == results.length){
+        setPage(page + 1);
+      }
+    }
+  };
 
   return (
     <>
@@ -75,15 +98,15 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
           />
         </div>
       </div> 
-      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-10 w-full overflow-y-auto scroll-sm pt-2"
+      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-10 w-full overflow-y-auto scroll-sm pt-2" onScroll={handleScroll}
       >
-        {results.length > 1 ? results.map((result) => (
+        {!loading ? results.map((result) => (
           <div
             className="aspect-video hover:scale-105 duration-300 cursor-pointer relative w-full sm:w-[275px] md:w-[285px]"
-            key={result.webformatURL}
+            key={result?.webformatURL}
           >
             <Image 
-              src={result.webformatURL} 
+              src={result?.webformatURL} 
               fill={true}
               sizes="100%"
               alt="result" 
@@ -95,6 +118,9 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
         :
           <Spinner />
         }
+        <p className="w-full text-center text-xl font-bold pb-6">
+          {!loading && results.length === 0 ? 'No results' : isImageMax ? 'No more results' : null}
+        </p>
       </div>
     </>
   )
