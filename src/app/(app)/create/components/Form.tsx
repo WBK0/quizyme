@@ -5,9 +5,10 @@ import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import TextInput from "@/components/Create/TextInput";
-import Image from "next/image";
-import caution from '@/public/caution.png';
 import TextareaInput from "@/components/Create/TextareaInput";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+
 type FormInputs = {
   topic: string,
   description: string;
@@ -19,8 +20,16 @@ type FormInputs = {
 
 type FormProps = {
   type: string;
-  localStorage: {};
-  setLocalStorage: (value: string) => void;
+  localStorage: {
+    mainImage?: string;
+    topic?: string;
+    description?: string;
+    collection?: string;
+    visibility?: string;
+    points?: string;
+    tags?: string[];
+  };
+  setLocalStorage: (value: {}) => void;
 }
 
 const schema = yup.object().shape({
@@ -55,13 +64,29 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    setLocalStorage(JSON.stringify({
+    if(!localStorage?.mainImage){
+      toast.error('You must upload a main image');
+      return;
+    }
+
+    setLocalStorage({
       ...localStorage,
       ...data
-    }));
+    });
 
     router.push(`/create/${type}`)
-  }
+  };
+
+  useEffect(() => {
+    if(localStorage){
+      setValue('topic', localStorage.topic || '');
+      setValue('description', localStorage.description || '');
+      setValue('collection', localStorage.collection || '');
+      setValue('visibility', localStorage.visibility || 'Public');
+      setValue('points', localStorage.points || 'Based on answer time');
+      setValue('tags', localStorage.tags || []);
+    }
+  }, []);
 
   return (
     <form className="flex flex-wrap flex-col gap-5 mt-5" onSubmit={handleSubmit(onSubmit)}>
@@ -112,6 +137,7 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
         register={register}
         setValue={setValue}
         error={errors.tags?.message}
+        watch={watch}
       />
       <button
         className="mx-auto rounded-full px-8 py-3 outline-none font-bold text-lg bg-black text-white mt-16 box-shadow shadow-small shadow-blue hover:scale-105 duration-300"

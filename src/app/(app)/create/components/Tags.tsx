@@ -9,11 +9,18 @@ type TagsProps = {
   register: UseFormRegister<any>;
   setValue: UseFormSetValue<any>;
   error?: string;
+  watch: (name: string) => string[];
 }
 
-const Tags = ({ register, setValue, error } : TagsProps) => {
+const Tags = ({ register, setValue, error, watch } : TagsProps) => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
+
+  useEffect(() => {
+    if(watch('tags')){
+      setTags(watch('tags'));
+    }
+  }, []);
 
   const handleRemoveTag = (tag: string) => {
     setTags(tags.filter((t) => t !== tag));
