@@ -1,6 +1,8 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form/dist/types/form";
+import Image from "next/image";
+import caution from '@/public/caution.png';
 
 type SelectInputProps = {
   title: string;
@@ -10,9 +12,10 @@ type SelectInputProps = {
   name: string;
   setValue: UseFormSetValue<any>;
   watch: (name: string) => string;
+  error?: string;
 }
 
-const SelectInput = ({ title, options, defaultValue, register, name, setValue, watch } : SelectInputProps) => {
+const SelectInput = ({ title, options, defaultValue, register, name, setValue, watch, error } : SelectInputProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -44,7 +47,7 @@ const SelectInput = ({ title, options, defaultValue, register, name, setValue, w
 
   return (
     <div
-      className="bg-gray-100 rounded-xl mt-5 relative cursor-pointer"
+      className="bg-gray-100 rounded-xl relative cursor-pointer"
       onClick={toggleSelect}
       ref={dropdownRef}
     >
@@ -70,6 +73,16 @@ const SelectInput = ({ title, options, defaultValue, register, name, setValue, w
             </div>
           </div>
         )}
+      </div>
+      <div className="group">
+        {error && 
+          <i className="absolute right-7 top-1/2 transform -translate-y-1/2 text-red cursor-pointer">
+            <Image src={caution} width={24} height={24} alt="error" />
+          </i>
+        }
+        <span className="pointer-events-none absolute bottom-1/2 mb-4 right-0 w-max rounded bg-red px-2 py-1 text-sm font-bold text-gray-50 opacity-0 shadow transition-opacity group-hover:opacity-100"> 
+          {error}
+        </span>
       </div>
       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
         <svg

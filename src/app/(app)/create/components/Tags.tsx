@@ -2,13 +2,16 @@
 import { useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import caution from '@/public/caution.png';
 
 type TagsProps = {
   register: UseFormRegister<any>;
   setValue: UseFormSetValue<any>;
+  error?: string;
 }
 
-const Tags = ({ register, setValue } : TagsProps) => {
+const Tags = ({ register, setValue, error } : TagsProps) => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
 
@@ -39,7 +42,7 @@ const Tags = ({ register, setValue } : TagsProps) => {
 
   return (
     <div>
-      <div className="mt-5 flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap">
         {tags.map((tag: string, index: number) => (
           <div
             key={index}
@@ -51,14 +54,26 @@ const Tags = ({ register, setValue } : TagsProps) => {
         ))}
       </div>
       <div className="flex">
-        <input
-          type="text"
-          placeholder="Keyword"
-          name="tag"
-          value={tagInput}
-          onChange={(e) => setTagInput(e.target.value)}
-          className="w-full rounded-l-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black mt-4"
-        />
+        <div className="relative w-full  mt-4">
+          <input
+            type="text"
+            placeholder="Keyword"
+            name="tag"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            className="w-full rounded-l-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black"
+          />
+          <div className="group">
+            {error && 
+              <i className="absolute right-2 top-1/2 transform -translate-y-1/2 text-red cursor-pointer">
+              <Image src={caution} width={24} height={24} alt="error" />
+              </i>
+            }
+            <span className="pointer-events-none absolute bottom-1/2 mb-4 right-0 w-max rounded bg-red px-2 py-1 text-sm font-bold text-gray-50 opacity-0 shadow transition-opacity group-hover:opacity-100"> 
+              {error}
+            </span>
+          </div>
+        </div>
         <button
           type="button"
           className="rounded-r-xl px-12 py-2 outline-none font-bold text-lg bg-black text-white mt-4"
@@ -66,6 +81,7 @@ const Tags = ({ register, setValue } : TagsProps) => {
         >
           ADD
         </button>
+        
       </div>
       <input 
         type="hidden"

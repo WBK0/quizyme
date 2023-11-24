@@ -4,7 +4,10 @@ import Tags from "./Tags";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-
+import TextInput from "@/components/Create/TextInput";
+import Image from "next/image";
+import caution from '@/public/caution.png';
+import TextareaInput from "@/components/Create/TextareaInput";
 type FormInputs = {
   topic: string,
   description: string;
@@ -58,22 +61,19 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
     }));
 
     router.push(`/create/${type}`)
-
   }
 
   return (
-    <form className="flex flex-wrap flex-col" onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
-        placeholder="Topic"
-        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black mt-5"
-        {...register('topic')}
+    <form className="flex flex-wrap flex-col gap-5 mt-5" onSubmit={handleSubmit(onSubmit)}>
+      <TextInput 
+        register={register}
+        name="topic"
+        error={errors.topic?.message}
       />
-      <textarea
-        placeholder="Description"
-        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black mt-5"
-        rows={5}
-        {...register('description')}
+      <TextareaInput
+        register={register}
+        name="description"
+        error={errors.description?.message}
       />
       <SelectInput
         title="Collection"
@@ -82,6 +82,7 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
         name="collection"
         setValue={setValue}
         watch={watch}
+        error={errors.collection?.message}
       />
       <SelectInput
         title="Visibility"
@@ -91,6 +92,7 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
         name="visibility"
         setValue={setValue}
         watch={watch}
+        error={errors.visibility?.message}
       />
       {
         type === 'quiz' && (
@@ -102,12 +104,14 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
             name="points"
             setValue={setValue}
             watch={watch}
+            error={errors.points?.message}
           />
         )
       }      
       <Tags
         register={register}
         setValue={setValue}
+        error={errors.tags?.message}
       />
       <button
         className="mx-auto rounded-full px-8 py-3 outline-none font-bold text-lg bg-black text-white mt-16 box-shadow shadow-small shadow-blue hover:scale-105 duration-300"
