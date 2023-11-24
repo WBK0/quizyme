@@ -1,9 +1,14 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { toast } from "react-toastify";
 
-const Tags = () => {
+type TagsProps = {
+  register: UseFormRegister<any>;
+  setValue: UseFormSetValue<any>;
+}
+
+const Tags = ({ register, setValue } : TagsProps) => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
 
@@ -17,12 +22,20 @@ const Tags = () => {
       return;
     } 
 
+    if(tagInput.length > 16){
+      toast.error('Tag must be at most 16 characters');
+      return;
+    }
+
     if (tagInput.trim() !== "" && tags.findIndex(element => element.toLowerCase() === tagInput.toLowerCase()) === -1) {
       setTags([...tags, tagInput]);
-
       setTagInput("");
     }
   };
+
+  useEffect(() => {
+    setValue('tags', tags);
+  }, [tags]);
 
   return (
     <div>
@@ -54,6 +67,10 @@ const Tags = () => {
           ADD
         </button>
       </div>
+      <input 
+        type="hidden"
+        {...register('tags')}
+      />
     </div>
   );
 };

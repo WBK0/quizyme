@@ -5,7 +5,7 @@ import ModalLocal from "./ModalLocal";
 import useUrlParams from "@/hooks/useUrlParams";
 import ModalConfirm from "./ModalConfirm";
 
-type PictureModalProps = {
+type ModalPictureProps = {
   handleCloseModal: () => void;
   value: {
     mainImage: string;
@@ -14,7 +14,7 @@ type PictureModalProps = {
 }
 
 
-const PictureModal = ({ handleCloseModal, value, setValue } : PictureModalProps) => {
+const ModalPicture = ({ handleCloseModal, value, setValue } : ModalPictureProps) => {
   const { getParams, changeParam } = useUrlParams();
 
   useEffect(() => {
@@ -54,4 +54,4 @@ const PictureModal = ({ handleCloseModal, value, setValue } : PictureModalProps)
     </div>
   )
 }
-export default PictureModal;
+export default ModalPicture;

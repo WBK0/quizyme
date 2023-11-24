@@ -5,7 +5,7 @@ import Image from "next/image";
 import Form from "./components/Form";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect, useState } from "react";
-import PictureModal from "./components/PictureModal";
+import ModalPicture from "./modal/ModalPicture";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 const CreatePage = () => {
@@ -67,7 +67,7 @@ const CreatePage = () => {
       />
       {
         modal && (
-          <PictureModal 
+          <ModalPicture 
             handleCloseModal={handleModal}
             value={value}
             setValue={setValue}

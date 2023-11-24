@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { UseFormRegister } from "react-hook-form/dist/types/form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form/dist/types/form";
 
 type SelectInputProps = {
   title: string;
@@ -8,18 +8,17 @@ type SelectInputProps = {
   defaultValue?: string;
   register: UseFormRegister<any>;
   name: string;
-  setValue: any;
-  watch: any;
+  setValue: UseFormSetValue<any>;
+  watch: (name: string) => string;
 }
 
 const SelectInput = ({ title, options, defaultValue, register, name, setValue, watch } : SelectInputProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(defaultValue || "");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setValue(name, defaultValue)
+    setValue(name, defaultValue || "")
 
     const handleOutsideClick = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -39,7 +38,6 @@ const SelectInput = ({ title, options, defaultValue, register, name, setValue, w
   };
 
   const handleOptionClick = (value: string) => {
-    setSelectedValue(value);
     setValue(name, value)
     setIsOpen(false);
   };
