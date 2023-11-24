@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Tags from "./Tags";
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 
 type FormInputs = {
   topic: string,
@@ -11,6 +12,12 @@ type FormInputs = {
   visibility: string;
   points: string;
   tags: string[];
+}
+
+type FormProps = {
+  type: string;
+  localStorage: {};
+  setLocalStorage: (value: string) => void;
 }
 
 const schema = yup.object().shape({
@@ -39,11 +46,19 @@ const schema = yup.object().shape({
     .required('Tags is required'),
 });
 
-const Form = ({ type } : { type: string }) => {
-  const { register, handleSubmit, setValue, watch } = useForm<FormInputs>({ resolver: yupResolver(schema) });
-  
-  const onSubmit : SubmitHandler<FormInputs> = (data) => {
-    console.log(data)  
+const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
+  const { register, handleSubmit, setValue, watch, formState: {errors} } = useForm<FormInputs>({ resolver: yupResolver(schema) });
+
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+    setLocalStorage(JSON.stringify({
+      ...localStorage,
+      ...data
+    }));
+
+    router.push(`/create/${type}`)
+
   }
 
   return (

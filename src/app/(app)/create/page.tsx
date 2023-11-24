@@ -64,6 +64,8 @@ const CreatePage = () => {
       } 
       <Form
         type={getParams().type}
+        localStorage={value}
+        setLocalStorage={setValue}
       />
       {
         modal && (
