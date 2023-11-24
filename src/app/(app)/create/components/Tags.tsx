@@ -11,15 +11,11 @@ const Tags = () => {
     setTags(tags.filter((t) => t !== tag));
   }
 
-  const handleAddTag = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleAddTag = () => {
     if(tags.length >= 5){
       toast.error('You can only add up to 5 tags');
       return;
     } 
-
-    console.log()
 
     if (tagInput.trim() !== "" && tags.findIndex(element => element.toLowerCase() === tagInput.toLowerCase()) === -1) {
       setTags([...tags, tagInput]);
@@ -41,7 +37,7 @@ const Tags = () => {
           </div>
         ))}
       </div>
-      <form className="flex" onSubmit={handleAddTag}>
+      <div className="flex">
         <input
           type="text"
           placeholder="Keyword"
@@ -51,12 +47,13 @@ const Tags = () => {
           className="w-full rounded-l-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black mt-4"
         />
         <button
-          type="submit"
+          type="button"
           className="rounded-r-xl px-12 py-2 outline-none font-bold text-lg bg-black text-white mt-4"
+          onClick={handleAddTag}
         >
           ADD
         </button>
-      </form>
+      </div>
     </div>
   );
 };

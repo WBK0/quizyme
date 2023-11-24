@@ -1,19 +1,26 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
+import { UseFormRegister } from "react-hook-form/dist/types/form";
 
 type SelectInputProps = {
   title: string;
   options: string[];
   defaultValue?: string;
+  register: UseFormRegister<any>;
+  name: string;
+  setValue: any;
+  watch: any;
 }
 
-const SelectInput = ({ title, options, defaultValue } : SelectInputProps) => {
+const SelectInput = ({ title, options, defaultValue, register, name, setValue, watch } : SelectInputProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue || "");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    setValue(name, defaultValue)
+
     const handleOutsideClick = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -33,6 +40,7 @@ const SelectInput = ({ title, options, defaultValue } : SelectInputProps) => {
 
   const handleOptionClick = (value: string) => {
     setSelectedValue(value);
+    setValue(name, value)
     setIsOpen(false);
   };
 
@@ -45,7 +53,7 @@ const SelectInput = ({ title, options, defaultValue } : SelectInputProps) => {
       <h6 className="px-4 text-gray-400 font-bold text-xs pt-2">{title}</h6>
       <div className="relative">
         <div className={`w-full ${isOpen ? 'rounded-t-xl' : 'rounded-xl'} px-4 pb-2 outline-none font-bold text-lg bg-gray-100 text-black capitalize`}>
-          {selectedValue || "Select an option"}
+          {watch(name) || "Select an option"}
         </div>
         {isOpen && (
           <div className="absolute top-full left-0 w-full bg-gray-100 rounded-b-xl pr-3 pb-1 z-10">
@@ -74,6 +82,11 @@ const SelectInput = ({ title, options, defaultValue } : SelectInputProps) => {
           <path d="M10 12l-8-8h16z" />
         </svg>
       </div>
+      <input
+        type="text"
+        {...register(name)}
+        className='hidden'
+      />
     </div>
   )
 }
