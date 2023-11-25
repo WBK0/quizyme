@@ -58,15 +58,15 @@ const ModalConfirm = ({ value, setValue, handleCloseModal } : ModalConfirmProps)
       />
       {
         !loading && (
-          <div className="flex justify-center gap-6 mt-12">
+          <div className="flex justify-center gap-3 sm:gap-6 mt-12 flex-wrap">
             <button
-              className="bg-black text-white shadow-small shadow-red px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
+              className="bg-black text-white shadow-small shadow-red px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300 w-full sm:w-fit"
               onClick={() => handleDecline()}
             >
               Decline
             </button>  
             <button
-              className="bg-black text-white shadow-small shadow-green px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300"
+              className="bg-black text-white shadow-small shadow-green px-12 py-2 rounded-full font-semibold hover:scale-105 duration-300 w-full sm:w-fit"
               onClick={() => handleAccept()}
             >
               Accept

@@ -98,7 +98,7 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
           />
         </div>
       </div> 
-      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-10 w-full overflow-y-auto scroll-sm pt-2" onScroll={handleScroll}
+      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-10 w-full overflow-y-auto scroll-sm pt-2 pr-1" onScroll={handleScroll}
       >
         {!loading ? results.map((result) => (
           <div
