@@ -5,8 +5,9 @@ import Image from "next/image";
 import Form from "./components/Form";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect, useState } from "react";
-import ModalPicture from "./modal/ModalPicture";
+import ModalPicture from "../../../components/Create/modal/ModalPicture";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import ImageInput from "@/components/Create/ImageInput";
 
 const CreatePage = () => {
   const { getParams, changeParam } = useUrlParams();
@@ -27,7 +28,10 @@ const CreatePage = () => {
   };
   
   useEffect(() => {
-    if(!getParams().type){
+    if(value?.type){
+      changeParam('type', value.type);
+    }
+    else if(!getParams().type){
       changeParam('type', 'quiz');
     }
   }, []);
@@ -38,30 +42,11 @@ const CreatePage = () => {
         options={['quiz', 'flashcards']}
         paramsName="type"
       />
-      {
-        isImageSet && value.mainImage ? 
-          <div className="w-full h-full rounded-xl aspect-video flex flex-col justify-center items-center cursor-pointer mt-16 relative"
-          onClick={handleModal}>
-            <Image
-              src={value.mainImage}
-              fill={true}
-              sizes="100%"
-              alt="cover image"
-              className="rounded-xl"
-            />
-          </div>
-          : 
-          <div className="w-full aspect-video mt-16 rounded-2xl bg-gradient-to-r from-green-gradient to-yellow-gradient p-1.5 cursor-pointer group" onClick={handleModal}>
-            <div className="w-full h-full bg-gradient-to-r from-[#F4FBF5] to-[#FCFAF1] rounded-xl aspect-video flex flex-col justify-center items-center">
-              <Image src={camera} alt="camera" width={50} className="group-hover:scale-125 duration-300"/>
-              <h3
-                className="text-center text-black font-black text-md mt-4 group-hover:scale-125 group-hover:mt-7 duration-300"
-              >
-                ADD COVER IMAGE
-              </h3>
-            </div>
-          </div>
-      } 
+      <ImageInput
+        isImageSet={isImageSet}
+        mainImage={value.mainImage}
+        handleModal={handleModal}
+      />
       <Form
         type={getParams().type}
         localStorage={value}
@@ -73,6 +58,7 @@ const CreatePage = () => {
             handleCloseModal={handleModal}
             value={value}
             setValue={setValue}
+            name="mainImage"
           />
         )
       }

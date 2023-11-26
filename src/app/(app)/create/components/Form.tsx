@@ -21,6 +21,7 @@ type FormInputs = {
 type FormProps = {
   type: string;
   localStorage: {
+    type?: string;
     mainImage?: string;
     topic?: string;
     description?: string;
@@ -71,7 +72,8 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
 
     setLocalStorage({
       ...localStorage,
-      ...data
+      ...data,
+      type: type,
     });
 
     router.push(`/create/${type}`)

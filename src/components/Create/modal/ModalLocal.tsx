@@ -9,9 +9,10 @@ type ModalLocalProps = {
     mainImage: string;
   };
   setValue: (value: {}) => void;
+  name: string;
 }
 
-const ModalLocal = ({ value, setValue } : ModalLocalProps) => {
+const ModalLocal = ({ value, setValue, name } : ModalLocalProps) => {
   const handleChangeForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
     toast.promise(
       async () => {
@@ -25,7 +26,7 @@ const ModalLocal = ({ value, setValue } : ModalLocalProps) => {
         const data = await response.json()
         setValue({
           ...value,
-          mainImage: data.url
+          [name]: data.url
         })
       },
       {

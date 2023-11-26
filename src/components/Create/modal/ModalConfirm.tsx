@@ -8,9 +8,10 @@ type ModalConfirmProps = {
   };
   setValue: (value: {}) => void;
   handleCloseModal: () => void;
+  name: string;
 }
 
-const ModalConfirm = ({ value, setValue, handleCloseModal } : ModalConfirmProps) => {
+const ModalConfirm = ({ value, setValue, handleCloseModal, name } : ModalConfirmProps) => {
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -27,7 +28,7 @@ const ModalConfirm = ({ value, setValue, handleCloseModal } : ModalConfirmProps)
       if(response.ok){
         setValue({
           ...value,
-          mainImage: ''
+          [name]: ''
         })
       }
     } catch (error) {
@@ -73,8 +74,7 @@ const ModalConfirm = ({ value, setValue, handleCloseModal } : ModalConfirmProps)
             </button> 
           </div>     
         )
-      }
-       
+      }   
     </div>
   )
 }

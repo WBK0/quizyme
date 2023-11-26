@@ -10,11 +10,12 @@ type ModalPictureProps = {
   value: {
     mainImage: string;
   };
-  setValue: (value: {}) => void;  
+  setValue: (value: {}) => void;
+  name: string;
 }
 
 
-const ModalPicture = ({ handleCloseModal, value, setValue } : ModalPictureProps) => {
+const ModalPicture = ({ handleCloseModal, value, setValue, name } : ModalPictureProps) => {
   const { getParams, changeParam } = useUrlParams();
 
   useEffect(() => {
@@ -43,10 +44,10 @@ const ModalPicture = ({ handleCloseModal, value, setValue } : ModalPictureProps)
               !value.mainImage
               ? 
                 getParams().modalType === 'online'
-                ? <ModalOnline value={value} setValue={setValue} />
-                : <ModalLocal value={value} setValue={setValue} />
+                ? <ModalOnline value={value} setValue={setValue} name={name}/>
+                : <ModalLocal value={value} setValue={setValue} name={name} />
               :
-                <ModalConfirm value={value} setValue={setValue} handleCloseModal={handleCloseModal} />
+                <ModalConfirm value={value} setValue={setValue} handleCloseModal={handleCloseModal} name={name} />
             }
           </div>
         </div>

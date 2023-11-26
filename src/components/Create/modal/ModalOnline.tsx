@@ -13,9 +13,10 @@ type ModalOnlineProps = {
     mainImage: string;
   };
   setValue: (value: {}) => void;
+  name: string;
 }
 
-const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
+const ModalOnline = ({ value, setValue, name } : ModalOnlineProps) => {
   const [results, setResults] = useState<Result>([]);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -51,7 +52,7 @@ const ModalOnline = ({ value, setValue } : ModalOnlineProps) => {
 
     setValue({
       ...value,
-      mainImage: json.url
+      [name]: json.url
     });
   }
 
