@@ -12,10 +12,11 @@ type ModalPictureProps = {
   };
   setValue: (value: {}) => void;
   name: string;
+  type?: 'quizzes' | 'flashcards';
 }
 
 
-const ModalPicture = ({ handleCloseModal, value, setValue, name } : ModalPictureProps) => {
+const ModalPicture = ({ handleCloseModal, value, setValue, name, type } : ModalPictureProps) => {
   const { getParams, changeParam } = useUrlParams();
 
   useEffect(() => {
@@ -23,6 +24,17 @@ const ModalPicture = ({ handleCloseModal, value, setValue, name } : ModalPicture
       changeParam('modalType', 'online');
     }
   }, []);
+
+  const setImage = (url: string) => {
+    if(type === 'quizzes'){
+      
+    }else{
+      setValue({
+        ...value,
+        mainImage: url,
+      })
+    }
+  }
 
   return (
     <div className="fixed bg-black/50 z-30 w-full h-screen top-0 left-0">
@@ -44,10 +56,10 @@ const ModalPicture = ({ handleCloseModal, value, setValue, name } : ModalPicture
               !value.mainImage
               ? 
                 getParams().modalType === 'online'
-                ? <ModalOnline value={value} setValue={setValue} name={name}/>
-                : <ModalLocal value={value} setValue={setValue} name={name} />
+                ? <ModalOnline setImage={setImage} />
+                : <ModalLocal setImage={setImage} />
               :
-                <ModalConfirm value={value} setValue={setValue} handleCloseModal={handleCloseModal} name={name} />
+                <ModalConfirm setImage={setImage} handleCloseModal={handleCloseModal} value={value} name={name} />
             }
           </div>
         </div>

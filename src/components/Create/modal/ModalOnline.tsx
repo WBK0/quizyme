@@ -9,14 +9,10 @@ type Result = {
 }[]
 
 type ModalOnlineProps = {
-  value: {
-    mainImage: string;
-  };
-  setValue: (value: {}) => void;
-  name: string;
+  setImage: (url: string) => void;
 }
 
-const ModalOnline = ({ value, setValue, name } : ModalOnlineProps) => {
+const ModalOnline = ({ setImage } : ModalOnlineProps) => {
   const [results, setResults] = useState<Result>([]);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -50,10 +46,7 @@ const ModalOnline = ({ value, setValue, name } : ModalOnlineProps) => {
   
     const json = await response.json();
 
-    setValue({
-      ...value,
-      [name]: json.url
-    });
+    setImage(json.url)
   }
 
   useEffect(() => {

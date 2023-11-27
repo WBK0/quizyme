@@ -1,18 +1,13 @@
-import useLocalStorage from '@/hooks/useLocalStorage';
 import dropdownicon from '@/public/dropdownicon.svg'
 import foldericon from '@/public/foldericon.svg'
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 
 type ModalLocalProps = {
-  value: {
-    mainImage: string;
-  };
-  setValue: (value: {}) => void;
-  name: string;
+  setImage: (url: string) => void;
 }
 
-const ModalLocal = ({ value, setValue, name } : ModalLocalProps) => {
+const ModalLocal = ({ setImage } : ModalLocalProps) => {
   const handleChangeForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
     toast.promise(
       async () => {
@@ -24,10 +19,7 @@ const ModalLocal = ({ value, setValue, name } : ModalLocalProps) => {
           body: formData
         })
         const data = await response.json()
-        setValue({
-          ...value,
-          [name]: data.url
-        })
+        setImage(data.url)
       },
       {
         pending: 'Sending image...',
