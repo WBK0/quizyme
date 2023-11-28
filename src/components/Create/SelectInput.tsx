@@ -53,7 +53,7 @@ const SelectInput = ({ title, options, defaultValue, register, name, setValue, w
     >
       <h6 className="px-4 text-gray-400 font-bold text-xs pt-2">{title}</h6>
       <div className="relative">
-        <div className={`w-full ${isOpen ? 'rounded-t-xl' : 'rounded-xl'} px-4 pb-2 outline-none font-bold text-lg bg-gray-100 text-black capitalize`}>
+        <div className={`w-full ${isOpen ? 'rounded-t-xl' : 'rounded-xl'} px-4 pb-2 outline-none font-bold text-lg bg-gray-100 text-black`}>
           {watch(name) || "Select an option"}
         </div>
         {isOpen && (
