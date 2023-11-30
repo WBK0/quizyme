@@ -3,6 +3,8 @@ import TextareaInput from "@/components/Create/TextareaInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
+import AnswerQuiz from "./AnswerQuiz";
+import { useState } from "react";
 
 type FormInputs = {
   question: string;
@@ -13,9 +15,9 @@ type FormInputs = {
 
 const schema = yup.object().shape({
   question: yup.string()
-    .min(4, 'Description must be at least 4 characters')
-    .max(512, 'Description must be at most 512 characters')
-    .required('Description is required'),
+    .min(4, 'Question must be at least 4 characters')
+    .max(512, 'Question must be at most 512 characters')
+    .required('Question is required'),
   answerTime: yup.string()
     .required('Answer time is required'),
   answerPoints: yup.string()
@@ -25,10 +27,54 @@ const schema = yup.object().shape({
 });
 
 const Form = () => {
-  const { register, formState: { errors }, setValue, watch, handleSubmit } = useForm<FormInputs>({ resolver: yupResolver(schema) });
+  const [formValues, setFormValues] = useState<any>([]);
+  const [actualQuestion, setActualQuestion] = useState(0);
+  
+  const { register, formState: { errors }, setValue, watch, handleSubmit, reset } = useForm<FormInputs>({ resolver: yupResolver(schema) });
+
+  const onSubmit = (data: FormInputs) => {
+    setFormValues([...formValues, data]);
+    reset({
+      question: "",
+      answerTime: "30 s",
+      answerPoints: "500",
+      responseType: "Quiz",
+    });
+    setActualQuestion(actualQuestion + 1);
+  }
+
+  const handlePreviousQuestion = () => {
+    setActualQuestion(actualQuestion - 1);
+    setValue("question", formValues[actualQuestion - 1].question);
+  }
+
+  const handleNextQuestion = (data : FormInputs) => {
+    setFormValues(
+      formValues.map((item : any, index : number) => {
+        if(index === actualQuestion){
+          return data;
+        }
+        return item;
+      })
+    );
+    setActualQuestion(actualQuestion + 1);
+    reset({
+      question: formValues[actualQuestion + 1]?.question || "",
+      answerTime: formValues[actualQuestion + 1]?.answerTime || formValues[actualQuestion].answerTime,
+      answerPoints: formValues[actualQuestion + 1]?.answerPoints || formValues[actualQuestion].answerPoints,
+      responseType: formValues[actualQuestion + 1]?.responseType || formValues[actualQuestion].responseType, 
+    })
+  }
 
   return (
     <form className="flex flex-col gap-4 mt-12">
+      <h6 className="text-right font-bold text-lg">
+        {
+          actualQuestion === formValues.length
+          ? `${formValues.length} questions`
+          : `You are viewing at ${actualQuestion + 1} of ${formValues.length + 1} questions`
+        }
+      </h6>
       <TextareaInput
         register={register}
         name="question"
@@ -64,17 +110,51 @@ const Form = () => {
         watch={watch}
         error={errors.responseType?.message}
       />
+      {
+        (() => {
+          switch (watch("responseType")) {
+            case 'Quiz':
+              return(
+                <AnswerQuiz />
+              )
+            default:
+              null
+          }
+        })()
+      }
       <div className="flex justify-between md:flex-row flex-col gap-4">
-        <button
-          className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 w-60"
-        >
-          Previous question
-        </button>
-        <button
-          className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-60"
-        >
-          Add question
-        </button>
+        {
+          actualQuestion > 0
+          ?
+            <button
+              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 w-60"
+              type="button"
+              onClick={handlePreviousQuestion}
+            >
+              Previous question
+            </button>
+          : null
+        }
+        {
+          actualQuestion !== formValues.length
+          ?
+            <button
+              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-60"
+              type="button"
+              onClick={handleSubmit(handleNextQuestion)}
+            >
+              Next question
+            </button>
+          : 
+            <button
+              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-60"
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Add question
+            </button>
+        }
+        
       </div>
       
     </form>
