@@ -12,10 +12,10 @@ const TextareaInput = ({register, name, error} : TextareaInputProps) => {
   return (
     <div className="relative">
       <textarea
-        placeholder="Description"
+        placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-gray-100 text-black"
         rows={5}
-        {...register('description')}
+        {...register(name)}
       />
       <div className="group">
         {error && 
