@@ -1,70 +1,39 @@
-import SelectInput from "@/components/Create/SelectInput";
-import TextareaInput from "@/components/Create/TextareaInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import * as yup from 'yup';
-import AnswerQuiz from "./AnswerQuiz";
+import { useFieldArray, useForm } from "react-hook-form";
 import { useState } from "react";
-
-type FormInputs = {
-  question: string;
-  answerTime: string;
-  answerPoints: string;
-  responseType: string;
-}
-
-const schema = yup.object().shape({
-  question: yup.string()
-    .min(4, 'Question must be at least 4 characters')
-    .max(512, 'Question must be at most 512 characters')
-    .required('Question is required'),
-  answerTime: yup.string()
-    .required('Answer time is required'),
-  answerPoints: yup.string()
-    .required('Answer points is required'),
-  responseType: yup.string()
-    .required('Response type is required'),
-});
+import { toast } from "react-toastify";
+import Inputs from "./Inputs";
+import { FormInputs, FormValues } from "./types/Form.types";
+import { useFormSchema } from "./schemas/CreateQuiz.yup";
+import Buttons from "./Buttons";
+import SwitchAnswers from "./SwitchAnswers";
 
 const Form = () => {
-  const [formValues, setFormValues] = useState<any>([]);
+  const [formValues, setFormValues] = useState<FormValues>([]);
   const [actualQuestion, setActualQuestion] = useState(0);
   
-  const { register, formState: { errors }, setValue, watch, handleSubmit, reset } = useForm<FormInputs>({ resolver: yupResolver(schema) });
+  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control } = useForm<FormInputs>({ resolver: yupResolver(useFormSchema) });
+  const { fields, append, remove, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 } })
 
-  const onSubmit = (data: FormInputs) => {
-    setFormValues([...formValues, data]);
-    reset({
-      question: "",
-      answerTime: "30 s",
-      answerPoints: "500",
-      responseType: "Quiz",
-    });
-    setActualQuestion(actualQuestion + 1);
+  const onSubmit = async (data: FormInputs) => {
+    try {
+      // await answersSchema.validate(answers);
+
+      setFormValues([...formValues, {...data}]);
+      reset({
+        question: "",
+        answerTime: "30 s",
+        answerPoints: "500",
+        responseType: "Quiz",
+      });
+      setActualQuestion(actualQuestion + 1);
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message);
+    }
   }
 
-  const handlePreviousQuestion = () => {
-    setActualQuestion(actualQuestion - 1);
-    setValue("question", formValues[actualQuestion - 1].question);
-  }
-
-  const handleNextQuestion = (data : FormInputs) => {
-    setFormValues(
-      formValues.map((item : any, index : number) => {
-        if(index === actualQuestion){
-          return data;
-        }
-        return item;
-      })
-    );
-    setActualQuestion(actualQuestion + 1);
-    reset({
-      question: formValues[actualQuestion + 1]?.question || "",
-      answerTime: formValues[actualQuestion + 1]?.answerTime || formValues[actualQuestion].answerTime,
-      answerPoints: formValues[actualQuestion + 1]?.answerPoints || formValues[actualQuestion].answerPoints,
-      responseType: formValues[actualQuestion + 1]?.responseType || formValues[actualQuestion].responseType, 
-    })
-  }
+  // console.log(watch('answers'))
 
   return (
     <form className="flex flex-col gap-4 mt-12">
@@ -75,88 +44,30 @@ const Form = () => {
           : `You are viewing at ${actualQuestion + 1} of ${formValues.length + 1} questions`
         }
       </h6>
-      <TextareaInput
+      <Inputs 
         register={register}
-        name="question"
-        error={errors.question?.message}
-      />
-      <SelectInput
-        title="Time to answer"
-        options={["10 s", "15 s", "30 s", "45 s", "60 s", "90 s", "120 s"]}
-        register={register}
-        name="answerTime"
-        defaultValue="30 s"
+        errors={errors}
         setValue={setValue}
         watch={watch}
-        error={errors.answerTime?.message}
       />
-      <SelectInput
-        title="Points for answer"
-        options={["100", "150", "250", "400", "500", "750", "1000", "1250", "1500"]}
+      <SwitchAnswers
+        fields={fields}
+        append={append}
         register={register}
-        name="answerPoints"
-        defaultValue="500"
-        setValue={setValue}
         watch={watch}
-        error={errors.answerPoints?.message}
+        remove={remove}
+        update={update}
       />
-      <SelectInput
-        title="Type of response"
-        options={["Quiz", "Puzzle", "True / False", "Multiple choice"]}
-        register={register}
-        name="responseType"
-        defaultValue="Quiz"
+      <Buttons
+        actualQuestion={actualQuestion}
+        setActualQuestion={setActualQuestion}
+        formValues={formValues}
+        setFormValues={setFormValues}
+        reset={reset}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
         setValue={setValue}
-        watch={watch}
-        error={errors.responseType?.message}
-      />
-      {
-        (() => {
-          switch (watch("responseType")) {
-            case 'Quiz':
-              return(
-                <AnswerQuiz />
-              )
-            default:
-              null
-          }
-        })()
-      }
-      <div className="flex justify-between md:flex-row flex-col gap-4">
-        {
-          actualQuestion > 0
-          ?
-            <button
-              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 w-60"
-              type="button"
-              onClick={handlePreviousQuestion}
-            >
-              Previous question
-            </button>
-          : null
-        }
-        {
-          actualQuestion !== formValues.length
-          ?
-            <button
-              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-60"
-              type="button"
-              onClick={handleSubmit(handleNextQuestion)}
-            >
-              Next question
-            </button>
-          : 
-            <button
-              className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-60"
-              type="button"
-              onClick={handleSubmit(onSubmit)}
-            >
-              Add question
-            </button>
-        }
-        
-      </div>
-      
+      />  
     </form>
   )
 }

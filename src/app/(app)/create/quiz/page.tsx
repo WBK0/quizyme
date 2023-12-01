@@ -5,17 +5,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import Form from "./Form";
 
-// type FormValues = {
-//   image: string;
-//   question: string;
-//   answerTime: string;
-//   answerPoints: string;
-//   responseType: string;
-//   answers: {
-//       answer: string;
-//       isCorrect: boolean;
-//     }[]
-// }[]
+
 
 const CreateQuiz = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,30 +1,15 @@
-import { useState } from "react";
-
-const AnswerQuiz = () => {
-  const [answers, setAnswers] = useState([
-    {
-      answer: "",
-      isCorrect: true,
-    }
-  ]);
-
+const AnswerQuiz = ({ fields, register, append, remove, update }) => {
   const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {
-    setAnswers(
-      answers.map((answer, i) => {
-        if(i === index){
-          return {
-            ...answer,
-            isCorrect: true,
-          }
-        }
-        return {
-          ...answer,
-          isCorrect: false,
-        }
-      })
-    )
+    update(fields.findIndex(field => field.isCorrect), {
+      ...fields[fields.findIndex(field => field.isCorrect)],
+      isCorrect: false,
+    })
+    update(index, {
+      ...fields[index],
+      isCorrect: true,
+    })
   }
 
   const adjustHeight = (element: HTMLTextAreaElement) => {
@@ -33,20 +18,21 @@ const AnswerQuiz = () => {
   }
 
   const handleAddAnswer = () => {
-    if(answers.length === 4) return;
-    setAnswers([
-      ...answers,
-      {
-        answer: "",
-        isCorrect: false,
-      }
-    ])
+    if(fields.length === 4) return;
+    append({
+      answer: "",
+      isCorrect: false,
+    })
   }
 
   const handleDeleteAnswer = () => {
-    setAnswers(
-      answers.filter((answer, index) => index !== answers.length - 1)
-    )
+    if(fields[fields.length - 1].isCorrect){
+      update(fields.length - 2), {
+        ...fields[fields.length - 2],
+        isCorrect: true,
+      }
+    }
+    remove(fields.length - 1);
   }
 
   return (
@@ -55,12 +41,16 @@ const AnswerQuiz = () => {
         Answers
       </h3>
       {
-        answers.map((answer, index) => (
-          <div className={`bg-${colors[index % 4]} min-h-fit w-full flex rounded-xl items-center`}>
+        fields.map((field, index) => (
+          <div 
+            className={`bg-${colors[index % 4]} min-h-fit w-full flex rounded-xl items-center`}
+            key={field.id}
+          >
             <textarea 
               className="bg-transparent w-full text-white outline-none p-4 font-bold text-lg resize-none overflow-y-hidden h-fit"
               rows={1}
               onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
+              {...register(`answers.${index}.answer`)}
             />
             <button 
               type="button"
@@ -68,7 +58,7 @@ const AnswerQuiz = () => {
               onClick={() => handleIsCorrect(index)}
             >
               {
-                answer.isCorrect
+                field.isCorrect
                 ?
                   <svg xmlns="http://www.w3.org/2000/svg" className={`h-7 w-7 text-${colors[index % 4]} mx-auto`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" d="M5 13l4 4L19 7" />
@@ -81,7 +71,7 @@ const AnswerQuiz = () => {
       }
       <div className="flex justify-center gap-6 flex-wrap">
         {
-          answers.length > 1
+          fields.length > 2
           ?
             <button
               type="button"
@@ -93,7 +83,7 @@ const AnswerQuiz = () => {
           : null
         }
         {
-          answers.length < 4
+          fields.length < 4
           ?
             <button
               type="button"
