@@ -3,6 +3,10 @@ export type FormInputs = {
   answerTime: string;
   answerPoints: string;
   responseType: string;
+  answers?: {
+    answer: string;
+    isCorrect: boolean;
+  }[]
 }
 
 export type FormValues = {
@@ -11,7 +15,7 @@ export type FormValues = {
   answerTime: string;
   answerPoints: string;
   responseType: string;
-  answers: {
+  answers?: {
     answer: string;
     isCorrect: boolean;
   }[]

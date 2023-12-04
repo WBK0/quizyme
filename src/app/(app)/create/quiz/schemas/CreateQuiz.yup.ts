@@ -11,20 +11,14 @@ export const useFormSchema = yup.object().shape({
     .required('Answer points is required'),
   responseType: yup.string()
     .required('Response type is required'),
-});
-
-export const answersSchema = yup.array().of(
-  yup.object().shape({
-    answer: yup.string()
-      .min(1, 'Answers must be at least 1 characters')
-      .max(512, 'Answers must be at most 512 characters')
-      .required('Answers is required'),
-    isCorrect: yup.boolean()
-      .required('Minimum one answer must be correct'),
-  })
-  )
-  .min(2, 'You must have at least 2 answers')
-  .max(4, 'You must have at most 4 answers')
-  .test('isCorrect', 'Minimum one answer must be correct', (answers) => {
-    return answers?.some((answer : any) => answer.isCorrect === true);
+  answers: yup.array().of(
+    yup.object().shape({
+      answer: yup.string()
+        .min(1, 'Answer must be at least 1 character')
+        .max(512, 'Answer must be at most 512 characters')
+        .required('Answer is required'),
+      isCorrect: yup.boolean()
+        .required('Answer correctness is required'),
+    })
+  ),
 });

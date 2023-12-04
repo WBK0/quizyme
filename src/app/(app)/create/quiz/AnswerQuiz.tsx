@@ -1,13 +1,13 @@
-const AnswerQuiz = ({ fields, register, append, remove, update }) => {
+const AnswerQuiz = ({ fields, register, append, remove, update, watch }) => {
   const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {
     update(fields.findIndex(field => field.isCorrect), {
-      ...fields[fields.findIndex(field => field.isCorrect)],
+      ...watch('answers')[fields.findIndex(field => field.isCorrect)],
       isCorrect: false,
     })
     update(index, {
-      ...fields[index],
+      ...watch('answers')[index],
       isCorrect: true,
     })
   }
@@ -51,6 +51,7 @@ const AnswerQuiz = ({ fields, register, append, remove, update }) => {
               rows={1}
               onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
               {...register(`answers.${index}.answer`)}
+
             />
             <button 
               type="button"

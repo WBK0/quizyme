@@ -1,4 +1,4 @@
-import { UseFormReset, UseFormSetValue } from "react-hook-form";
+import { UseFormReset } from "react-hook-form";
 import { FormInputs, FormValues } from "./types/Form.types";
 
 type ButtonsProps = {
@@ -6,19 +6,21 @@ type ButtonsProps = {
   formValues: FormValues;
   handleSubmit: any;
   setActualQuestion: (value: number) => void;
-  setValue: UseFormSetValue<FormInputs>;
   setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
   reset: UseFormReset<FormInputs>;
   onSubmit: (data: FormInputs) => void;
 }
 
-const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, setValue, setFormValues, reset, onSubmit} : ButtonsProps) => {
-  const handlePreviousQuestion = () => {
-    setActualQuestion(actualQuestion - 1);
-    setValue("question", formValues[actualQuestion - 1].question);
+const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, setFormValues, reset, onSubmit} : ButtonsProps) => {
+  const handlePreviousQuestion = (data : FormInputs) => {
+    handleStepAction(actualQuestion - 1, data);
   }
 
   const handleNextQuestion = (data : FormInputs) => {
+    handleStepAction(actualQuestion + 1, data);
+  }
+
+  const handleStepAction = (questionIndex : number, data: FormInputs) => {
     setFormValues(
       formValues.map((item : any, index : number) => {
         if(index === actualQuestion){
@@ -27,12 +29,16 @@ const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, 
         return item;
       })
     );
-    setActualQuestion(actualQuestion + 1);
+    setActualQuestion(questionIndex);
     reset({
-      question: formValues[actualQuestion + 1]?.question || "",
-      answerTime: formValues[actualQuestion + 1]?.answerTime || formValues[actualQuestion].answerTime,
-      answerPoints: formValues[actualQuestion + 1]?.answerPoints || formValues[actualQuestion].answerPoints,
-      responseType: formValues[actualQuestion + 1]?.responseType || formValues[actualQuestion].responseType, 
+      question: formValues[questionIndex]?.question || "",
+      answerTime: formValues[questionIndex]?.answerTime || formValues[actualQuestion].answerTime,
+      answerPoints: formValues[questionIndex]?.answerPoints || formValues[actualQuestion].answerPoints,
+      responseType: formValues[questionIndex]?.responseType || formValues[actualQuestion].responseType,
+      answers: formValues[questionIndex]?.answers || [
+        { answer: "", isCorrect: true },
+        { answer: "", isCorrect: false },
+      ] 
     })
   }
 
@@ -44,7 +50,7 @@ const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, 
           <button
             className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 w-60"
             type="button"
-            onClick={handlePreviousQuestion}
+            onClick={handleSubmit(handlePreviousQuestion)}
           >
             Previous question
           </button>

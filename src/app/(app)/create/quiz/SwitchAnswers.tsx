@@ -25,6 +25,7 @@ const SwitchAnswers = ({ fields, register, watch, append, remove, update } : Swi
                   register={register}
                   remove={remove}
                   update={update}
+                  watch={watch}
                 />
               )
             default:

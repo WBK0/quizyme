@@ -12,28 +12,32 @@ const Form = () => {
   const [formValues, setFormValues] = useState<FormValues>([]);
   const [actualQuestion, setActualQuestion] = useState(0);
   
-  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control } = useForm<FormInputs>({ resolver: yupResolver(useFormSchema) });
-  const { fields, append, remove, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 } })
-
-  const onSubmit = async (data: FormInputs) => {
-    try {
-      // await answersSchema.validate(answers);
-
-      setFormValues([...formValues, {...data}]);
-      reset({
+  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control } = 
+    useForm<FormInputs>({ 
+      resolver: yupResolver(useFormSchema), 
+      defaultValues: {
         question: "",
         answerTime: "30 s",
         answerPoints: "500",
         responseType: "Quiz",
-      });
+        answers: [
+          { answer: "", isCorrect: true },
+          { answer: "", isCorrect: false },
+        ]
+      }
+    });
+  const { fields, append, remove, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
+
+  const onSubmit = async (data: FormInputs) => {
+    try {
+      setFormValues([...formValues, {...data}]);
+      reset();
       setActualQuestion(actualQuestion + 1);
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message);
     }
   }
-
-  // console.log(watch('answers'))
 
   return (
     <form className="flex flex-col gap-4 mt-12">
@@ -66,7 +70,6 @@ const Form = () => {
         reset={reset}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
-        setValue={setValue}
       />  
     </form>
   )
