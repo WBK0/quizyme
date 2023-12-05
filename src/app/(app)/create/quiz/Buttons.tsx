@@ -1,17 +1,24 @@
-import { UseFormReset } from "react-hook-form";
-import { FormInputs, FormValues } from "./types/Form.types";
+import { FormInputs } from "./types/Form.types";
+import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
+import { useContext } from "react";
+import { DataContext } from "@/providers/create-quiz/DataProvider";
+import { toast } from "react-toastify";
 
-type ButtonsProps = {
-  actualQuestion: number;
-  formValues: FormValues;
-  handleSubmit: any;
-  setActualQuestion: (value: number) => void;
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
-  reset: UseFormReset<FormInputs>;
-  onSubmit: (data: FormInputs) => void;
-}
+const Buttons = () => {
+  const { handleSubmit, reset } = useContext(UseFormContext);
+  const { formValues, setFormValues, actualQuestion, setActualQuestion } = useContext(DataContext);
 
-const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, setFormValues, reset, onSubmit} : ButtonsProps) => {
+  const onSubmit = async (data: FormInputs) => {
+    try {
+      setFormValues([...formValues, {...data}]);
+      reset();
+      setActualQuestion(actualQuestion + 1);
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message);
+    }
+  }
+
   const handlePreviousQuestion = (data?: FormInputs) => {
     if(data){
       handleStepAction(actualQuestion - 1, data);

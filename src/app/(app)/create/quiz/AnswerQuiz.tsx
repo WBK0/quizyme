@@ -1,16 +1,8 @@
-import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { FormInputs } from "./types/Form.types";
+import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
+import { useContext } from "react";
 
-type AnswerQuizProps = {
-  watch: UseFormWatch<FormInputs>;
-  fields: FieldArrayWithId<FormInputs, "answers", "id">[];
-  register: UseFormRegister<FormInputs>;
-  append: UseFieldArrayAppend<FormInputs>;
-  remove: UseFieldArrayRemove;
-  update: UseFieldArrayUpdate<FormInputs>;
-}
-
-const AnswerQuiz = ({ fields, register, append, remove, update, watch } : AnswerQuizProps) => {
+const AnswerQuiz = () => {
+  const { register, watch, fields, append, remove, update } = useContext(UseFormContext);
   const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {

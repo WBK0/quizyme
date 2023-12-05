@@ -1,16 +1,12 @@
 import SelectInput from "@/components/Create/SelectInput";
 import TextareaInput from "@/components/Create/TextareaInput";
-import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { FormInputs } from "./types/Form.types";
+import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
+import { useContext } from "react";
 
-type InputsProps = {
-  register: UseFormRegister<FormInputs>;
-  errors: FieldErrors<FormInputs>;
-  setValue: UseFormSetValue<FormInputs>;
-  watch: UseFormWatch<FormInputs>;
-}
+const Inputs = () => {
 
-const Inputs = ({ register, errors, setValue, watch } : InputsProps) => {
+  const { register, errors, watch, setValue } = useContext(UseFormContext);
+
   return (
     <>
       <TextareaInput
