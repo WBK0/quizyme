@@ -1,5 +1,5 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
-import AnswerQuiz from "./AnswerQuiz";
+import AnswerQuiz from "./answers/AnswerQuiz";
 import { useContext } from "react";
 
 
@@ -8,6 +8,9 @@ const SwitchAnswers = () => {
 
   return (
     <>
+      <h3 className="font-bold text-lg">
+        Answers
+      </h3>
      {
         (() => {
           switch (watch("responseType")) {

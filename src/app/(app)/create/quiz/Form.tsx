@@ -8,6 +8,7 @@ const Form = () => {
     <form className="flex flex-col gap-4 mt-12">
       <QuestionHeading />
       <Inputs />
+
       <SwitchAnswers />
       <Buttons />  
     </form>
