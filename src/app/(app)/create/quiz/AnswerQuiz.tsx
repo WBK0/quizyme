@@ -1,15 +1,30 @@
-const AnswerQuiz = ({ fields, register, append, remove, update, watch }) => {
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, UseFormWatch } from "react-hook-form";
+import { FormInputs } from "./types/Form.types";
+
+type AnswerQuizProps = {
+  watch: UseFormWatch<FormInputs>;
+  fields: FieldArrayWithId<FormInputs, "answers", "id">[];
+  register: UseFormRegister<FormInputs>;
+  append: UseFieldArrayAppend<FormInputs>;
+  remove: UseFieldArrayRemove;
+  update: UseFieldArrayUpdate<FormInputs>;
+}
+
+const AnswerQuiz = ({ fields, register, append, remove, update, watch } : AnswerQuizProps) => {
   const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {
-    update(fields.findIndex(field => field.isCorrect), {
-      ...watch('answers')[fields.findIndex(field => field.isCorrect)],
-      isCorrect: false,
-    })
-    update(index, {
-      ...watch('answers')[index],
-      isCorrect: true,
-    })
+    const answers = watch('answers');
+    if(answers){
+      update(fields.findIndex(field => field.isCorrect), {
+        ...answers[fields.findIndex(field => field.isCorrect)],
+        isCorrect: false,
+      })
+      update(index, {
+        ...answers[index],
+        isCorrect: true,
+      })
+    }
   }
 
   const adjustHeight = (element: HTMLTextAreaElement) => {
@@ -27,10 +42,10 @@ const AnswerQuiz = ({ fields, register, append, remove, update, watch }) => {
 
   const handleDeleteAnswer = () => {
     if(fields[fields.length - 1].isCorrect){
-      update(fields.length - 2), {
+      update(fields.length - 2, {
         ...fields[fields.length - 2],
         isCorrect: true,
-      }
+      })
     }
     remove(fields.length - 1);
   }

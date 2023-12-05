@@ -1,14 +1,14 @@
-import { UseFormWatch } from "react-hook-form";
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, UseFormWatch } from "react-hook-form";
 import AnswerQuiz from "./AnswerQuiz";
 import { FormInputs } from "./types/Form.types";
 
 type SwitchAnswersProps = {
-  answers: {
-    answer: string;
-    isCorrect: boolean;
-  }[];
-  setAnswers: (value: any) => void;
   watch: UseFormWatch<FormInputs>;
+  fields: FieldArrayWithId<FormInputs, "answers", "id">[];
+  register: UseFormRegister<FormInputs>;
+  append: UseFieldArrayAppend<FormInputs>;
+  remove: UseFieldArrayRemove;
+  update: UseFieldArrayUpdate<FormInputs>;
 }
 
 const SwitchAnswers = ({ fields, register, watch, append, remove, update } : SwitchAnswersProps) => {

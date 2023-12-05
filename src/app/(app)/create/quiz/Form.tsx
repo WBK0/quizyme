@@ -24,7 +24,7 @@ const Form = () => {
           { answer: "", isCorrect: true },
           { answer: "", isCorrect: false },
         ]
-      }
+      } as FormInputs // Add type assertion here
     });
   const { fields, append, remove, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
 
