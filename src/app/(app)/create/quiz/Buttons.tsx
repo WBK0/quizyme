@@ -12,8 +12,12 @@ type ButtonsProps = {
 }
 
 const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, setFormValues, reset, onSubmit} : ButtonsProps) => {
-  const handlePreviousQuestion = (data : FormInputs) => {
-    handleStepAction(actualQuestion - 1, data);
+  const handlePreviousQuestion = (data?: FormInputs) => {
+    if(data){
+      handleStepAction(actualQuestion - 1, data);
+    }else{
+      handleStepAction(actualQuestion - 1, formValues[actualQuestion]);
+    }
   }
 
   const handleNextQuestion = (data : FormInputs) => {
@@ -50,7 +54,11 @@ const Buttons = ({ actualQuestion, formValues, handleSubmit, setActualQuestion, 
           <button
             className="mx-auto rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 w-60"
             type="button"
-            onClick={handleSubmit(handlePreviousQuestion)}
+            onClick={
+              actualQuestion === formValues.length 
+                ? () => handlePreviousQuestion()
+                : handleSubmit(handlePreviousQuestion)
+            }
           >
             Previous question
           </button>
