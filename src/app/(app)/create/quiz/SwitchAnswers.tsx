@@ -1,6 +1,7 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import AnswerQuiz from "./answers/AnswerQuiz";
 import { useContext } from "react";
+import AnswerBoolean from "./answers/AnswerBoolean";
 
 
 const SwitchAnswers = () => {
@@ -17,6 +18,10 @@ const SwitchAnswers = () => {
             case 'Quiz':
               return(
                 <AnswerQuiz />
+              )
+            case 'True / False':
+              return(
+                <AnswerBoolean />
               )
             default:
               null

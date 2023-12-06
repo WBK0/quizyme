@@ -1,7 +1,7 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { useContext } from "react";
 
-const Fields = () => {
+const Fields = ({ disable = false } : { disable?: boolean }) => {
   const { fields, watch, update, register } = useContext(UseFormContext);
   const colors = ['blue', 'red', 'green', 'yellow'];
 
@@ -37,6 +37,7 @@ const Fields = () => {
               rows={1}
               onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
               {...register(`answers.${index}.answer`)}
+              disabled={disable}
 
             />
             <button 
