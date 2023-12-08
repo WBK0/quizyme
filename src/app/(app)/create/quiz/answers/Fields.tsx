@@ -1,20 +1,22 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { useContext } from "react";
 
-const Fields = ({ disable = false } : { disable?: boolean }) => {
+const Fields = ({ disable = false, multiChoice = false } : { disable?: boolean, multiChoice?: boolean }) => {
   const { fields, watch, update, register } = useContext(UseFormContext);
   const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {
     const answers = watch('answers');
     if(answers){
-      update(fields.findIndex(field => field.isCorrect), {
-        ...answers[fields.findIndex(field => field.isCorrect)],
-        isCorrect: false,
-      })
+      if(!multiChoice) {
+        update(fields.findIndex(field => field.isCorrect), {
+          ...answers[fields.findIndex(field => field.isCorrect)],
+          isCorrect: false,
+        })
+      }
       update(index, {
         ...answers[index],
-        isCorrect: true,
+        isCorrect: multiChoice ? !answers[index].isCorrect : true,
       })
     }
   }

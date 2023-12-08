@@ -3,7 +3,7 @@ import Buttons from "./Buttons";
 import { useContext, useEffect } from "react";
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 
-const AnswerQuiz = () => {  
+const AnswerMultiple = () => {  
   const { fields, setValue } = useContext(UseFormContext);
   
   useEffect(() => {
@@ -23,10 +23,10 @@ const AnswerQuiz = () => {
   
   return (
     <div className="mt-4 mb-12 flex flex-col gap-4">
-      <Fields />
+      <Fields multiChoice={true} />
       <Buttons />
     </div>
   )
 }
 
-export default AnswerQuiz;
+export default AnswerMultiple;
