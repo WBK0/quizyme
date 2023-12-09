@@ -9,8 +9,16 @@ const AnswerBoolean = () => {
 
   useEffect(() => {
     setValue("answers", [
-      { answer: "True", isCorrect: true },
-      { answer: "False", isCorrect: false },
+      { 
+        answer: "True", 
+        isCorrect: true,
+        color: "green"
+      },
+      { 
+        answer: "False", 
+        isCorrect: false,
+        color: "red"
+      },
     ])
   }, [formValues])
 

@@ -8,7 +8,6 @@ type FieldsProps = {
 
 const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
   const { fields, watch, update, register } = useContext(UseFormContext);
-  const colors = ['blue', 'red', 'green', 'yellow'];
 
   const handleIsCorrect = (index: number) => {
     const answers = watch('answers');
@@ -36,7 +35,7 @@ const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
       {
         fields.map((field, index) => (
           <div 
-            className={`bg-${colors[index % 4]} min-h-fit w-full flex rounded-xl items-center`}
+            className={`bg-${field.color} min-h-fit w-full flex rounded-xl items-center`}
             key={field.id}
           >
             <textarea 
@@ -54,7 +53,7 @@ const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
               {
                 field.isCorrect
                 ?
-                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-7 w-7 text-${colors[index % 4]} mx-auto`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-7 w-7 text-${field.color} mx-auto`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="5" d="M5 13l4 4L19 7" />
                   </svg>
                 : null

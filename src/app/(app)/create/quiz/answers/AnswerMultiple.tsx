@@ -12,10 +12,12 @@ const AnswerMultiple = () => {
       fields.some(field => field.answer === 'False')) {
         setValue('answers', [{
           answer: '',
-          isCorrect: true
+          isCorrect: true,
+          color: 'blue'
         }, {
           answer: '',
-          isCorrect: false
+          isCorrect: false,
+          color: 'red'
         }])
     }
   }, [])
