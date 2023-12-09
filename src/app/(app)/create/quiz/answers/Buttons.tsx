@@ -6,10 +6,14 @@ const Buttons = () => {
 
   const handleAddAnswer = () => {
     if(fields.length === 4) return;
-    append({
-      answer: "",
-      isCorrect: false,
-    })
+      append({
+        answer: "",
+        isCorrect: false,
+        color: !fields.some(field => field.color === 'blue') ? 'blue' : 
+               !fields.some(field => field.color === 'red') ? 'red' : 
+               !fields.some(field => field.color === 'green') ? 'green' 
+               : 'yellow',
+      })
   }
 
   const handleDeleteAnswer = () => {

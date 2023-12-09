@@ -1,7 +1,12 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { useContext } from "react";
 
-const Fields = ({ disable = false, multiChoice = false } : { disable?: boolean, multiChoice?: boolean }) => {
+type FieldsProps = {
+  disable?: boolean;
+  multiChoice?: boolean;
+}
+
+const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
   const { fields, watch, update, register } = useContext(UseFormContext);
   const colors = ['blue', 'red', 'green', 'yellow'];
 
@@ -40,7 +45,6 @@ const Fields = ({ disable = false, multiChoice = false } : { disable?: boolean, 
               onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
               {...register(`answers.${index}.answer`)}
               disabled={disable}
-
             />
             <button 
               type="button"

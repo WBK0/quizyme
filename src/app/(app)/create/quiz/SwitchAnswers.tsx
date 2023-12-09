@@ -3,6 +3,7 @@ import AnswerQuiz from "./answers/AnswerQuiz";
 import { useContext } from "react";
 import AnswerBoolean from "./answers/AnswerBoolean";
 import AnswerMultiple from "./answers/AnswerMultiple";
+import AnswerPuzzle from "./answers/AnswerPuzzle";
 
 
 const SwitchAnswers = () => {
@@ -27,6 +28,10 @@ const SwitchAnswers = () => {
             case 'Multiple choice':
               return(
                 <AnswerMultiple />
+              )
+            case 'Puzzle':
+              return(
+                <AnswerPuzzle />
               )
             default:
               null

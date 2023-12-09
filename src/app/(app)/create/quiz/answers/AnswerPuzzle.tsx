@@ -1,9 +1,9 @@
-import Fields from "./Fields";
 import Buttons from "./Buttons";
 import { useContext, useEffect } from "react";
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
+import PuzzleFields from "./PuzzleFields";
 
-const AnswerQuiz = () => {  
+const AnswerPuzzle = () => {  
   const { fields, setValue } = useContext(UseFormContext);
   
   useEffect(() => {
@@ -19,13 +19,13 @@ const AnswerQuiz = () => {
         }])
     }
   }, [])
-
+  
   return (
     <div className="mt-4 mb-12 flex flex-col gap-4">
-      <Fields />
+      <PuzzleFields />
       <Buttons />
     </div>
   )
 }
 
-export default AnswerQuiz;
+export default AnswerPuzzle;

@@ -6,6 +6,7 @@ export type FormInputs = {
   answers?: {
     answer: string;
     isCorrect: boolean;
+    color?: string;
   }[]
 }
 

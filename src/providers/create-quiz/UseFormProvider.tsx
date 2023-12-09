@@ -3,7 +3,7 @@ import { useFormSchema } from "@/app/(app)/create/quiz/schemas/CreateQuiz.yup";
 import { FormInputs } from "@/app/(app)/create/quiz/types/Form.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";
-import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
+import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -20,6 +20,7 @@ interface UseFormContextProps {
   remove: UseFieldArrayRemove;
   update: UseFieldArrayUpdate<FormInputs>;
   handleSubmit: UseFormHandleSubmit<FormInputs>;
+  move: UseFieldArrayMove;
 }
 
 export const UseFormContext = createContext(({} as UseFormContextProps));
@@ -34,12 +35,12 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         answerPoints: "500",
         responseType: "Quiz",
         answers: [
-          { answer: "", isCorrect: true },
-          { answer: "", isCorrect: false },
+          { answer: "", isCorrect: true, color: "blue" },
+          { answer: "", isCorrect: false, color: "red" },
         ]
       } as FormInputs
     });
-  const { fields, append, remove, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
+  const { fields, append, remove, move, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
 
   return (
     <UseFormContext.Provider
@@ -53,7 +54,8 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         fields,
         append,
         remove,
-        update
+        update,
+        move
       }}
     >
       {children}

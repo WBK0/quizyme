@@ -10,7 +10,6 @@ const AnswerMultiple = () => {
     if(
       fields.some(field => field.answer === 'True') && 
       fields.some(field => field.answer === 'False')) {
-        console.log('dzialam')
         setValue('answers', [{
           answer: '',
           isCorrect: true
