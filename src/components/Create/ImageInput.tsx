@@ -2,16 +2,16 @@ import Image from "next/image";
 import camera from '@/public/camera.svg';
 
 type ImageInputProps = {
-  isImageSet: boolean;
   mainImage: string;
   handleModal: () => void;
+  isClient: boolean;
 }
 
-const ImageInput = ({isImageSet, mainImage, handleModal} : ImageInputProps) => {
+const ImageInput = ({mainImage, handleModal, isClient} : ImageInputProps) => {
   return (
     <>
     {
-      isImageSet && mainImage ? 
+      isClient && mainImage ? 
         <div className="w-full h-full rounded-xl aspect-video flex flex-col justify-center items-center cursor-pointer mt-16 relative"
         onClick={handleModal}>
           <Image
@@ -20,6 +20,7 @@ const ImageInput = ({isImageSet, mainImage, handleModal} : ImageInputProps) => {
             sizes="100%"
             alt="cover image"
             className="rounded-xl"
+            priority={true}
           />
         </div>
         : 

@@ -9,12 +9,10 @@ type ModalPictureProps = {
   handleCloseModal: () => void;
   image?: string;
   setImage?: (value: string) => void;
-  name: string;
-  type?: 'quizzes' | 'flashcards';
 }
 
 
-const ModalPicture = ({ handleCloseModal, image, setImage, name } : ModalPictureProps) => {
+const ModalPicture = ({ handleCloseModal, image, setImage } : ModalPictureProps) => {
   const { getParams, changeParam } = useUrlParams();
 
   useEffect(() => {
@@ -46,7 +44,7 @@ const ModalPicture = ({ handleCloseModal, image, setImage, name } : ModalPicture
                 ? <ModalOnline setImage={setImage} />
                 : <ModalLocal setImage={setImage} />
               :
-                <ModalConfirm setImage={setImage} handleCloseModal={handleCloseModal} image={image} name={name} />
+                <ModalConfirm setImage={setImage} handleCloseModal={handleCloseModal} image={image} />
             }
           </div>
         </div>

@@ -13,15 +13,14 @@ const CreatePage = () => {
   const { getParams, changeParam } = useUrlParams();
   const [value, setValue] = useLocalStorage('create-form', {});
   const [modal, setModal] = useState(false);
-  const [isImageSet, setIsImageSet] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    if(value.mainImage){
-      setIsImageSet(true);
-    }else{
-      setIsImageSet(false);
-    }
-  }, [value])
+  const setImage = (image : string) => {
+    setValue({
+      ...value,
+      mainImage: image
+    });
+  }
 
   const handleModal = () => {
     setModal(!modal);
@@ -34,6 +33,7 @@ const CreatePage = () => {
     else if(!getParams().type){
       changeParam('type', 'quiz');
     }
+    setIsClient(true)
   }, []);
 
   return (
@@ -43,7 +43,7 @@ const CreatePage = () => {
         paramsName="type"
       />
       <ImageInput
-        isImageSet={isImageSet}
+        isClient={isClient}
         mainImage={value.mainImage}
         handleModal={handleModal}
       />
@@ -56,9 +56,8 @@ const CreatePage = () => {
         modal && (
           <ModalPicture 
             handleCloseModal={handleModal}
-            value={value}
-            setValue={setValue}
-            name="mainImage"
+            image={value.mainImage}
+            setImage={setImage}
           />
         )
       }

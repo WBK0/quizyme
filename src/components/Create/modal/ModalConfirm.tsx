@@ -6,10 +6,9 @@ type ModalConfirmProps = {
   setImage?: (value: string) => void;
   handleCloseModal: () => void;
   image: any;
-  name: string;
 }
 
-const ModalConfirm = ({ setImage, image, handleCloseModal, name } : ModalConfirmProps) => {
+const ModalConfirm = ({ setImage, image, handleCloseModal } : ModalConfirmProps) => {
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ImageInput from "@/components/Create/ImageInput"
 import ModalPicture from "@/components/Create/modal/ModalPicture"
 import { DataContext } from "@/providers/create-quiz/DataProvider";
@@ -6,6 +6,7 @@ import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 
 const Modal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { formValues } = useContext(DataContext);
   const { register, setValue, watch } = useContext(UseFormContext);
 
@@ -17,13 +18,17 @@ const Modal = () => {
     setValue("image", image);
   }
 
+  useEffect(() => {
+    setIsClient(true);
+  }, [])
+
   console.log(formValues);
   console.log(watch('image'));
 
   return (
     <div>
       <ImageInput
-        isImageSet={true}
+        isClient={isClient}
         mainImage={watch('image') || ""}
         handleModal={handleModal}
       />
@@ -34,8 +39,6 @@ const Modal = () => {
             handleCloseModal={handleModal}
             image={watch('image')}
             setImage={handleSetImage}
-            name="test"
-            type="quizzes"
           />
         :
           null
