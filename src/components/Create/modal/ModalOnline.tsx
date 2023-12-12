@@ -9,7 +9,7 @@ type Result = {
 }[]
 
 type ModalOnlineProps = {
-  setImage: (url: string) => void;
+  setImage?: (value: string) => void;
 }
 
 const ModalOnline = ({ setImage } : ModalOnlineProps) => {
@@ -46,7 +46,7 @@ const ModalOnline = ({ setImage } : ModalOnlineProps) => {
   
     const json = await response.json();
 
-    setImage(json.url)
+    setImage && setImage(json.url)
   }
 
   useEffect(() => {

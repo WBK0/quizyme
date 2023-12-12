@@ -8,18 +8,17 @@ const Buttons = () => {
   const { handleSubmit, reset } = useContext(UseFormContext);
   const { formValues, setFormValues, actualQuestion, setActualQuestion } = useContext(DataContext);
 
-  console.log(formValues);
-
   const onSubmit = async (data: FormInputs) => {
     try {
       if(data.responseType === "Puzzle" && data.answers){
         data.answers = data.answers.map((answer) => {
           return {
-            ...answer,
-            isCorrect: false,
+            answer: answer.answer,  
+            color: answer.color,
           }
         });
       }
+      
       setFormValues([...formValues, {...data}]);
       reset();
       setActualQuestion(actualQuestion + 1);
@@ -56,6 +55,7 @@ const Buttons = () => {
       answerTime: formValues[questionIndex]?.answerTime || formValues[actualQuestion].answerTime,
       answerPoints: formValues[questionIndex]?.answerPoints || formValues[actualQuestion].answerPoints,
       responseType: formValues[questionIndex]?.responseType || formValues[actualQuestion].responseType,
+      image: formValues[questionIndex]?.image || "",
       answers: formValues[questionIndex]?.answers || [
         { answer: "", isCorrect: true, color: "blue" },
         { answer: "", isCorrect: false, color: "red" },

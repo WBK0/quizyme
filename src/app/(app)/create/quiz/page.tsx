@@ -1,31 +1,17 @@
 "use client";
-import ImageInput from "@/components/Create/ImageInput";
-import ModalPicture from "@/components/Create/modal/ModalPicture";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { useState } from "react";
 import Form from "./Form";
 import DataProvider from "@/providers/create-quiz/DataProvider";
 import UseFormProvider from "@/providers/create-quiz/UseFormProvider";
-
-
+import Modal from "./Modal";
 
 const CreateQuiz = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);  
-
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  }
 
   return (
     <div className="relative pb-24 xl:pb-0">
       <DataProvider>
         <UseFormProvider>
           <div className="max-w-3xl mx-auto px-3">
-            <ImageInput
-              isImageSet={false}
-              mainImage=""
-              handleModal={handleModal}
-            />
+            <Modal />
             <Form
               // formValues={formValues}
               // setFormValues={setFormValues}
@@ -43,20 +29,7 @@ const CreateQuiz = () => {
               Public quiz
             </button>
           </div>
-          {
-            isModalOpen
-            ?
-              // <ModalPicture 
-              //   handleCloseModal={handleModal}
-              //   value={value}
-              //   setValue={setValue}
-              //   name="test"
-              //   type="quizzes"
-              // />
-              <></>
-            :
-              null
-          }
+          
         </UseFormProvider>
       </DataProvider>
     </div>

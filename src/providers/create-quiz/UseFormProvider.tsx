@@ -34,6 +34,7 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         answerTime: "30 s",
         answerPoints: "500",
         responseType: "Quiz",
+        image: "",
         answers: [
           { answer: "", isCorrect: true, color: "blue" },
           { answer: "", isCorrect: false, color: "red" },

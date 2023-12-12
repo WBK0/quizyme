@@ -3,13 +3,13 @@ import Image from "next/image";
 import { useState } from "react";
 
 type ModalConfirmProps = {
-  setImage: (url: string) => void;
+  setImage?: (value: string) => void;
   handleCloseModal: () => void;
-  value: any;
+  image: any;
   name: string;
 }
 
-const ModalConfirm = ({ setImage, value, handleCloseModal, name } : ModalConfirmProps) => {
+const ModalConfirm = ({ setImage, image, handleCloseModal, name } : ModalConfirmProps) => {
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -18,13 +18,13 @@ const ModalConfirm = ({ setImage, value, handleCloseModal, name } : ModalConfirm
 
   const handleDecline = async () => {
     try {
-      const filename = value[name].split('/').pop();
+      const filename = image.split('/').pop();
       const response = await fetch(`${process.env.NEXT_PUBLIC_CDN_URL}/delete/${filename}`, {
         method: 'DELETE'
       })
 
       if(response.ok){
-        setImage('');
+        setImage && setImage('');
       }
     } catch (error) {
       console.log(error)
@@ -45,7 +45,7 @@ const ModalConfirm = ({ setImage, value, handleCloseModal, name } : ModalConfirm
         )
       }
       <Image 
-        src={value.mainImage} 
+        src={image} 
         alt="image" 
         width={680} 
         height={380} 

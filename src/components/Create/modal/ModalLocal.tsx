@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 
 type ModalLocalProps = {
-  setImage: (url: string) => void;
+  setImage?: (url: string) => void;
 }
 
 const ModalLocal = ({ setImage } : ModalLocalProps) => {
@@ -18,8 +18,8 @@ const ModalLocal = ({ setImage } : ModalLocalProps) => {
           method: 'POST',
           body: formData
         })
-        const data = await response.json()
-        setImage(data.url)
+        const data = await response.json();
+        setImage && setImage(data.url);
       },
       {
         pending: 'Sending image...',
