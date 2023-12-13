@@ -20,7 +20,17 @@ const Buttons = () => {
       }
       
       setFormValues([...formValues, {...data}]);
-      reset();
+      reset({
+        question: "",
+        answerTime: data.answerTime,
+        answerPoints: data.answerPoints,
+        responseType: data.responseType,
+        image: "",
+        answers: [
+          { answer: "", isCorrect: true, color: "blue" },
+          { answer: "", isCorrect: false, color: "red" },
+        ]
+      });
       setActualQuestion(actualQuestion + 1);
     } catch (error : unknown) {
       if(error instanceof Error)
