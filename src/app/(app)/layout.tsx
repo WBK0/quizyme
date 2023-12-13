@@ -29,6 +29,8 @@ export default async function RootLayout ({
     <html lang="en">
       <UserProvider>
         <body>
+          {/* TEMPORARY SET BACKGROUND YELLOW - DELETE IN FUTURE */}
+          <div className='bg-yellow'></div>
           <ToastProvider>
             <Navbar />
             <div className='container mx-auto pt-28 min-h-screen'>

@@ -1,6 +1,7 @@
 "use client";
 import { FormValues } from "@/app/(app)/create/quiz/types/Form.types";
-import { createContext, useState } from "react";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { createContext, useEffect, useState } from "react";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -14,8 +15,18 @@ export const DataContext = createContext({
 });
 
 export default function DataProvider({ children }: CreateQuizProvider) {
-  const [formValues, setFormValues] = useState<FormValues>([]);
-  const [actualQuestion, setActualQuestion] = useState(0);
+  const [ value, setValue ] = useLocalStorage("create-form", {});
+  const [formValues, setFormValues] = useState<FormValues>(value.questions);
+  const [actualQuestion, setActualQuestion] = useState(formValues.length || 0);
+
+  useEffect(() => {
+    if(formValues.length > 0){
+      setValue({
+        ...value,
+        questions: formValues
+      });
+    }
+  }, [formValues]);
 
   return (
     <DataContext.Provider
