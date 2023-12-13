@@ -60,3 +60,36 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Collection {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  image String
+  Quiz  Quiz[]
+}
+
+type Answer {
+  answer    String
+  isCorrect Boolean
+}
+
+type Question {
+  question String
+  answers  Answer[]
+}
+
+model Quiz {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  topic        String
+  visibility   String
+  tags         String[]
+  pointsMethod String
+  image        String
+  description  String
+  collectionId String     @db.ObjectId
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  questions    Question[]
+  userId       String     @db.ObjectId
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
