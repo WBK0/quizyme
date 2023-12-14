@@ -50,6 +50,7 @@ model User {
   bio           String?
   interests     String[]
   isComplete    Boolean   @default(false)
+  Quiz          Quiz[]
 }
 
 model VerificationToken {
@@ -76,6 +77,10 @@ type Answer {
 type Question {
   question String
   answers  Answer[]
+  points   Int
+  time     Int
+  image    String
+  type     String
 }
 
 model Quiz {
@@ -90,6 +95,7 @@ model Quiz {
   collection   Collection @relation(fields: [collectionId], references: [id])
   questions    Question[]
   userId       String     @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

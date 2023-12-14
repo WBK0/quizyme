@@ -35,11 +35,11 @@ type FormProps = {
 
 const schema = yup.object().shape({
   topic: yup.string()
-    .min(3, 'Topic must be at least 8 characters')
-    .max(64, 'Topic must be at most 100 characters')
+    .min(3, 'Topic must be at least 3 characters')
+    .max(64, 'Topic must be at most 64 characters')
     .required('Topic is required'),
   description: yup.string()
-    .min(10, 'Description must be at least 10 characters')
+    .min(4, 'Description must be at least 4 characters')
     .max(1024, 'Description must be at most 1024 characters')
     .required('Description is required'),
   collection: yup.string()

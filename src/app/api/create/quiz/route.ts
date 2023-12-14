@@ -1,55 +1,105 @@
 import { connectToDB } from "@/utils/database";
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { schema } from "./schema";
+import * as yup from 'yup';
 
-export const POST = async (req : Request) => {
+export const POST = async (req: Request) => {
+  const prisma = new PrismaClient();
+  const session = await getServerSession(authOptions);
+
+  if(!session?.user?.id) {
+    return new Response(
+      JSON.stringify({
+        status: "Error",
+        message: "User not logged in",
+      }),
+      { status: 401 }
+    );
+  }
+
+  const userId = session?.user?.id;
+
+  const { topic, visibility, tags, pointsMethod, image, description, collectionId, questions } = await req.json();
+
   try {
-    const prisma = new PrismaClient();
     connectToDB();
 
-    // await prisma.quiz.create({
-    //   data: {
-    //     topic: "Test",
-    //     visibility: "public",
-    //     tags: ["test", "test1"],
-    //     pointsMethod: "Based on answer time",
-    //     image: "",
-    //     description: "Test",
-    //     collectionId: "657a113b54eb35a503e8ada1",
-    //     questions: [{
-    //       question: "Test",
-    //       answers: [
-    //         {
-    //           answer: "Test",
-    //           isCorrect: true,
-    //         },
-    //         {
-    //             answer: "Test",
-    //             isCorrect: false,
-    //         }
-    //       ]
-    //     }],
-    //     userId: "657a113b54eb35a503e8ada1"
-    // }
-    // })
-    const test = await prisma.quiz.findFirst({
-      include: {
-        collection: true,
+    await schema.validate({
+      topic, visibility, tags, pointsMethod, image, description, collectionId, questions, userId
+    }, { abortEarly: false });
+
+    await prisma.quiz.create({
+      data: {
+        topic: topic,
+        visibility: visibility,
+        tags: tags,
+        pointsMethod: pointsMethod,
+        image: image,
+        description: description,
+        collectionId: collectionId,
+        questions:
+          questions.map((question: any) => {
+            return {
+              question: question.question,
+              points: question.points,
+              time: question.time,
+              type: question.type,
+              image: question.image,
+              answers:
+                question.answers.map((answer: any) => {
+                  return {
+                    answer: answer.answer,
+                    isCorrect: answer.isCorrect,
+                  }
+                })
+            }
+          }),
+        userId: userId
       }
     });
+
     return new Response(
-      JSON.stringify(test),
+      JSON.stringify({
+        status: "Success",
+        message: "Added new quiz successfully",
+      }),
       { status: 200 }
     );
-  } catch (error) {
-    console.log(error);
-  }
-  
 
-  return new Response(
-    JSON.stringify({
-      status: "Success",
-      message: "Added new quiz successfully",
-    }),
-    { status: 200 }
-  )
-}
+  } catch (error: unknown) {
+    console.error(error);
+
+    if (error instanceof yup.ValidationError) {
+      const validationErrors = error.errors.map(err => err.toString());
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Invalid request body",
+          errors: validationErrors,
+        }),
+        { status: 400 }
+      );
+
+    }else if (error instanceof Error) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: error.message,
+        }),
+        { status: 400 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        status: "Error",
+        message: "Unknown error",
+      }),
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+};
