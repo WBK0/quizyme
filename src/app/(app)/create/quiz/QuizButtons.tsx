@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { onSubmit } from "./submitForm";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const QuizButtons = () => {
   const [showButtons, setShowButtons] = useState(false);
-
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
   }
@@ -40,6 +41,8 @@ const QuizButtons = () => {
 }
 
 const Buttons = () => {
+  const [ value ] = useLocalStorage('create-form', {});
+
   return(
     <>
       <button
@@ -48,7 +51,9 @@ const Buttons = () => {
         Delete quiz
       </button>
       <button
+        type="button"
         className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300"
+        onClick={() => onSubmit(value)}
       >
         Public quiz
       </button>

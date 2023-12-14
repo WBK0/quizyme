@@ -71,7 +71,7 @@ model Collection {
 
 type Answer {
   answer    String
-  isCorrect Boolean
+  isCorrect Boolean?
 }
 
 type Question {

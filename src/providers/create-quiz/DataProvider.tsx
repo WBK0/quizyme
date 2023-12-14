@@ -16,8 +16,13 @@ export const DataContext = createContext({
 
 export default function DataProvider({ children }: CreateQuizProvider) {
   const [ value, setValue ] = useLocalStorage("create-form", {});
-  const [formValues, setFormValues] = useState<FormValues>(value.questions);
-  const [actualQuestion, setActualQuestion] = useState(formValues.length || 0);
+  const [formValues, setFormValues] = useState<FormValues>([]);
+  const [actualQuestion, setActualQuestion] = useState(0);
+
+  useEffect(() => {
+    setActualQuestion(value.questions.length);
+    setFormValues(value.questions || []);
+  }, []);
 
   useEffect(() => {
     if(formValues.length > 0){
