@@ -1,10 +1,18 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 const Fields = () => {
   const { fields, register, move } = useContext(UseFormContext);
-  const inputsRef = useRef<Record<string, HTMLInputElement | null>>({});
+  const inputsRef = useRef<Record<string, HTMLTextAreaElement | null>>({});
+
+  useEffect(() => {
+    Object.values(inputsRef.current).forEach(input => {
+      if(input) {
+        adjustHeight(input as HTMLTextAreaElement)
+      }
+    })
+  }, [inputsRef])
 
   const adjustHeight = (element: HTMLTextAreaElement) => {
     if(!element) return;
@@ -52,7 +60,7 @@ const Fields = () => {
                       {...rest}
                       ref={(e) => {
                         ref(e);
-                        inputsRef.current[field.id] = e as HTMLInputElement | null;
+                        inputsRef.current[field.id] = e as HTMLTextAreaElement | null;
                       }}
                     />
                     <div  

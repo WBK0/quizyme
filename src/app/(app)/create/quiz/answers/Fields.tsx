@@ -1,5 +1,5 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 type FieldsProps = {
   disable?: boolean;
@@ -8,6 +8,15 @@ type FieldsProps = {
 
 const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
   const { fields, watch, update, register } = useContext(UseFormContext);
+  const inputsRef = useRef<Record<string, HTMLTextAreaElement | null>>({});
+
+  useEffect(() => {
+    Object.values(inputsRef.current).forEach(input => {
+      if(input) {
+        adjustHeight(input as HTMLTextAreaElement)
+      }
+    })
+  }, [watch('answers')])
 
   const handleIsCorrect = (index: number) => {
     const answers = watch('answers');
@@ -33,7 +42,9 @@ const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
   return (
     <>
       {
-        fields.map((field, index) => (
+        fields.map((field, index) => {
+          const {ref, ...rest} = register(`answers.${index}.answer`);
+          return(
           <div 
             className={`bg-${field.color} min-h-fit w-full flex rounded-xl items-center`}
             key={field.id}
@@ -42,7 +53,11 @@ const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
               className="bg-transparent w-full text-white outline-none p-4 font-bold text-lg resize-none overflow-y-hidden h-fit"
               rows={1}
               onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
-              {...register(`answers.${index}.answer`)}
+              {...rest}
+              ref={(e) => {
+                ref(e);
+                inputsRef.current[field.id] = e as HTMLTextAreaElement | null;
+              }}
               disabled={disable}
             />
             <button 
@@ -60,7 +75,7 @@ const Fields = ({ disable = false, multiChoice = false } :  FieldsProps) => {
               }
             </button>   
           </div>
-        ))
+        )})
       }
     </>
   )
