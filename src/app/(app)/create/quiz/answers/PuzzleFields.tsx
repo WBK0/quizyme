@@ -58,7 +58,7 @@ const Fields = () => {
                     </div>   
                   </div>
 
-                  )}
+                    )}
                 </Draggable>
                 ))
               } 

@@ -21,13 +21,13 @@ export const POST = async (req: Request) => {
 
   const userId = session?.user?.id;
 
-  const { topic, visibility, tags, pointsMethod, image, description, collectionId, questions } = await req.json();
+  const { topic, visibility, tags, pointsMethod, image, description, collectionName, questions } = await req.json();
 
   try {
     connectToDB();
 
     await schema.validate({
-      topic, visibility, tags, pointsMethod, image, description, collectionId, questions, userId
+      topic, visibility, tags, pointsMethod, image, description, collectionName, questions, userId
     }, { abortEarly: false });
 
     await prisma.quiz.create({
@@ -38,7 +38,7 @@ export const POST = async (req: Request) => {
         pointsMethod: pointsMethod,
         image: image,
         description: description,
-        collectionId: collectionId,
+        collectionName: collectionName,
         questions:
           questions.map((question: any) => {
             return {

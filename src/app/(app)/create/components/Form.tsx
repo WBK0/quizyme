@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import TextInput from "@/components/Create/TextInput";
 import TextareaInput from "@/components/Create/TextareaInput";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type FormInputs = {
   topic: string,
@@ -32,6 +32,12 @@ type FormProps = {
   };
   setLocalStorage: (value: {}) => void;
 }
+
+type Collection = {
+  id: string;
+  name: string;
+  image: string;
+}[]
 
 const schema = yup.object().shape({
   topic: yup.string()
@@ -61,6 +67,7 @@ const schema = yup.object().shape({
 
 const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
   const { register, handleSubmit, setValue, watch, formState: {errors} } = useForm<FormInputs>({ resolver: yupResolver(schema) });
+  const [collections, setCollections] = useState<Collection>([]);
 
   const router = useRouter();
 
@@ -88,6 +95,14 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
       setValue('points', localStorage.points || 'Based on answer time');
       setValue('tags', localStorage.tags || []);
     }
+
+    fetch('/api/collections/list')
+    .then(res => {
+      res.json()
+      .then(data => {
+        setCollections(data.collection);
+      })
+    })
   }, []);
 
   return (
@@ -104,7 +119,7 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
       />
       <SelectInput
         title="Collection"
-        options={["Sports", "Science", "History", "Geography", "Art", "Music", "Literature", "Movies", "TV Shows", "Video Games", "Animals", "Food", "General Knowledge"]}
+        options={collections.map(collection => collection.name)}
         register={register}
         name="collection"
         setValue={setValue}

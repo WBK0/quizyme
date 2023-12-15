@@ -37,14 +37,14 @@ export const schema = yup.object().shape({
     .min(4, 'Description must be at least 4 characters')
     .max(1024, 'Description must be at most 1024 characters')
     .required('Description is required'),
-  collectionId: yup.string()
+    collectionName: yup.string()
     .test({
-      name: 'collectionId',
-      message: 'Collection ID must be a valid UUID',
-      test: (collectionId) => {
+      name: 'collectionName',
+      message: 'collectionName must exist in the database',
+      test: (collectionName) => {
         const isCollection = prisma.collection.findFirst({
           where: {
-            id: collectionId,
+            name: collectionName,
           },
         });
         if(!isCollection) {
@@ -54,7 +54,7 @@ export const schema = yup.object().shape({
         }
       },
     })
-    .required("Collection ID is required"),
+    .required("Collection Name is required"),
   questions: yup.array()
     .of(
       yup.object().shape({

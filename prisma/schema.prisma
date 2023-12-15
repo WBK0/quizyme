@@ -64,7 +64,7 @@ model VerificationToken {
 
 model Collection {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
+  name  String @unique
   image String
   Quiz  Quiz[]
 }
@@ -84,18 +84,18 @@ type Question {
 }
 
 model Quiz {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  topic        String
-  visibility   String
-  tags         String[]
-  pointsMethod String
-  image        String
-  description  String
-  collectionId String     @db.ObjectId
-  collection   Collection @relation(fields: [collectionId], references: [id])
-  questions    Question[]
-  userId       String     @db.ObjectId
-  user         User       @relation(fields: [userId], references: [id])
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  topic          String
+  visibility     String
+  tags           String[]
+  pointsMethod   String
+  image          String
+  description    String
+  collectionName String
+  collection     Collection @relation(fields: [collectionName], references: [name])
+  questions      Question[]
+  userId         String     @db.ObjectId
+  user           User       @relation(fields: [userId], references: [id])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 }
