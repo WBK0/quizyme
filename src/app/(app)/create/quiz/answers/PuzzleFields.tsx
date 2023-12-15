@@ -1,11 +1,13 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { DragDropContext, Draggable, DropResult, Droppable } from "@hello-pangea/dnd";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 
 const Fields = () => {
   const { fields, register, move } = useContext(UseFormContext);
+  const inputsRef = useRef<Record<string, HTMLInputElement | null>>({});
 
   const adjustHeight = (element: HTMLTextAreaElement) => {
+    if(!element) return;
     element.style.height = "auto";
     element.style.height = (element.scrollHeight) + "px";
   }
@@ -25,7 +27,14 @@ const Fields = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col">
               { 
-                fields.map((field, index) => (
+                fields.map((field, index) => {
+                  if (inputsRef.current[field.id]) {
+                    const inputElement = inputsRef.current[field.id]!;
+                    inputElement.style.height = inputElement.scrollHeight + "px";
+                  }
+                  
+                  const { ref, ...rest } = register(`answers.${index}.answer`);
+                  return(
                   <Draggable key={index} draggableId={index.toString()} index={index}>
                     {(provided) => (
                       <div
@@ -36,10 +45,15 @@ const Fields = () => {
                         key={field.id}
                       >
                     <textarea 
-                      className="bg-transparent w-full text-white outline-none p-4 font-bold text-lg resize-none overflow-y-hidden h-fit"
+                      className='bg-transparent w-full text-white outline-none p-4 font-bold text-lg resize-none overflow-y-hidden'
+                      style={{ height: inputsRef.current[field.id]?.style?.height }}
                       rows={1}
                       onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement)}
-                      {...register(`answers.${index}.answer`)}
+                      {...rest}
+                      ref={(e) => {
+                        ref(e);
+                        inputsRef.current[field.id] = e as HTMLInputElement | null;
+                      }}
                     />
                     <div  
                       className="px-4"
@@ -60,7 +74,7 @@ const Fields = () => {
 
                     )}
                 </Draggable>
-                ))
+                )})
               } 
               {provided.placeholder}
             </div>
