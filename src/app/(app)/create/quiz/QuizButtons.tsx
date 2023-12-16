@@ -47,10 +47,18 @@ const Buttons = () => {
   const { setFormValues } = useContext(DataContext);
   const router = useRouter();
 
+  console.log(value)
+
+  const deleteQuiz = () => {
+    removeLocalStorage();
+    router.push('/create');
+  }
+
   return(
     <>
       <button
         className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-red hover:scale-105 duration-300"
+        onClick={deleteQuiz}
       >
         Delete quiz
       </button>

@@ -1,7 +1,9 @@
 "use client";
 import { FormValues } from "@/app/(app)/create/quiz/types/Form.types";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useRouter } from "next/navigation";
 import { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -18,9 +20,26 @@ export default function DataProvider({ children }: CreateQuizProvider) {
   const [ value, setValue ] = useLocalStorage("create-form", {});
   const [formValues, setFormValues] = useState<FormValues>([]);
   const [actualQuestion, setActualQuestion] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
-    setActualQuestion(value.questions.length);
+    if(
+        !value.topic || 
+        !value.description || 
+        !value.collection ||
+        !value.mainImage ||
+        !value.points ||
+        !value.tags ||
+        value.type !== "quiz" ||
+        !value.visibility
+      ){
+      toast.error("You need to create a quiz details first", {
+        toastId: "create-quiz-details"
+      });
+      router.replace("/create?type=quiz");
+    }
+
+    setActualQuestion(value?.questions?.length || 0);
     setFormValues(value.questions || []);
   }, []);
 
