@@ -1,5 +1,12 @@
 import { toast } from "react-toastify"
 
+type OnSubmitProps = {
+  formValues: FormValues,
+  removeLocalStorage: Function,
+  setFormValues: Function,
+  router: any,
+}
+
 type FormValues = {
   topic: string,
   visibility: string,
@@ -22,7 +29,7 @@ type FormValues = {
 
 }
 
-export const onSubmit = async (formValues : FormValues) => {
+export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router} : OnSubmitProps) => {
   toast.promise(
     async () => {
       const response = await fetch('/api/create/quiz', {
@@ -61,7 +68,13 @@ export const onSubmit = async (formValues : FormValues) => {
       if(!response.ok){
         throw new Error('Error creating quiz');
       }
+
+      const data = await response.json();
     
+      removeLocalStorage();
+      setFormValues({});
+    
+      router.push(`/study/${formValues.topic.replaceAll(' ', '-')}-${data.id}`);
     },
     {
       pending: 'Creating quiz...',

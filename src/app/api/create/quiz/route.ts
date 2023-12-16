@@ -30,7 +30,7 @@ export const POST = async (req: Request) => {
       topic, visibility, tags, pointsMethod, image, description, collectionName, questions, userId
     }, { abortEarly: false });
 
-    await prisma.quiz.create({
+    const quiz = await prisma.quiz.create({
       data: {
         topic: topic,
         visibility: visibility,
@@ -64,6 +64,7 @@ export const POST = async (req: Request) => {
       JSON.stringify({
         status: "Success",
         message: "Added new quiz successfully",
+        id: quiz.id
       }),
       { status: 200 }
     );

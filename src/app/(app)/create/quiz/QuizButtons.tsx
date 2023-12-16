@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { onSubmit } from "./submitForm";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { DataContext } from "@/providers/create-quiz/DataProvider";
+import { useRouter } from "next/navigation";
 
 const QuizButtons = () => {
   const [showButtons, setShowButtons] = useState(false);
@@ -41,7 +43,9 @@ const QuizButtons = () => {
 }
 
 const Buttons = () => {
-  const [ value ] = useLocalStorage('create-form', {});
+  const [ value, setValue, removeLocalStorage ] = useLocalStorage('create-form', {});
+  const { setFormValues } = useContext(DataContext);
+  const router = useRouter();
 
   return(
     <>
@@ -53,7 +57,7 @@ const Buttons = () => {
       <button
         type="button"
         className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300"
-        onClick={() => onSubmit(value)}
+        onClick={() => onSubmit({formValues: value, setFormValues, removeLocalStorage, router})}
       >
         Public quiz
       </button>

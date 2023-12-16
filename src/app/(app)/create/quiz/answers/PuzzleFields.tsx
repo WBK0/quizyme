@@ -79,7 +79,6 @@ const Fields = () => {
                       </svg>           
                     </div>   
                   </div>
-
                     )}
                 </Draggable>
                 )})

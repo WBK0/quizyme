@@ -30,6 +30,15 @@ const useLocalStorage = (key : string, initialValue : string | {}) => {
     }
   }
 
+  const removeLocalStorage = () => {
+    try {
+      localStorage.removeItem(key);
+      setValue(null);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key) {
@@ -49,7 +58,7 @@ const useLocalStorage = (key : string, initialValue : string | {}) => {
     };
   }, [key]);
 
-  return [value, setLocalStorage]
+  return [value, setLocalStorage, removeLocalStorage]
 }
 
 export default useLocalStorage;

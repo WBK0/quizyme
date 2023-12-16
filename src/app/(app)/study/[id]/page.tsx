@@ -4,7 +4,7 @@ import Hero from "./Hero";
 import Stats from "./Stats";
 import userPhoto1 from '@/public/userPhoto1.png';
 import QuizCode from "./QuizCode";
-import Recommendations from "../../../components/Recommendations";
+import Recommendations from "@/components/Recommendations";
 import ActionButtons from "./ActionButtons";
 
 const data = {
