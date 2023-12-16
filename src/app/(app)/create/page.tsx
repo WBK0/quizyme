@@ -38,10 +38,15 @@ const CreatePage = () => {
 
   return (
     <div className="px-3 max-w-3xl mx-auto">
-      <SelectButton
-        options={['quiz', 'flashcards']}
-        paramsName="type"
-      />
+      {
+        !value?.type && isClient
+        ? <SelectButton
+            options={['quiz', 'flashcards']}
+            paramsName="type"
+          />
+        : null
+      }
+      
       <ImageInput
         isClient={isClient}
         mainImage={value.mainImage}
