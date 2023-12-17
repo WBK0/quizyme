@@ -26,10 +26,14 @@ type FormValues = {
       isCorrect: boolean,
     }>
   }>
-
 }
 
 export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router} : OnSubmitProps) => {
+  if(!formValues.questions || formValues.questions?.length === 0){
+    toast.error('You need to add at least one question');
+    return;
+  }
+
   toast.promise(
     async () => {
       const response = await fetch('/api/create/quiz', {

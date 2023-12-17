@@ -9,7 +9,7 @@ const QuestionHeading = () => {
       {
         actualQuestion === formValues.length
         ? `${formValues.length} questions`
-        : `You are viewing at ${actualQuestion + 1} of ${formValues.length + 1} questions`
+        : `You are viewing at ${actualQuestion + 1} of ${(formValues.length + 1) || 0} questions`
       }
     </h6>
   )

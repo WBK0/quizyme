@@ -3,7 +3,7 @@ import Form from "./Form";
 import DataProvider from "@/providers/create-quiz/DataProvider";
 import UseFormProvider from "@/providers/create-quiz/UseFormProvider";
 import Modal from "./Modal";
-import QuizButtons from "./QuizButtons";
+import QuizButtons from "./quizActions/QuizButtons";
 
 const CreateQuiz = () => {
 
@@ -14,10 +14,7 @@ const CreateQuiz = () => {
           <div className="max-w-3xl mx-auto px-3">
             <QuizButtons />
             <Modal />
-            <Form
-              // formValues={formValues}
-              // setFormValues={setFormValues}
-            />
+            <Form />
           </div>
         </UseFormProvider>
       </DataProvider>
