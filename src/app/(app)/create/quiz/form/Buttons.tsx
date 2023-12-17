@@ -1,4 +1,4 @@
-import { FormInputs } from "./types/Form.types";
+import { FormInputs } from "../types/Form.types";
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import { useContext } from "react";
 import { DataContext } from "@/providers/create-quiz/DataProvider";

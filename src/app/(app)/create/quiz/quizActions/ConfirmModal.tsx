@@ -1,7 +1,7 @@
 import useLocalStorage from '@/hooks/useLocalStorage';
 import caution from '@/public/caution.png';
 import Image from 'next/image';
-import { onSubmit } from '../submitForm';
+import { onSubmit } from './submitForm';
 import { DataContext } from '@/providers/create-quiz/DataProvider';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';

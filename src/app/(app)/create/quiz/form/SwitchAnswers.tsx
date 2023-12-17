@@ -1,9 +1,9 @@
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
-import AnswerQuiz from "./answers/AnswerQuiz";
+import AnswerQuiz from "../answers/AnswerQuiz";
 import { useContext } from "react";
-import AnswerBoolean from "./answers/AnswerBoolean";
-import AnswerMultiple from "./answers/AnswerMultiple";
-import AnswerPuzzle from "./answers/AnswerPuzzle";
+import AnswerBoolean from "../answers/AnswerBoolean";
+import AnswerMultiple from "../answers/AnswerMultiple";
+import AnswerPuzzle from "../answers/AnswerPuzzle";
 
 
 const SwitchAnswers = () => {
