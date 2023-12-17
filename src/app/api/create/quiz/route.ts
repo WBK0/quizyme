@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { schema } from "./schema";
 import * as yup from 'yup';
+import { generateCode } from "./generateCode";
 
 export const POST = async (req: Request) => {
   const prisma = new PrismaClient();
@@ -30,6 +31,8 @@ export const POST = async (req: Request) => {
       topic, visibility, tags, pointsMethod, image, description, collectionName, questions, userId
     }, { abortEarly: false });
 
+    const codeId = await generateCode();
+
     const quiz = await prisma.quiz.create({
       data: {
         topic: topic,
@@ -39,6 +42,7 @@ export const POST = async (req: Request) => {
         image: image,
         description: description,
         collectionName: collectionName,
+        codeId: codeId,
         questions:
           questions.map((question: any) => {
             return {
