@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Buttons = ({ handleModal } : {handleModal: (action: 'publish' | 'delete' | null) => void}) => {
   const router = useRouter();

@@ -24,6 +24,7 @@ export default function DataProvider({ children }: CreateQuizProvider) {
 
   useEffect(() => {
     if(
+        !value ||
         !value.topic || 
         !value.description || 
         !value.collection ||

@@ -18,8 +18,8 @@ const CreateQuiz = () => {
           </div>
         </UseFormProvider>
       </DataProvider>
-    </div>
-    
+    </div>    
   )
 }
+
 export default CreateQuiz;
