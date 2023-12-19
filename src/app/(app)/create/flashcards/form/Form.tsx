@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import Fields from "./Fields";
+import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 
-const Form = ({ handleSubmit, fields, register, append, watch, remove }) => {
+const Form = () => {
+  const { handleSubmit, fields, register, append, watch, remove } = useContext(UseFormContext);
   const onSubmit = async (data) => {
     console.log(data);
   }
@@ -16,12 +19,7 @@ const Form = ({ handleSubmit, fields, register, append, watch, remove }) => {
             Definition
           </p>
         </div>
-        <Fields 
-          fields={fields}
-          register={register}
-          watch={watch}
-          append={append}
-        />
+        <Fields />
         <div className="flex justify-center gap-4 flex-wrap mt-8">
           <button
             type="button"
