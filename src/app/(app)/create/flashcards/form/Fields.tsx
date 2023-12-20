@@ -12,15 +12,18 @@ const Fields: React.FC = () => {
   const { fields, register, watch, append } = useContext(UseFormContext);
   const inputsRef = useRef<InputsRef>({});
 
-  const adjustHeight = (element: HTMLTextAreaElement, id: string) => {
+  const adjustHeight = (id: string) => {
     const inputs = inputsRef.current[id];
     if(!inputs.concept || !inputs.definition){
       return;
     }
 
     if(window.innerWidth < 768){
-      element.style.height = "auto";
-      element.style.height = element.scrollHeight + 2 + "px";
+      inputs.concept.style.height = "auto";
+      inputs.definition.style.height = "auto";
+
+      inputs.concept.style.height = inputs.concept.scrollHeight + 2 + "px";
+      inputs.definition.style.height = inputs.definition.scrollHeight + 2 + "px";
       return;
     }
 
@@ -34,8 +37,16 @@ const Fields: React.FC = () => {
   };
 
   useEffect(() => {
+    let widthBreakPoint: 'mobile' | 'desktop' = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const handleResize = () => {
-      
+      Object.keys(inputsRef.current).forEach((key) => {
+        const newBreakPoint = window.innerWidth < 768 ? 'mobile' : 'desktop';
+        if(widthBreakPoint === newBreakPoint){
+          return;
+        }
+        widthBreakPoint = newBreakPoint;
+        adjustHeight(key);
+      });
     };
 
     window.addEventListener('resize', handleResize);
@@ -43,8 +54,6 @@ const Fields: React.FC = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-
-    
   }, [])
 
   return (
@@ -70,7 +79,7 @@ const Fields: React.FC = () => {
                     concept: el,
                   };
                 }}
-                onInput={(e) => adjustHeight(e.target as HTMLTextAreaElement, field.id)}
+                onInput={(e) => adjustHeight(field.id)}
               />
               <p className="w-full px-2 text-xs font-bold text-gray-900 py-2 md:hidden mb-2">CONCEPT</p>
               <textarea
@@ -88,7 +97,7 @@ const Fields: React.FC = () => {
                   index === fields.length - 1 && watch('flashcards')[index]?.concept !== ''
                     ? () => append({})
                     : (e) => {
-                        adjustHeight(e.target as HTMLTextAreaElement, field.id);
+                        adjustHeight(field.id);
                       }
                 }
               />
