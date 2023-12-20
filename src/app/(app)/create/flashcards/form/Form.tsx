@@ -29,19 +29,20 @@ const Form = () => {
             <div {...provided.droppableProps} ref={provided.innerRef} className="flex flex-col"> 
               <Fields />
               {provided.placeholder}
+              <div className="flex justify-center gap-4 flex-wrap mt-8">
+                <button
+                  type="button"
+                  onClick={() => handleAppend()}
+                  className="rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-40"
+                >
+                  Add
+                </button>
+              </div>
             </div>
           )}
         </Droppable>
       </DragDropContext>
-      <div className="flex justify-center gap-4 flex-wrap mt-8">
-        <button
-          type="button"
-          onClick={() => handleAppend}
-          className="rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-40"
-        >
-          Add
-        </button>
-      </div>
+      
     </form>
   )
 }
