@@ -1,5 +1,5 @@
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
-import { MutableRefObject, useContext } from "react";
+import { MutableRefObject, useContext, useEffect } from "react";
 import InputsRef from "../types/InputsRef";
 import { ChangeHandler, RefCallBack, UseFormRegisterReturn } from "react-hook-form";
 
@@ -37,6 +37,10 @@ const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id,
       })
     }
   }
+
+  useEffect(() => {
+    adjustHeight(id);
+  }, [])
 
   return (
     <>

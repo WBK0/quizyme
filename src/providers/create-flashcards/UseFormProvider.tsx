@@ -20,6 +20,7 @@ interface UseFormContextProps {
   remove: UseFieldArrayRemove;
   update: UseFieldArrayUpdate<FormInputs>;
   handleSubmit: UseFormHandleSubmit<FormInputs>;
+  move: UseFieldArrayMove;
 }
 
 export const UseFormContext = createContext(({} as UseFormContextProps));
@@ -38,7 +39,7 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         ]
       }
     });
-  const { fields, append, remove, update } = useFieldArray({ control, name: "flashcards", rules: { required: true, minLength: 5, maxLength: 999 }})
+  const { fields, append, remove, update, move } = useFieldArray({ control, name: "flashcards", rules: { required: true, minLength: 5, maxLength: 999 }})
 
   return (
     <UseFormContext.Provider
@@ -53,6 +54,7 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         append,
         remove,
         update,
+        move
       }}
     >
       {children}
