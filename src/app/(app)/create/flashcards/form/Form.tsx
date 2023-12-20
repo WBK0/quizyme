@@ -11,14 +11,6 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-20">
       <div className="flex flex-col gap-3"> 
-        <div className="flex gap-0 w-full">
-          <p className="w-1/3 pl-1 font-semibold text-gray-700">
-            Concept
-          </p>
-          <p className="w-2/3 pl-1 font-semibold text-gray-700">
-            Definition
-          </p>
-        </div>
         <Fields />
         <div className="flex justify-center gap-4 flex-wrap mt-8">
           <button
