@@ -1,5 +1,5 @@
 "use client";
-import { useFormSchema } from "@/app/(app)/create/quiz/schemas/CreateQuiz.yup";
+import schema from "@/app/(app)/create/flashcards/schema/schema";
 import { FormInputs } from "@/app/(app)/create/flashcards/types/FormInputs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";
@@ -27,8 +27,8 @@ export const UseFormContext = createContext(({} as UseFormContextProps));
 
 export default function UseFormProvider({ children }: CreateQuizProvider) {
   const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control } = 
-    useForm({ 
-      // resolver: yupResolver(useFormSchema), 
+    useForm<FormInputs>({ 
+      resolver: yupResolver(schema), 
       defaultValues: {
         flashcards: [
           { concept: "", definition: "" },
@@ -37,7 +37,7 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
           { concept: "", definition: "" },
           { concept: "", definition: "" },
         ]
-      }
+      } as FormInputs
     });
   const { fields, append, remove, update, move } = useFieldArray({ control, name: "flashcards", rules: { required: true, minLength: 5, maxLength: 999 }})
 

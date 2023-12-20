@@ -1,5 +1,5 @@
 "use client";
-import { useFormSchema } from "@/app/(app)/create/quiz/schemas/CreateQuiz.yup";
+import { useFormSchema } from "@/app/(app)/create/quiz/schema/CreateQuiz.yup";
 import { FormInputs } from "@/app/(app)/create/quiz/types/Form.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";

@@ -5,7 +5,7 @@ import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 
 const Form = () => {
   const { handleSubmit, append, move } = useContext(UseFormContext);
-  const onSubmit = async (data) => {
+  const onSubmit = async (data : any) => {
     console.log(data);
   }
 
