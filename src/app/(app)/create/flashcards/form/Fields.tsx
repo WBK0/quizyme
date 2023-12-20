@@ -1,16 +1,12 @@
 import { useContext, useEffect, useRef } from "react";
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
-
-interface InputsRef {
-  [key: string]: {
-    concept: HTMLTextAreaElement | null;
-    definition: HTMLTextAreaElement | null;
-  };
-}
+import Textarea from "./Textarea";
+import InputsRef from "../types/InputsRef";
 
 const Fields: React.FC = () => {
-  const { fields, register, watch, append } = useContext(UseFormContext);
   const inputsRef = useRef<InputsRef>({});
+
+  const { fields, register } = useContext(UseFormContext);
 
   const adjustHeight = (id: string) => {
     const inputs = inputsRef.current[id];
@@ -36,6 +32,7 @@ const Fields: React.FC = () => {
     inputs.definition.style.height = height + 2 + "px";
   };
 
+
   useEffect(() => {
     let widthBreakPoint: 'mobile' | 'desktop' = window.innerWidth < 768 ? 'mobile' : 'desktop';
     const handleResize = () => {
@@ -56,6 +53,14 @@ const Fields: React.FC = () => {
     };
   }, [])
 
+  useEffect(() => {
+    console.log('adjustHeight')
+
+    Object.keys(inputsRef.current).forEach((key) => {
+      adjustHeight(key);
+    });
+  }, [fields.length])
+
   return (
     <>
       {fields.map((field, index) => {
@@ -68,40 +73,24 @@ const Fields: React.FC = () => {
               <p className="font-black">{index + 1}</p>
             </div>
             <div className="flex gap-0 w-full h-fit flex-wrap">
-              <textarea
-                rows={1}
-                className="bg-transparent text-black font-bold resize-none px-2 outline-none md:w-1/3 w-full border-b-2 border-gray-100 focus:border-black py-3 h-full"
-                {...registerConcept}
-                ref={(el) => {
-                  refConcept(el);
-                  inputsRef.current[field.id] = {
-                    ...inputsRef.current[field.id],
-                    concept: el,
-                  };
-                }}
-                onInput={(e) => adjustHeight(field.id)}
+              <Textarea 
+                variant="concept"
+                register={registerConcept}
+                registerRef={refConcept}
+                inputsRef={inputsRef}
+                adjustHeight={adjustHeight}
+                id={field.id}
+                index={index}
               />
-              <p className="w-full px-2 text-xs font-bold text-gray-900 py-2 md:hidden mb-2">CONCEPT</p>
-              <textarea
-                rows={1}
-                className="bg-transparent text-black font-bold resize-none px-2 outline-none md:w-2/3 w-full border-b-2 border-gray-100 focus:border-black py-3 h-full"
-                {...registerDefinition}
-                ref={(el) => {
-                  refDefinition(el);
-                  inputsRef.current[field.id] = {
-                    ...inputsRef.current[field.id],
-                    definition: el,
-                  };
-                }}
-                onInput={
-                  index === fields.length - 1 && watch('flashcards')[index]?.concept !== ''
-                    ? () => append({})
-                    : (e) => {
-                        adjustHeight(field.id);
-                      }
-                }
+              <Textarea 
+                variant="definition"
+                register={registerDefinition}
+                registerRef={refDefinition}
+                inputsRef={inputsRef}
+                adjustHeight={adjustHeight}
+                id={field.id}
+                index={index}
               />
-              <p className="w-full px-2 text-xs font-bold text-gray-900 py-2 md:hidden">DEFINITION</p>
               <p className="w-1/3 px-2 text-xs font-bold text-gray-900 py-2 hidden md:block">CONCEPT</p>
               <p className="w-1/3 px-2 text-xs font-bold text-gray-900 py-2 hidden md:block">DEFINITION</p>
             </div>
