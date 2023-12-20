@@ -42,7 +42,7 @@ const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id,
     <>
       <textarea
         rows={1}
-        className={`bg-transparent text-black font-bold resize-none px-2 outline-none md:w-${variant === 'concept' ? '1/3' : '2/3'} w-full border-b-2 border-gray-100 focus:border-black pt-4 pb-2 h-full`}
+        className={`bg-transparent text-black font-bold resize-none px-2 outline-none w-full ${variant === 'concept' ? 'md:w-1/3' : 'md:w-2/3'} border-b-2 border-gray-100 focus:border-black pt-4 pb-2 h-full`}
         {...register}
         ref={(el) => {
           registerRef && registerRef(el);

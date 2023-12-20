@@ -2,11 +2,13 @@ import { useContext, useEffect, useRef } from "react";
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import Textarea from "./Textarea";
 import InputsRef from "../types/InputsRef";
+import Image from "next/image";
+import trashcan from '@/public/trashcan.svg'
 
 const Fields: React.FC = () => {
   const inputsRef = useRef<InputsRef>({});
 
-  const { fields, register } = useContext(UseFormContext);
+  const { fields, register, remove } = useContext(UseFormContext);
 
   const adjustHeight = (id: string) => {
     const inputs = inputsRef.current[id];
@@ -61,6 +63,10 @@ const Fields: React.FC = () => {
     });
   }, [fields.length])
 
+  const handleRemove = (index: number) => {
+    remove(index);
+  }
+
   return (
     <>
       {fields.map((field, index) => {
@@ -69,8 +75,24 @@ const Fields: React.FC = () => {
 
         return (
           <div className="flex gap-0 w-full h-fit flex-wrap bg-yellow rounded-xl" key={field.id}>
-            <div className="w-full px-3 py-3 border-b-4 border-white">
-              <p className="font-black">{index + 1}</p>
+            <div className="w-full px-3 py-3 border-b-4 border-white flex justify-between items-center">
+              <div>
+                <p className="font-black">{index + 1}</p>
+              </div>
+              <div className="flex">
+                <button
+                  type="button"
+                  className="outline-none focus:outline-none"
+                  onClick={() => {handleRemove(index)}}
+                >
+                  <Image
+                    src={trashcan}
+                    alt="trashcan"
+                    width={24}
+                    height={24}
+                  />
+                </button>
+              </div>
             </div>
             <div className="flex gap-0 w-full h-fit flex-wrap">
               <Textarea 
