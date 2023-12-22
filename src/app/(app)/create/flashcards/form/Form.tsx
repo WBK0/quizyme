@@ -2,9 +2,12 @@ import { useContext } from "react";
 import Fields from "./Fields";
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
+import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
 const Form = () => {
   const { handleSubmit, append, move } = useContext(UseFormContext);
+  const { setLastEddited } = useContext(DataContext);
+
   const onSubmit = async (data : any) => {
     console.log(data);
   }
@@ -18,6 +21,7 @@ const Form = () => {
 
   const handleDragEnd = (result : DropResult) => {
     if(!result.destination) return;
+    setLastEddited(result.destination.droppableId + "-" + Math.random());
     move(result.source.index, result.destination.index)
   }
 

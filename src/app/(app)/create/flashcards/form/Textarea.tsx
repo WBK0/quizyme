@@ -2,6 +2,7 @@ import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import { MutableRefObject, useContext, useEffect } from "react";
 import InputsRef from "../types/InputsRef";
 import { ChangeHandler, RefCallBack, UseFormRegisterReturn } from "react-hook-form";
+import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
 type TextareaProps = {
   variant: 'concept' | 'definition';
@@ -26,6 +27,7 @@ type TextareaProps = {
 
 const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id, index } : TextareaProps) => {
   const { fields, append, watch } = useContext(UseFormContext);
+  const { setLastEddited } = useContext(DataContext);
 
   const handleInput = () => {
     adjustHeight(id);
@@ -56,6 +58,7 @@ const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id,
           };
         }}
         onInput={handleInput}
+        onBlur={() => setLastEddited(id + '-' + variant)}
       />
       <p className="w-full px-2 text-xs font-bold text-gray-900 py-2 md:hidden mb-2 uppercase">{variant}</p>
     </>
