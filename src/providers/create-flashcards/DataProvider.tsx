@@ -20,7 +20,7 @@ export default function DataProvider({ children }: CreateQuizProvider) {
   const [ value, setValue ] = useLocalStorage("create-form", {});
   const [ formValues, setFormValues ] = useState<FormValues>([]);
   const [ lastEditted, setLastEddited ] = useState("");
-  const { getValues } = useContext(UseFormContext);
+  const { getValues, replace } = useContext(UseFormContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,8 +49,17 @@ export default function DataProvider({ children }: CreateQuizProvider) {
       });
       router.replace("/create?type=flashcards");
     }
+        
+    setFormValues(value.flashcards || []);
+    if(value.flashcards.length < 5){
+      replace([
+        ...value.flashcards,
+        ...Array.from({ length: 5 - value.flashcards.length }, () => ({ concept: "", definition: "" })),
+      ]);
+    }else{
+      replace([...value.flashcards]); 
+    }
 
-    setFormValues(value.questions || []);
   }, []);
 
   return (

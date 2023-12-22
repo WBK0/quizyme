@@ -3,7 +3,7 @@ import schema from "@/app/(app)/create/flashcards/schema/schema";
 import { FormInputs } from "@/app/(app)/create/flashcards/types/FormInputs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";
-import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormGetValues, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
+import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayReplace, UseFieldArrayUpdate, UseFormGetValues, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -22,6 +22,7 @@ interface UseFormContextProps {
   handleSubmit: UseFormHandleSubmit<FormInputs>;
   move: UseFieldArrayMove;
   getValues: UseFormGetValues<FormInputs>;
+  replace: UseFieldArrayReplace<FormInputs>;
 }
 
 export const UseFormContext = createContext(({} as UseFormContextProps));
@@ -40,7 +41,7 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         ]
       } as FormInputs
     });
-  const { fields, append, remove, update, move } = useFieldArray({ control, name: "flashcards", rules: { required: true, minLength: 5, maxLength: 999 }})
+  const { fields, append, remove, update, move, replace } = useFieldArray({ control, name: "flashcards", rules: { required: true, minLength: 5, maxLength: 999 }})
 
   return (
     <UseFormContext.Provider
@@ -56,7 +57,8 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         remove,
         update,
         move,
-        getValues
+        getValues,
+        replace
       }}
     >
       {children}

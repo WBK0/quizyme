@@ -79,6 +79,7 @@ const Fields: React.FC = () => {
             >
             <Heading  
               index={index}
+              id={field.id}
             />
             <div className="flex gap-0 w-full h-fit flex-wrap">
               <Textarea 

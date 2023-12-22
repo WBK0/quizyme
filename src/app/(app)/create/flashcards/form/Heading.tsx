@@ -1,15 +1,19 @@
+import { DataContext } from "@/providers/create-flashcards/DataProvider";
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import { useContext } from "react";
 
 type HeadingProps = {
   index: number;
+  id: string;
 }
 
-const Heading = ({ index } : HeadingProps) => {
+const Heading = ({ index, id } : HeadingProps) => {
   const { remove } = useContext(UseFormContext);
+  const { setLastEddited } = useContext(DataContext);
 
   const handleRemove = (index: number) => {
     remove(index);
+    setLastEddited(id + '-remove');
   }
 
   return (
