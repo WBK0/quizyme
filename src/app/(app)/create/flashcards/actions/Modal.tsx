@@ -1,3 +1,9 @@
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { useRouter } from "next/navigation";
+import { onSubmit } from "./submitForm";
+import { DataContext } from "@/providers/create-flashcards/DataProvider";
+import { useContext } from "react";
+
 type ModalProps = {
   modal: 'publish' | 'delete' | null;
   handleCloseModal: () => void;
@@ -5,6 +11,15 @@ type ModalProps = {
 }
 
 const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
+  const [value, setValue, removeLocalStorage] = useLocalStorage('create-form', {});
+  const { setFormValues } = useContext(DataContext);
+  const router = useRouter();
+
+  const onDelete = () => {
+    removeLocalStorage();
+    router.push('/create');
+  }
+
   return (
     <div className="fixed bg-black/50 z-30 w-full h-screen top-0 left-0">
       <div className="flex items-center h-full justify-center">
@@ -16,6 +31,11 @@ const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
           <div className="flex py-5 gap-4">
             <button 
               className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 capitalize"
+              type="button"
+              onClick={() => modal === 'publish' 
+                ? onSubmit({formValues: value, setFormValues, removeLocalStorage, router })
+                : onDelete
+              }
             >
               {modal}
             </button>

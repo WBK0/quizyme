@@ -16,7 +16,7 @@ const Actions = () => {
     }).length;
 
     setLength(flashcardsLength);
-  }, [lastEditted])
+  }, [lastEditted, formValues])
 
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
