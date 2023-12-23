@@ -1,10 +1,22 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Buttons from "./Buttons";
 import Modal from "./Modal";
+import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
 const Actions = () => {
   const [showButtons, setShowButtons] = useState(false);
-  const [modal, setModal] = useState<'publish' | 'delete' | null>('publish');
+  const [modal, setModal] = useState<'publish' | 'delete' | null>(null);
+  const [ length, setLength ] = useState(0);
+
+  const { formValues, lastEditted } = useContext(DataContext);
+
+  useEffect(() => {
+    const flashcardsLength = formValues.filter((value) => { 
+      return value.concept !== "" && value.definition !== "";
+    }).length;
+
+    setLength(flashcardsLength);
+  }, [lastEditted])
 
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
@@ -47,7 +59,7 @@ const Actions = () => {
         ? <Modal 
             handleCloseModal={() => setModal(null)}
             modal={modal}
-            length={4}
+            length={length}
           />
         : null
       }

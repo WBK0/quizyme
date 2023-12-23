@@ -13,13 +13,14 @@ interface CreateQuizProvider {
 export const DataContext = createContext({
   formValues: [] as FormValues,
   setFormValues: (() => {}) as React.Dispatch<React.SetStateAction<FormValues>>,
-  setLastEddited: (() => {}) as React.Dispatch<React.SetStateAction<string>>
+  setLastEddited: (() => {}) as React.Dispatch<React.SetStateAction<string>>,
+  lastEditted: "" as string
 });
 
 export default function DataProvider({ children }: CreateQuizProvider) {
   const [ value, setValue ] = useLocalStorage("create-form", {});
   const [ formValues, setFormValues ] = useState<FormValues>([]);
-  const [ lastEditted, setLastEddited ] = useState("");
+  const [ lastEditted, setLastEddited ] = useState<string>("");
   const { getValues, replace } = useContext(UseFormContext);
   const router = useRouter();
 
@@ -67,7 +68,8 @@ export default function DataProvider({ children }: CreateQuizProvider) {
       value={{
         formValues,
         setFormValues,
-        setLastEddited
+        setLastEddited,
+        lastEditted
       }}
     >
       {children}
