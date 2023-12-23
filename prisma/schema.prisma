@@ -36,21 +36,22 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  username      String?   @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  username      String?      @unique
   bio           String?
   interests     String[]
-  isComplete    Boolean   @default(false)
+  isComplete    Boolean      @default(false)
   Quiz          Quiz[]
+  Flashcards    Flashcards[]
 }
 
 model VerificationToken {
@@ -63,10 +64,11 @@ model VerificationToken {
 }
 
 model Collection {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String @unique
-  image String
-  Quiz  Quiz[]
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String       @unique
+  image      String
+  Quiz       Quiz[]
+  Flashcards Flashcards[]
 }
 
 type Answer {
@@ -84,11 +86,12 @@ type Question {
 }
 
 model Code {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Quiz      Quiz?
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  code       String      @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  Quiz       Quiz?
+  Flashcards Flashcards?
 }
 
 model Quiz {
@@ -108,4 +111,27 @@ model Quiz {
   code           Code       @relation(fields: [codeId], references: [id])
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+}
+
+type Flashcard {
+  concept    String
+  definition String
+}
+
+model Flashcards {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  topic          String
+  visibility     String
+  tags           String[]
+  image          String
+  description    String
+  flashcards     Flashcard[]
+  collectionName String
+  collection     Collection  @relation(fields: [collectionName], references: [name])
+  userId         String      @db.ObjectId
+  user           User        @relation(fields: [userId], references: [id])
+  codeId         String      @unique @db.ObjectId
+  code           Code        @relation(fields: [codeId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
