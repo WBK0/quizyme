@@ -21,7 +21,7 @@ const schema = yup.object().shape({
           return yup.string()
             .required('Concept is required')
             .min(2, 'Concept must be at least 2 characters long')
-            .max(255, 'Concept must be at most 160 characters long')
+            .max(255, 'Concept must be at most 255 characters long')
             .isValidSync(value, { context: this });
         }),
       definition: yup.string()
@@ -42,7 +42,7 @@ const schema = yup.object().shape({
           return yup.string()
             .required('Definition is required')
             .min(2, 'Definition must be at least 2 characters long')
-            .max(255, 'Definition must be at most 160 characters long')
+            .max(255, 'Definition must be at most 255 characters long')
             .isValidSync(value, { context: this });
         }),
     })

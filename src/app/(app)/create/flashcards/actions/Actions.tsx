@@ -11,11 +11,13 @@ const Actions = () => {
   const { formValues, lastEditted } = useContext(DataContext);
 
   useEffect(() => {
-    const flashcardsLength = formValues.filter((value) => { 
-      return value.concept !== "" && value.definition !== "";
-    }).length;
-
-    setLength(flashcardsLength);
+    if(formValues.length > 0){
+      const flashcardsLength = formValues.filter((value) => { 
+        return value.concept !== "" && value.definition !== "";
+      }).length;
+  
+      setLength(flashcardsLength);
+    }
   }, [lastEditted, formValues])
 
   const handleShowButtons = () => {
@@ -59,7 +61,7 @@ const Actions = () => {
         ? <Modal 
             handleCloseModal={() => setModal(null)}
             modal={modal}
-            length={length}
+            length={length || 0}
           />
         : null
       }

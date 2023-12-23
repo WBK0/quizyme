@@ -22,42 +22,31 @@ export const POST = async (req: Request) => {
 
   const userId = session?.user?.id;
 
-  const { topic, visibility, tags, pointsMethod, image, description, collectionName, questions } = await req.json();
+  const { topic, visibility, tags, image, description, collectionName, flashcards } = await req.json();
 
   try {
     connectToDB();
 
     await schema.validate({
-      topic, visibility, tags, pointsMethod, image, description, collectionName, questions, userId
+      topic, visibility, tags, image, description, collectionName, flashcards, userId
     }, { abortEarly: false });
 
     const codeId = await generateCode();
 
-    const quiz = await prisma.quiz.create({
+    const flashcardSet = await prisma.flashcards.create({
       data: {
         topic: topic,
         visibility: visibility,
         tags: tags,
-        pointsMethod: pointsMethod,
         image: image,
         description: description,
         collectionName: collectionName,
         codeId: codeId,
-        questions:
-          questions.map((question: any) => {
+        flashcards:
+          flashcards.map((flashcard: any) => {
             return {
-              question: question.question,
-              points: question.points,
-              time: question.time,
-              type: question.type,
-              image: question.image,
-              answers:
-                question.answers.map((answer: any) => {
-                  return {
-                    answer: answer.answer,
-                    isCorrect: answer.isCorrect,
-                  }
-                })
+              concept: flashcard.concept,
+              definition: flashcard.definition,
             }
           }),
         userId: userId
@@ -68,7 +57,7 @@ export const POST = async (req: Request) => {
       JSON.stringify({
         status: "Success",
         message: "Added new quiz successfully",
-        id: quiz.id
+        id: flashcardSet.id
       }),
       { status: 200 }
     );
