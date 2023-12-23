@@ -1,8 +1,10 @@
 import { useState } from "react"
 import Buttons from "./Buttons";
+import Modal from "./Modal";
 
 const Actions = () => {
   const [showButtons, setShowButtons] = useState(false);
+  const [modal, setModal] = useState<'publish' | 'delete' | null>('publish');
 
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
@@ -31,15 +33,24 @@ const Actions = () => {
            <div className="xl:hidden flex gap-3 flex-col">
               {
                 showButtons
-                ? <Buttons />
+                ? <Buttons setModal={setModal} />
                 : null
               } 
             </div>
             <div className="hidden xl:flex xl:flex-col gap-4">
-              <Buttons />
+              <Buttons setModal={setModal} />
             </div>  
         </div>      
       </div>
+      {
+        modal 
+        ? <Modal 
+            handleCloseModal={() => setModal(null)}
+            modal={modal}
+            length={4}
+          />
+        : null
+      }
     </div>
   )
 }

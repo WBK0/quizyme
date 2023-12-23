@@ -28,7 +28,7 @@ const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmMo
   return (
     <div className="fixed bg-black/50 z-30 w-full h-screen top-0 left-0">
       <div className="flex items-center h-full justify-center">
-        <div className="bg-white w-full max-w-lg h-fit min-h-[300px] relative rounded-2xl pb-2 px-3 flex justify-between flex-col">
+        <div className="bg-white w-full max-w-lg h-fit min-h-[300px] relative rounded-2xl pb-2 sm:px-6 px-3 flex justify-between flex-col">
           <div className="">
             <h2 className="text-center mt-8 font-bold text-2xl">{type === 'publish' ? 'Are you sure you want to publish this quiz?' : 'Are you sure you want to delete this quiz?'}</h2>
             <p className="text-center mt-4 font-semibold text-lg">Your quiz contains {questions} questions</p>
