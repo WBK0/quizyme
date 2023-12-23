@@ -1,13 +1,15 @@
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { useContext } from "react";
 
 type HeadingProps = {
   index: number;
   id: string;
+  draggable: DraggableProvidedDragHandleProps | null;
 }
 
-const Heading = ({ index, id } : HeadingProps) => {
+const Heading = ({ index, id, draggable } : HeadingProps) => {
   const { remove } = useContext(UseFormContext);
   const { setLastEddited } = useContext(DataContext);
 
@@ -26,6 +28,7 @@ const Heading = ({ index, id } : HeadingProps) => {
           type="button"
           className="outline-none focus:outline-none"
           onClick={() => {handleRemove(index)}}
+          tabIndex={-1}
         >
           <svg width="18" height="18" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
             <path d="M767 336H233q-12 0-21 9t-9 21l38 505q1 13 12 22t30 8h434q18 0 29-8t13-22l38-505q0-12-9-21t-21-9z"/>
@@ -35,7 +38,11 @@ const Heading = ({ index, id } : HeadingProps) => {
             <path d="M765 174L586 144q-12-2-15-15l-8-33q-4-20-14-26-6-3-22-3h-90q-16 0-23 3-10 6-13 26l-8 33q-2 13-15 15L235 174q-19 3-31 15t-13 28v28q0 9 7 15t15 6h610q9 0 16-6t6-15v-28q0-17-12-28t-32-15z"/>
           </svg>
         </button>
-        <button className="h-fit">
+        <button 
+          className="h-fit cursor-move"
+          tabIndex={-1}
+          {...draggable}
+        >
           <svg
             width="15"
             height="15"

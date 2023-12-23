@@ -71,15 +71,16 @@ const Fields: React.FC = () => {
           <Draggable key={index} draggableId={index.toString()} index={index} >
             {(provided) => (
             <div 
+              ref={provided.innerRef}
               {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              ref={provided.innerRef} 
               className="flex gap-0 w-full flex-wrap bg-yellow rounded-xl my-2" 
               key={field.id}
+              tabIndex={-1}
             >
             <Heading  
               index={index}
               id={field.id}
+              draggable={provided.dragHandleProps}
             />
             <div className="flex gap-0 w-full h-fit flex-wrap">
               <Textarea 
