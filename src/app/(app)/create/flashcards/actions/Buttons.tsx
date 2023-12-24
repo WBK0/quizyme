@@ -1,6 +1,7 @@
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { toast } from "react-toastify";
 
 type ButtonsProps = {
   setModal: (action: 'publish' | 'delete' | null) => void;
@@ -12,6 +13,10 @@ const Buttons = ({ setModal } : ButtonsProps) => {
 
   const onPublic = () => {
     setModal('publish');
+  }
+
+  const onPublicError = (error) => {
+    console.log(error)
   }
 
   const onDelete = () => {
@@ -27,7 +32,7 @@ const Buttons = ({ setModal } : ButtonsProps) => {
       <button
         type="button"
         className="rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-48"
-        onClick={handleSubmit(onPublic)}
+        onClick={handleSubmit(onPublic, onPublicError)}
       >
         Public
       </button>
