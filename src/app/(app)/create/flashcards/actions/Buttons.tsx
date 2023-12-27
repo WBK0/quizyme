@@ -1,7 +1,9 @@
 import { UseFormContext } from "@/providers/create-flashcards/UseFormProvider";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { SubmitErrorHandler } from "react-hook-form";
 import { toast } from "react-toastify";
+import { FormInputs } from "../types/FormInputs";
 
 type ButtonsProps = {
   setModal: (action: 'publish' | 'delete' | null) => void;
@@ -14,10 +16,26 @@ const Buttons = ({ setModal } : ButtonsProps) => {
   const onPublic = () => {
     setModal('publish');
   }
-
-  const onPublicError = (error) => {
+ 
+  const onPublicError: SubmitErrorHandler<FormInputs> = (error) => {
     console.log(error)
-  }
+    if (!error.flashcards || typeof error.flashcards !== 'object') {
+      return;
+    }
+  
+    if (error.flashcards.root) {
+      toast.error(error.flashcards.root.message);
+      return;
+    }
+        
+    const message = typeof error.flashcards.filter === 'function' && error.flashcards.filter((item) => item !== undefined)[0];
+
+    if (message && message.concept) {
+      toast.error(message.concept.message);
+    } else if (message && message.definition) {
+      toast.error(message.definition.message);
+    }
+  };
 
   const onDelete = () => {
     setModal('delete');

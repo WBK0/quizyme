@@ -12,6 +12,8 @@ const schema = yup.object().shape({
 
             const maxIndex = context.from ? context.from[1].value.flashcards.length : 0;
 
+            if(index === 5) return true;
+
             if (
               index === maxIndex && 
               index > 5 &&
@@ -35,6 +37,8 @@ const schema = yup.object().shape({
 
             const maxIndex = context.from ? context.from[1].value.flashcards.length : 0;
 
+            if(index === 5) return true;
+
             if (
               index === maxIndex && 
               index > 5 &&
@@ -53,7 +57,23 @@ const schema = yup.object().shape({
   )
   .min(5, 'At least 5 flashcards are required')
   .max(999, 'At most 999 flashcards are allowed')
-  .required('Flashcards are required'),
+  .required('Flashcards are required')
+  .test('minimum', 'At least 5 flashcards are required', function (value) {
+    console.log(value)
+    if(
+      value.length === 5 &&
+      (value[4].concept || value[4].concept === '') &&
+      (value[4].definition || value[4].definition === '') &&
+      (value[4].concept.length < 2 ||
+      value[4].definition.length < 2)
+    ) {
+      return this.createError({
+        path: value[4].concept.length < 2 ? `flashcards[4].concept` : `flashcards[4].definition`,
+        message: 'At least 5 flashcards are required'
+      });
+    }
+    return true;
+  })
 });
 
 export default schema;
