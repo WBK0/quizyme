@@ -43,6 +43,9 @@ export const POST = async (req: Request) => {
         description: description,
         collectionName: collectionName,
         codeId: codeId,
+        stats: {
+          questions: questions.length,
+        },
         questions:
           questions.map((question: any) => {
             return {

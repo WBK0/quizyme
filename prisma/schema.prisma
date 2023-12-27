@@ -94,6 +94,13 @@ model Code {
   Flashcards Flashcards?
 }
 
+type Stats {
+  played    Int @default(0)
+  favorited Int @default(0)
+  shared    Int @default(0)
+  questions Int @default(0)
+}
+
 model Quiz {
   id             String     @id @default(auto()) @map("_id") @db.ObjectId
   topic          String
@@ -109,6 +116,7 @@ model Quiz {
   user           User       @relation(fields: [userId], references: [id])
   codeId         String     @unique @db.ObjectId
   code           Code       @relation(fields: [codeId], references: [id])
+  stats          Stats
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
 }

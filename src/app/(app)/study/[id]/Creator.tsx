@@ -3,7 +3,7 @@ import Image from "next/image";
 type CreatorProps = {
   user: {
     image: any;
-    fullname: string;
+    name: string;
     username: string;
   }
 }
@@ -14,7 +14,7 @@ const Creator = ({ user } : CreatorProps) => {
       <div className="flex gap-4 items-center">
         <Image src={user.image} alt='user image' width={50} height={50} className="rounded-full" />
         <div className="flex flex-col">
-          <p className="font-bold">{user.fullname}</p>
+          <p className="font-bold">{user.name}</p>
           <p className="text-gray-300 text-sm">@{user.username}</p>
         </div>
       </div>
