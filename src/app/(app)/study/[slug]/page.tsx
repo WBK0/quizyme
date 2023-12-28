@@ -2,16 +2,23 @@ import Creator from "./Creator";
 import About from "./About";
 import Hero from "./Hero";
 import Stats from "./Stats";
-import userPhoto1 from '@/public/userPhoto1.png';
 import QuizCode from "./QuizCode";
 import Recommendations from "@/components/Recommendations";
 import ActionButtons from "./ActionButtons";
+import { redirect } from "next/navigation";
 
-const Study = async () => {
-  const result = await fetch(`${process.env.NEXT_PUBLIC_API}/study/test-658c31346d4753fc02c9321c`, {
+const Study = async ({ params } : { params : { slug: string }}) => {
+  const { slug } = params;
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${slug}`, {
     cache: 'no-cache',
   });
-  const json = await result.json();
+
+  if(!response.ok){
+    redirect('/study/404');
+  }
+
+  const json = await response.json();
   const data = json.data;
 
   return (
