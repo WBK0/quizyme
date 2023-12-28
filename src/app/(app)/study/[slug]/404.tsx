@@ -2,7 +2,7 @@ import Image from "next/image";
 import logo from "@/public/logo.svg";
 import Link from "next/link";
 
-const StudyNotFound = () => {
+const NotFound = () => {
   return (
     <div className="absolute min-h-screen w-full container flex flex-col justify-center top-0 gap-12">
       <Image 
@@ -30,4 +30,4 @@ const StudyNotFound = () => {
     </div>
   )
 }
-export default StudyNotFound;
+export default NotFound;
