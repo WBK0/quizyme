@@ -1,3 +1,5 @@
+"use client"
+
 import Button from "@/components/Button";
 
 type QuizCodeProps = {
@@ -27,7 +29,11 @@ const QuizCode = ({ code } : QuizCodeProps) => {
           }
         </div>
         <div className="mt-10 flex justify-center">
-          <Button>COPY</Button>
+          <Button
+            onClick={() => navigator.clipboard.writeText(code)}
+          >
+            COPY
+          </Button>
         </div>
       </div>      
     </div>

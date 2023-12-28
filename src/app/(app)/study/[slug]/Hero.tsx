@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 type HeroProps = {
   image: string;
 }
@@ -5,8 +7,15 @@ type HeroProps = {
 const Hero = ({ image } : HeroProps) => {
   return (
     <div
-      className="bg-cover bg-center bg-no-repeat aspect-video max-w-2xl mx-auto rounded-2xl " 
-      style={{backgroundImage: `url(${image})`, boxShadow: `5px 5px 0px 1px var(--lightblue)`}}>
+      className="aspect-video max-w-2xl mx-auto rounded-2xl shadow-medium shadow-lightblue" 
+    >
+      <Image 
+        src={image} 
+        alt="hero image" 
+        width={672}
+        height={378}
+        className="aspect-video rounded-2xl"
+      />
     </div>
   )
 }

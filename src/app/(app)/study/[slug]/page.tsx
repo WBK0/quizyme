@@ -22,14 +22,14 @@ const Study = async ({ params } : { params : { slug: string }}) => {
   const data = json.data;
 
   return (
-    <div className=" mx-auto px-3">
+    <div className="mx-auto px-3">
       <Hero 
         image={data.image}
       />
       <Stats 
         stats={data.stats}
       />
-      <h1 className="font-bold text-center mt-12 text-xl">Guest the questions about <span className="font-black">{data.topic}!</span></h1>
+      <h1 className="font-bold text-center mt-12 text-xl">Guest the questions about <span className="font-black">{data.topic}{data.topic.includes("!") ? '' : '!'}</span></h1>
       <Creator user={data.user} />
       <About
         description={data.description}
