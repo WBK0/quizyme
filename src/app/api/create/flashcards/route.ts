@@ -42,6 +42,9 @@ export const POST = async (req: Request) => {
         description: description,
         collectionName: collectionName,
         codeId: codeId,
+        stats: {
+          flashcards: flashcards.length,
+        },
         flashcards:
           flashcards.map((flashcard: any) => {
             return {

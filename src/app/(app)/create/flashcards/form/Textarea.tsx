@@ -26,7 +26,7 @@ type TextareaProps = {
 }
 
 const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id, index } : TextareaProps) => {
-  const { fields, append, watch } = useContext(UseFormContext);
+  const { fields, append, watch, setFocus } = useContext(UseFormContext);
   const { setLastEddited } = useContext(DataContext);
 
   const handleInput = () => {
@@ -44,6 +44,18 @@ const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id,
     adjustHeight(id);
   }, [])
 
+  const onEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(e.key !== 'Enter') return;
+    e.preventDefault();
+
+    if(variant === 'concept'){
+      setFocus(`flashcards.${index}.definition`);
+      return;
+    }
+    setFocus(`flashcards.${index + 1}.concept`);
+    return;
+  };
+
   return (
     <>
       <textarea
@@ -59,6 +71,7 @@ const Textarea = ({ variant, register, registerRef, inputsRef, adjustHeight, id,
         }}
         onInput={handleInput}
         onBlur={() => setLastEddited(id + '-' + variant)}
+        onKeyDown={onEnter}
       />
       <p className="w-full px-2 text-xs font-bold text-gray-900 py-2 md:hidden mb-2 uppercase">{variant}</p>
     </>

@@ -40,8 +40,8 @@ const Heading = ({ index, id, draggable } : HeadingProps) => {
         </button>
         <button 
           className="h-fit cursor-move"
-          tabIndex={-1}
           {...draggable}
+          tabIndex={-1}
         >
           <svg
             width="15"

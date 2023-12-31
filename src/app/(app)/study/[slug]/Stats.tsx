@@ -5,9 +5,10 @@ interface StatsProps {
     shared: number;
     questions: number;
   };
+  type: 'quiz' | 'flashcards';
 }
 
-const Stats = ({ stats } : StatsProps) => {
+const Stats = ({ stats, type } : StatsProps) => {
   return (
     <div className="max-w-2xl mx-auto flex justify-center gap-3 flex-wrap sm:gap-10 mt-8">
       <div>

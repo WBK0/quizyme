@@ -33,6 +33,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
           />
           <Stats 
             stats={data.stats}
+            type={data.type}
           />
           <h1 className="font-bold text-center mt-12 text-xl">Guest the questions about <span className="font-black">{data.topic}{data.topic.includes("!") ? '' : '!'}</span></h1>
           <Creator user={data.user} />
@@ -45,7 +46,9 @@ const Study = async ({ params } : { params : { slug: string }}) => {
           <QuizCode
             code={data.code.code}
           />
-          <Recommendations />
+          <Recommendations 
+            type={data.type}
+          />
           <ActionButtons 
             type={data.type}
           />

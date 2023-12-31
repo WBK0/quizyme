@@ -94,7 +94,7 @@ model Code {
   Flashcards Flashcards?
 }
 
-type Stats {
+type StatsQuestions {
   played    Int @default(0)
   favorited Int @default(0)
   shared    Int @default(0)
@@ -102,7 +102,7 @@ type Stats {
 }
 
 model Quiz {
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   topic          String
   visibility     String
   tags           String[]
@@ -110,15 +110,15 @@ model Quiz {
   image          String
   description    String
   collectionName String
-  collection     Collection @relation(fields: [collectionName], references: [name])
+  collection     Collection     @relation(fields: [collectionName], references: [name])
   questions      Question[]
-  userId         String     @db.ObjectId
-  user           User       @relation(fields: [userId], references: [id])
-  codeId         String     @unique @db.ObjectId
-  code           Code       @relation(fields: [codeId], references: [id])
-  stats          Stats
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  userId         String         @db.ObjectId
+  user           User           @relation(fields: [userId], references: [id])
+  codeId         String         @unique @db.ObjectId
+  code           Code           @relation(fields: [codeId], references: [id])
+  stats          StatsQuestions
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 type Flashcard {
@@ -126,20 +126,28 @@ type Flashcard {
   definition String
 }
 
+type StatsFlashcards {
+  learned    Int @default(0)
+  favorited  Int @default(0)
+  shared     Int @default(0)
+  flashcards Int @default(0)
+}
+
 model Flashcards {
-  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   topic          String
   visibility     String
   tags           String[]
   image          String
   description    String
   flashcards     Flashcard[]
+  stats          StatsFlashcards
   collectionName String
-  collection     Collection  @relation(fields: [collectionName], references: [name])
-  userId         String      @db.ObjectId
-  user           User        @relation(fields: [userId], references: [id])
-  codeId         String      @unique @db.ObjectId
-  code           Code        @relation(fields: [codeId], references: [id])
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  collection     Collection      @relation(fields: [collectionName], references: [name])
+  userId         String          @db.ObjectId
+  user           User            @relation(fields: [userId], references: [id])
+  codeId         String          @unique @db.ObjectId
+  code           Code            @relation(fields: [codeId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }

@@ -27,6 +27,8 @@ export const GET = async (req: Request, {params} : {params : {type: string}}) =>
           id: true,
           topic: true,
           description: true,
+          image: true,
+          questions: true,
           user: {
             select: {
               id: true,
@@ -43,6 +45,8 @@ export const GET = async (req: Request, {params} : {params : {type: string}}) =>
           id: true,
           topic: true,
           description: true,
+          image: true,
+          flashcards: true,
           user: {
             select: {
               id: true,

@@ -3,7 +3,7 @@ import schema from "@/app/(app)/create/flashcards/schema/schema";
 import { FormInputs } from "@/app/(app)/create/flashcards/types/FormInputs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";
-import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayReplace, UseFieldArrayUpdate, UseFormGetValues, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
+import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayReplace, UseFieldArrayUpdate, UseFormGetValues, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetFocus, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -23,12 +23,13 @@ interface UseFormContextProps {
   move: UseFieldArrayMove;
   getValues: UseFormGetValues<FormInputs>;
   replace: UseFieldArrayReplace<FormInputs>;
+  setFocus: UseFormSetFocus<FormInputs>;
 }
 
 export const UseFormContext = createContext(({} as UseFormContextProps));
 
 export default function UseFormProvider({ children }: CreateQuizProvider) {
-  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control, getValues } = 
+  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control, getValues, setFocus } = 
     useForm<FormInputs>({ 
       resolver: yupResolver(schema), 
       defaultValues: {
@@ -58,7 +59,8 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
         update,
         move,
         getValues,
-        replace
+        replace,
+        setFocus
       }}
     >
       {children}
