@@ -18,43 +18,17 @@ const Recommendations = async ({ type } : { type : string }) => {
             <Card 
               key={recommendation.id}
               image={recommendation.image}
-              to={`/study/${recommendation.topic}-${recommendation.id}`}
+              to={`/study/${recommendation.topic.replaceAll(' ', '-')}-${recommendation.id}`}
               color={colors[index]}
               type={type}
               topic={recommendation.topic}
-              authorId={recommendation.user.id}
+              authorImage={recommendation.user.image}
+              authorName={recommendation.user.name}
               quantity={type === 'quiz' ? recommendation.questions.length : recommendation.flashcards.length}
             />
           ))
         }
-        {/* <Card 
-            image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-            to="/"
-            color="purple"
-            type="quiz"
-            topic="Cosmos"
-            authorId="1"
-            quantity={18}
-          />
-          <Card 
-            image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-            to="/"
-            color="green"
-            type="quiz"
-            topic="Cosmos"
-            authorId="1"
-            quantity={18}
-          />
-          <Card 
-            image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-            to="/"
-            color="yellow"
-            type="quiz"
-            topic="Cosmos"
-            authorId="1"
-            quantity={18}
-          /> */}
-        </div>
+      </div>
     </div>
   )
 }

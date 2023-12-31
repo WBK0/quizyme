@@ -1,9 +1,11 @@
 interface StatsProps {
   stats: {
-    played: number;
+    learned?: number;
+    played?: number;
     favorited: number;
     shared: number;
-    questions: number;
+    questions?: number;
+    flashcards?: number;
   };
   type: 'quiz' | 'flashcards';
 }
@@ -12,8 +14,8 @@ const Stats = ({ stats, type } : StatsProps) => {
   return (
     <div className="max-w-2xl mx-auto flex justify-center gap-3 flex-wrap sm:gap-10 mt-8">
       <div>
-        <h3 className="text-center text-gray-300 font-semibold text-sm">Played</h3>
-        <p className="text-center font-bold">{stats.played}</p>
+        <h3 className="text-center text-gray-300 font-semibold text-sm">{type === 'quiz' ? 'Played' : 'Learned'}</h3>
+        <p className="text-center font-bold">{type === 'quiz' ? stats.played : stats.learned}</p>
       </div>
       <div>
         <h3 className="text-center text-gray-300 font-semibold text-sm">Favorited</h3>
@@ -24,8 +26,8 @@ const Stats = ({ stats, type } : StatsProps) => {
         <p className="text-center font-bold">{stats.shared}</p>
       </div>
       <div>
-        <h3 className="text-center text-gray-300 font-semibold text-sm">Questions</h3>
-        <p className="text-center font-bold">{stats.questions}</p>
+        <h3 className="text-center text-gray-300 font-semibold text-sm capitalize">{type === 'quiz' ? 'Questions' : 'Flashcards'}</h3>
+        <p className="text-center font-bold">{type === 'quiz' ? stats.questions : stats.flashcards}</p>
       </div>
     </div>
   )
