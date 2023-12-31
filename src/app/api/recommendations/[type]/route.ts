@@ -1,9 +1,11 @@
 import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
+import { NextRequest } from "next/server";
 import prismaRandom from 'prisma-extension-random';
 
-export const GET = async (req: Request, {params} : {params : {type: string}}) => {
+export const GET = async (req: NextRequest, {params} : {params : {type: string}}) => {
   const { type } = params;
+  const skipTopic = req.nextUrl.searchParams.get('skipTopic');
 
   if(!type || (type !== 'quiz' && type !== 'flashcards')) {
     return new Response(
@@ -37,6 +39,11 @@ export const GET = async (req: Request, {params} : {params : {type: string}}) =>
               name: true
             }
           },
+        },
+        where:{
+          topic: {
+            not: skipTopic?.replaceAll('%20', ' ')
+          }
         }
       });
     }else if(type === 'flashcards'){
@@ -55,6 +62,11 @@ export const GET = async (req: Request, {params} : {params : {type: string}}) =>
               name: true
             }
           },
+        },
+        where:{
+          topic: {
+            not: skipTopic?.replaceAll('%20', ' ')
+          }
         }
       });
     }

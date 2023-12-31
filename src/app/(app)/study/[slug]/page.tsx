@@ -48,6 +48,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
           />
           <Recommendations 
             type={data.type}
+            skip={data.topic}
           />
           <ActionButtons 
             type={data.type}
