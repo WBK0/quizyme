@@ -3,7 +3,7 @@ import { useFormSchema } from "@/app/(app)/create/quiz/schema/schema";
 import { FormInputs } from "@/app/(app)/create/quiz/types/Form.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createContext } from "react";
-import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
+import { FieldArrayWithId, FormState, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormClearErrors, UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormSetValue, UseFormWatch, useFieldArray, useForm } from "react-hook-form";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ interface UseFormContextProps {
 export const UseFormContext = createContext(({} as UseFormContextProps));
 
 export default function UseFormProvider({ children }: CreateQuizProvider) {
-  const { register, formState: { errors }, setValue, watch, handleSubmit, reset, control } = 
+  const { register, formState: { errors, isSubmitted }, setValue, watch, handleSubmit, reset, control } = 
     useForm<FormInputs>({ 
       resolver: yupResolver(useFormSchema), 
       defaultValues: {
@@ -42,6 +42,8 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
       } as FormInputs
     });
   const { fields, append, remove, move, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
+  
+  console.log(errors, isSubmitted)
 
   return (
     <UseFormContext.Provider

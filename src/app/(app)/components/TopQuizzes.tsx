@@ -13,7 +13,8 @@ const TopQuizzes = () => {
           color="purple"
           type="quiz"
           topic="Cosmos"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -22,7 +23,8 @@ const TopQuizzes = () => {
           color="yellow"
           type="quiz"
           topic="Africa"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -31,7 +33,8 @@ const TopQuizzes = () => {
           color="green"
           type="quiz"
           topic="Football"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -40,7 +43,8 @@ const TopQuizzes = () => {
           color="lightblue"
           type="quiz"
           topic="Motorcycles"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
       </div>

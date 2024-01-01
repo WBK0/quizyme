@@ -13,7 +13,8 @@ const TopFlashcards = () => {
           color="purple"
           type="flashcards"
           topic="Cosmos"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -22,7 +23,8 @@ const TopFlashcards = () => {
           color="yellow"
           type="flashcards"
           topic="Forest"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -31,7 +33,8 @@ const TopFlashcards = () => {
           color="green"
           type="flashcards"
           topic="Boats"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
         <Card 
@@ -40,7 +43,8 @@ const TopFlashcards = () => {
           color="lightblue"
           type="flashcards"
           topic="Karting"
-          authorId="1"
+          authorName="John Doe"
+          authorImage="http://localhost:3100/defaultPicture.png"
           quantity={18}
         />
       </div>

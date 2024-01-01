@@ -20,18 +20,21 @@ const Buttons = () => {
       }
       
       setFormValues([...formValues, {...data}]);
-      reset({
-        question: "",
-        answerTime: data.answerTime,
-        answerPoints: data.answerPoints,
-        responseType: data.responseType,
-        image: "",
-        answers: [
-          { answer: "", isCorrect: true, color: "blue" },
-          { answer: "", isCorrect: false, color: "red" },
-        ]
-      });
+      
       setActualQuestion(actualQuestion + 1);
+      setTimeout(() => {
+        reset({
+          question: "",
+          answerTime: data.answerTime,
+          answerPoints: data.answerPoints,
+          responseType: data.responseType,
+          image: "",
+          answers: [
+            { answer: data.responseType !== 'True / False' ? '' : 'True', isCorrect: true, color: data.responseType !== 'True / False' ? "blue" : "green"},
+            { answer: data.responseType !== 'True / False' ? '' : 'False', isCorrect: false, color: "red" },
+          ]
+        });
+      }, 0);
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message);
@@ -60,17 +63,19 @@ const Buttons = () => {
       })
     );
     setActualQuestion(questionIndex);
-    reset({
-      question: formValues[questionIndex]?.question || "",
-      answerTime: formValues[questionIndex]?.answerTime || formValues[actualQuestion].answerTime,
-      answerPoints: formValues[questionIndex]?.answerPoints || formValues[actualQuestion].answerPoints,
-      responseType: formValues[questionIndex]?.responseType || formValues[actualQuestion].responseType,
-      image: formValues[questionIndex]?.image || "",
-      answers: formValues[questionIndex]?.answers || [
-        { answer: "", isCorrect: true, color: "blue" },
-        { answer: "", isCorrect: false, color: "red" },
-      ] 
-    })
+    setTimeout(() => {
+      reset({
+        question: formValues[questionIndex]?.question || "",
+        answerTime: formValues[questionIndex]?.answerTime || formValues[actualQuestion].answerTime,
+        answerPoints: formValues[questionIndex]?.answerPoints || formValues[actualQuestion].answerPoints,
+        responseType: formValues[questionIndex]?.responseType || formValues[actualQuestion].responseType,
+        image: formValues[questionIndex]?.image || "",
+        answers: formValues[questionIndex]?.answers || [
+          { answer: "", isCorrect: true, color: "blue" },
+          { answer: "", isCorrect: false, color: "red" },
+        ] 
+      });
+    }, 0);
   }
 
   return (

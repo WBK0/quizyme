@@ -7,6 +7,8 @@ const Recommendations = async ({ type, skip } : { type : string, skip?: string }
 
   const recommendations = await response.json();
 
+  console.log(recommendations);
+
   const colors = ['purple', 'green', 'yellow']
 
   return (
