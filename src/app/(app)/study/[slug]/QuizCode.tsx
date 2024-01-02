@@ -1,12 +1,21 @@
 "use client"
 
 import Button from "@/components/Button";
+import { toast } from "react-toastify";
 
 type QuizCodeProps = {
   code: string;
 }
 
 const QuizCode = ({ code } : QuizCodeProps) => {
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code)
+    toast.success("Code copied to clipboard", {
+      toastId: "copy-code",
+    });
+  }
+
   return (
     <div className='w-full mt-36 max-w-[650px] mx-auto'>
       <div className='bg-red w-full rounded-3xl pt-12 pb-14'>
@@ -30,7 +39,7 @@ const QuizCode = ({ code } : QuizCodeProps) => {
         </div>
         <div className="mt-10 flex justify-center">
           <Button
-            onClick={() => navigator.clipboard.writeText(code)}
+            onClick={handleCopy}
           >
             COPY
           </Button>

@@ -59,7 +59,6 @@ const schema = yup.object().shape({
   .max(999, 'At most 999 flashcards are allowed')
   .required('Flashcards are required')
   .test('minimum', 'At least 5 flashcards are required', function (value) {
-    console.log(value)
     if(
       value.length === 5 &&
       (value[4].concept || value[4].concept === '') &&

@@ -10,8 +10,6 @@ import ProgressBar from './components/ProgressBar';
 const CompleteRegister = async () => {
   const session = await getServerSession(authOptions);
 
-  console.log(session)
-
   if(session?.user?.isComplete || !session){
     redirect('/')
   }

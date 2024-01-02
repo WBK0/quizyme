@@ -65,7 +65,6 @@ export const authOptions : AuthOptions = {
   },
   callbacks: {
     async signIn({ user, account } : { user: any, account: any }) {  
-      console.log(user, account)      
       try {
         if(!user.email && account.provider === 'github'){
           throw new Error("Email is required to sign in. Set up your email in your github profile to public and try again.");

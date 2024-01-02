@@ -24,7 +24,6 @@ const UserSpace = () => {
       </div>
       {
         (() => {
-          console.log(params.option)
           switch (params.option) {
             case 'invitations':
               return(

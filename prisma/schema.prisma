@@ -52,6 +52,7 @@ model User {
   isComplete    Boolean      @default(false)
   Quiz          Quiz[]
   Flashcards    Flashcards[]
+  QuizGame      QuizGame[]
 }
 
 model VerificationToken {
@@ -117,6 +118,7 @@ model Quiz {
   codeId         String         @unique @db.ObjectId
   code           Code           @relation(fields: [codeId], references: [id])
   stats          StatsQuestions
+  quizGame       QuizGame[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
@@ -150,4 +152,20 @@ model Flashcards {
   code           Code            @relation(fields: [codeId], references: [id])
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+}
+
+model QuizGame {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  quizId         String   @db.ObjectId
+  userId         String   @db.ObjectId
+  quiz           Quiz     @relation(fields: [quizId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+  questionOrder  Int[]
+  actualQuestion Int
+  timeToRespond  DateTime
+  points         Int
+  correctAnswers Int
+  isFinished     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

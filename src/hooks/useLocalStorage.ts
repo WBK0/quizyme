@@ -41,7 +41,6 @@ const useLocalStorage = (key : string, initialValue : string | {}) => {
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      console.log("Storage event", e)
       if (e.key === key) {
         try {
           const newValue = JSON.parse(e.newValue || '');

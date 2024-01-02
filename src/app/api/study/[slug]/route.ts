@@ -6,8 +6,6 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
   const prisma = new PrismaClient();
   const { slug } = params;
 
-  console.log(slug)
-
   if(!slug) {
     return new Response(
       JSON.stringify({
