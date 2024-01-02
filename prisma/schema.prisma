@@ -160,11 +160,12 @@ model QuizGame {
   userId         String   @db.ObjectId
   quiz           Quiz     @relation(fields: [quizId], references: [id])
   user           User     @relation(fields: [userId], references: [id])
-  questionOrder  Int[]
+  questionsOrder Int[]
   actualQuestion Int
   timeToRespond  DateTime
   points         Int
   correctAnswers Int
+  isStarted      Boolean  @default(false)
   isFinished     Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

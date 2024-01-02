@@ -60,11 +60,18 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    prisma.quizGame.create({
+    let questionsOrder = quiz.questions.map((question, index) => index);
+
+    for (let i = questionsOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [questionsOrder[i], questionsOrder[j]] = [questionsOrder[j], questionsOrder[i]];
+    }
+
+    const createdQuiz = await prisma.quizGame.create({
       data: {
         quizId: quizId,
         userId: session?.user?.id,
-        questionOrder: [0, 1],
+        questionsOrder: questionsOrder,
         actualQuestion: 0,
         timeToRespond: new Date(),
         points: 0,
@@ -72,11 +79,21 @@ export const POST = async (req: NextRequest) => {
       }
     })
 
+    if(!createdQuiz) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Failed to create quiz game",
+        }),
+        { status: 400 }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         status: "Success",
         message: "Successfully created quiz game",
-        gameId: "1234567890"
+        gameId: createdQuiz.id
       }),
       { status: 201 }
     )
