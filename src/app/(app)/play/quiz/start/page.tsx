@@ -20,9 +20,18 @@ const StartQuiz = () => {
   const handleStart = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/65941baf63f72165bd5a1d65/start`, {
       method: 'POST',
-      body: JSON.stringify({
-        quizId: '658db2c923a2d55edb5a01d2',
-      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-cache',
+    });
+
+    console.log(await response.json());
+  }
+
+  const handlePlay = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/65941baf63f72165bd5a1d65`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -41,6 +50,10 @@ const StartQuiz = () => {
       type="button"
       onClick={handleStart}
     >start</button>
+    <button
+      type="button"
+      onClick={handlePlay}
+    >play</button>
   </>
     
   )

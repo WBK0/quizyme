@@ -7,18 +7,6 @@ import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest, { params } : {params : {id: string}}) => {
   try {
-    const session = await getServerSession(authOptions);
-
-    if(!session?.user?.id) {
-      return new Response(
-        JSON.stringify({
-          status: "Error",
-          message: "User not logged in",
-        }),
-        { status: 401 }
-      );
-    }
-
     const { id } = params;
 
     if(!checkMongoDBID(id)){
@@ -31,12 +19,25 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
 
+    const session = await getServerSession(authOptions);
+
+    if(!session?.user?.id) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "User not logged in",
+        }),
+        { status: 401 }
+      );
+    }
+
     connectToDB();
     const prisma = new PrismaClient();
 
     const quizGame = await prisma.quizGame.findUnique({
       where: {
-        id: id
+        id: id,
+        userId: session.user.id,
       },
       include: {
         quiz: true,
@@ -69,7 +70,8 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
 
     const updateQuizGame = await prisma.quizGame.update({
       where: {
-        id: id
+        id: id,
+        userId: session.user.id,
       },
       data: {
         isStarted: true,
