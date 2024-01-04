@@ -72,18 +72,24 @@ model Collection {
   Flashcards Flashcards[]
 }
 
-type Answer {
-  answer    String
-  isCorrect Boolean?
+model Answer {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  answer     String
+  isCorrect  Boolean?
+  Question   Question? @relation(fields: [questionId], references: [id])
+  questionId String?   @db.ObjectId
 }
 
-type Question {
+model Question {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   question String
-  answers  Answer[]
   points   Int
   time     Int
   image    String
   type     String
+  answers  Answer[]
+  Quiz     Quiz?    @relation(fields: [quizId], references: [id])
+  quizId   String?  @db.ObjectId
 }
 
 model Code {
