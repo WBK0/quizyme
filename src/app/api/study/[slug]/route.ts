@@ -6,6 +6,8 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
   const prisma = new PrismaClient();
   const { slug } = params;
 
+  console.log(slug)
+
   if(!slug) {
     return new Response(
       JSON.stringify({
@@ -50,13 +52,51 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
   
   const [quizResults, flashcardResults] = result;
 
+  const quizData = {
+    stats: quizResults?.stats,
+    id: quizResults?.id,
+    topic: quizResults?.topic,
+    visibility: quizResults?.visibility,
+    tags: quizResults?.tags,
+    pointsMethod: quizResults?.pointsMethod,
+    image: quizResults?.image,
+    description: quizResults?.description,
+    collectionName: quizResults?.collectionName,
+    createdAt: quizResults?.createdAt,
+    user: {
+      name: quizResults?.user?.name,
+      image: quizResults?.user?.image,
+      username: quizResults?.user?.username,
+    },
+    code: quizResults?.code.code
+  }
+
+  const flashcardData = {
+    stats: flashcardResults?.stats,
+    id: flashcardResults?.id,
+    topic: flashcardResults?.topic,
+    visibility: flashcardResults?.visibility,
+    tags: flashcardResults?.tags,
+    image: flashcardResults?.image,
+    description: flashcardResults?.description,
+    collectionName: flashcardResults?.collectionName,
+    createdAt: flashcardResults?.createdAt,
+    user: {
+      name: flashcardResults?.user?.name,
+      image: flashcardResults?.user?.image,
+      username: flashcardResults?.user?.username,
+    },
+    code: flashcardResults?.code.code
+  }
+  
+
   if(quizResults) {
     return new Response(
       JSON.stringify({
         status: "Success",
         message: "Quiz found",
         data: {
-          ...quizResults,
+          ...quizData,
           type: 'quiz'
         },
       }),
@@ -68,7 +108,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
         status: "Success",
         message: "Flashcards found",
         data: {
-          ...flashcardResults,
+          ...flashcardData,
           type: 'flashcards'
         },
       }),

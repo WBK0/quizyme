@@ -21,7 +21,6 @@ const Study = async ({ params } : { params : { slug: string }}) => {
     data = json.data;
   }
 
-
   return (
     <>
     {
@@ -44,7 +43,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
             createdAt={data.createdAt}
           />
           <QuizCode
-            code={data.code.code}
+            code={data.code}
           />
           <Recommendations 
             type={data.type}

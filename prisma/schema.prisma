@@ -79,6 +79,7 @@ type Answer {
 }
 
 type Question {
+  id       String   @default(cuid())
   question String
   answers  Answer[]
   points   Int

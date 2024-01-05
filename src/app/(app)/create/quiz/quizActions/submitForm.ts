@@ -83,7 +83,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
     {
       pending: 'Creating quiz...',
       success: 'Quiz created!',
-      error: 'Error creating quiz'
+      error: 'Error while creating quiz. Try again later!'
     }
   )
 }
