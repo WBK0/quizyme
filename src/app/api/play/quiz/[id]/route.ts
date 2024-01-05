@@ -95,9 +95,10 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       numberOfQuestions: quizGame.quiz.questions.length,
       question: {
         ...quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]],
-        answers: quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].answers.map((answer) => (
-          answer.answer
-        ))
+        answers: quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].answers.map((answer) => ({
+          id: answer.id,
+          answer: answer.answer
+        }))
       }
     };
 
