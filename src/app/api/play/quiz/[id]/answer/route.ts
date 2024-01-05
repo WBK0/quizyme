@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import checkQuizAnswer from "./checkQuizAnswer";
 import checkPuzzleAnswer from "./checkPuzzleAnswer";
+import checkMultiplechoiceAnswer from "./checkMultiplechoiceAnswer";
+import checkTrueFalseAnswer from "./checkTrueFalseAnswer";
 
 export const POST = async (req: NextRequest, { params } : {params : {id: string}}) => {
   try {
@@ -45,7 +47,6 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
 
-    connectToDB();
     const prisma = new PrismaClient();
 
     const quizGame = await prisma.quizGame.findUnique({
@@ -88,6 +89,9 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
 
+    let result; 
+    let points = 0;
+
     if(!skipAnswer && quizGame?.timeToRespond < new Date()){
       return new Response(
         JSON.stringify({
@@ -98,32 +102,41 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
 
-    const type = quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].type;
-    const question = quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]];
-
-    let result; 
-    let points;
-    const timeFromStart = (quizGame.timeToRespond.getTime() - new Date().getTime()) / 1000
-
-    // Check answers
-    if(type === 'Quiz'){
-      result = checkQuizAnswer(answer, question.answers)
-    }else if(type === 'Puzzle'){
-      result = checkPuzzleAnswer(answer, question.answers)
-    }else if(type === 'Multiple Choice'){
-      result = checkQuizAnswer(answer, question.answers)
-    }
-
-    // Calculate points
-    if(result === true){
-      points = question.points * (timeFromStart * 100 / (question.time + 5) / 100) // 5 seconds for safety reasons
-      if(points < 0) points = 0
-      if(points > question.points) points = question.points
-    }else{
-      points = 0
-    }
-
+    if(!skipAnswer){
+      const type = quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].type;
+      const question = quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]];
   
+      const timeFromStart = (quizGame.timeToRespond.getTime() - new Date().getTime()) / 1000
+  
+      // Check answers
+      if(type === 'Quiz'){
+        result = checkQuizAnswer(answer, question.answers)
+      }else if(type === 'Puzzle'){
+        result = checkPuzzleAnswer(answer, question.answers)
+      }else if(type === 'Multiple choice'){
+        result = checkMultiplechoiceAnswer(answer, question.answers)
+      }else if(type === 'True / False'){
+        result = checkTrueFalseAnswer(answer, question.answers)
+      }else{
+        return new Response(
+          JSON.stringify({
+            status: "Error",
+            message: "Invalid question type",
+          }),
+          { status: 400 }
+        );
+      }
+  
+      // Calculate points
+      if(result === true){
+        points = question.points * (timeFromStart * 100 / (question.time + 5) / 100) // 5 seconds for safety reasons
+        if(points < 0) points = 0
+        if(points > question.points) points = question.points
+      }else{
+        points = 0
+      }
+    }
+
     const updateQuiz = await prisma.quizGame.update({
       where: {
         id: id,
@@ -139,7 +152,8 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
         actualQuestion: {
           increment: 1
         },
-        timeToRespond: new Date(Date.now() + quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]].time * 1000 + 5000) // 5 seconds for safety reasons
+        timeToRespond: new Date(Date.now() + (quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]]?.time || 0) * 1000 + 5000), // 5 seconds for safety reasons
+        isFinished: quizGame.actualQuestion + 1 === quizGame.quiz.questions.length,
       }
     });
 
@@ -153,7 +167,6 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
     
-
     return new Response(
       JSON.stringify({
         status: "Success",
@@ -166,6 +179,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       { status: 200 }
     );
   } catch (error) {
+    console.log(error)
     return new Response(
       JSON.stringify({
         status: "Error",

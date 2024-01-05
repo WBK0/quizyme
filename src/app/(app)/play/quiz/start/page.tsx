@@ -6,7 +6,7 @@ const StartQuiz = () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/create`, {
       method: 'POST',
       body: JSON.stringify({
-        quizId: '65983c0661279bf25c73562b',
+        quizId: '65988735087fc29a062bdc8a',
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ const StartQuiz = () => {
   }
 
   const handleStart = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/65985445d0e04cd39601c8eb/start`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/659888a1087fc29a062bdca6/start`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const StartQuiz = () => {
   }
 
   const handlePlay = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/65985445d0e04cd39601c8eb`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/659888a1087fc29a062bdca6`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -42,10 +42,10 @@ const StartQuiz = () => {
   }
 
   const handleNext = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/65985445d0e04cd39601c8eb/answer`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/659888a1087fc29a062bdca6/answer`, {
       method: 'POST',
       body: JSON.stringify({
-        answer: 'clr0wsni9000kuiwo6bp2epec',
+        answer: ['clr1896zv000cuipck3x9xhnb'],
         skipAnswer: true
       }),
       headers: {

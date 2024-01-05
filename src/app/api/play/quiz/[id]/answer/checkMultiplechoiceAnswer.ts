@@ -1,13 +1,15 @@
 import Answer from "./answer.type";
 
-const checkPuzzleAnswer = (answer : string[], answers : Answer) => {
-  for(let i = 0; i < answers.length; i++){
-    if(answers[i].id !== answer[i]){
-      return answers;
+const checkMultiplechoiceAnswer = (answer : string[], answers : Answer) => {
+  const correctAnswers = answers.filter((answerObject) => answerObject.isCorrect);
+
+  for(let i = 0; i < correctAnswers.length; i++){
+    if(!correctAnswers.find((answerObject) => answerObject.id === answer[i])){
+      return correctAnswers;
     }
   }
-
+  
   return true;
 };
 
-export default checkPuzzleAnswer;
+export default checkMultiplechoiceAnswer;
