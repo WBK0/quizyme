@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import checkQuizAnswer from "./checkQuizAnswer";
+import checkPuzzleAnswer from "./checkPuzzleAnswer";
 
 export const POST = async (req: NextRequest, { params } : {params : {id: string}}) => {
   try {
@@ -107,8 +108,10 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
     // Check answers
     if(type === 'Quiz'){
       result = checkQuizAnswer(answer, question.answers)
+    }else if(type === 'Puzzle'){
+      result = checkPuzzleAnswer(answer, question.answers)
     }else if(type === 'Multiple Choice'){
-    
+      result = checkQuizAnswer(answer, question.answers)
     }
 
     // Calculate points
@@ -120,36 +123,36 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       points = 0
     }
 
-    if(result === true){
-      const updateQuiz = await prisma.quizGame.update({
-        where: {
-          id: id,
-          userId: session.user.id,
+  
+    const updateQuiz = await prisma.quizGame.update({
+      where: {
+        id: id,
+        userId: session.user.id,
+      },
+      data: {
+        points: {
+          increment: points
         },
-        data: {
-          points: {
-            increment: points
-          },
-          correctAnswers: {
-            increment: 1
-          },
-          actualQuestion: {
-            increment: 1
-          },
-          timeToRespond: new Date(Date.now() + quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]].time * 1000 + 5000) // 5 seconds for safety reasons
-        }
-      });
-
-      if(!updateQuiz) {
-        return new Response(
-          JSON.stringify({
-            status: "Error",
-            message: "Failed to update quiz game",
-          }),
-          { status: 400 }
-        );
+        correctAnswers: {
+          increment: result === true ? 1 : 0
+        },
+        actualQuestion: {
+          increment: 1
+        },
+        timeToRespond: new Date(Date.now() + quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]].time * 1000 + 5000) // 5 seconds for safety reasons
       }
+    });
+
+    if(!updateQuiz) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Failed to update quiz game",
+        }),
+        { status: 400 }
+      );
     }
+    
 
     return new Response(
       JSON.stringify({
