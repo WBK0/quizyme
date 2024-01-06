@@ -59,6 +59,8 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         JSON.stringify({
           status: "Error",
           message: "Quiz game not started yet",
+          errorId: 101,
+          quizSlug: quizGame.quiz.topic.replaceAll(' ', '-') + '-' + quizGame.quiz.id
         }),
         { status: 400 }
       );
