@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import StartQuiz from "./StartQuiz";
+import StartQuiz from "./startQuiz/StartQuiz";
 
 const PlayQuiz = async ({ params } : { params: {id: string}}) => {  
   const { id } = params;
@@ -15,10 +15,13 @@ const PlayQuiz = async ({ params } : { params: {id: string}}) => {
   return (
     <div>
       {
-        quiz.errorId === 101 && (
+        quiz.errorId === 101 ? (
           <StartQuiz 
             quizSlug={quiz.quizSlug}
+            id={id}
           />
+        ) : (
+          <></>
         )
       }
     </div>
