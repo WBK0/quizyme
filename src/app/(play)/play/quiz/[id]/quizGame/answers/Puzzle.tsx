@@ -1,21 +1,39 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import GameData from "../GameData.types";
+import { useEffect } from "react";
 
-const Puzzle = ({ answers, setAnswers }: { answers: GameData['question']['answers'] }) => {
+type PuzzleProps = {
+  answers: GameData['question']['answers'];
+  setAnswers: React.Dispatch<React.SetStateAction<GameData['question']['answers']>>;
+};
+
+const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow'];
 
-  const handleDragEnd = (result: any) => {
+  useEffect(() => {
     setAnswers((prevAnswers) => {
-      console.log(prevAnswers, result)
+      prevAnswers.forEach((element, index) => {
+        prevAnswers[index]['color'] = colors[index];
+      });
+      return prevAnswers;
+    });
+  }, []);
 
-      let newArray = prevAnswers;
-      newArray[result.destination.index] = prevAnswers[result.source.index];
-      newArray[result.source.index] = prevAnswers[result.destination.index];
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
 
-      console.log(newArray, result)
+    setAnswers((prevAnswers) => {
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
 
-      return newArray;
-    })
+      const updatedAnswers = [...prevAnswers];
+      const [removed] = updatedAnswers.splice(startIndex, 1);
+      updatedAnswers.splice(endIndex, 0, removed);
+
+      return updatedAnswers;
+    });
   };
 
   return (
@@ -36,7 +54,7 @@ const Puzzle = ({ answers, setAnswers }: { answers: GameData['question']['answer
                 {(provided) => (
                   <div
                     key={answer.id}
-                    className={`bg-blue w-1/4 gap-4 mx-2.5 min-h-[240px] ${colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
+                    className={`bg-blue w-1/4 gap-4 mx-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

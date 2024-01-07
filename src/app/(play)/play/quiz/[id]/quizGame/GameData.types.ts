@@ -6,6 +6,7 @@ type GameData = {
     answers: {
       id: string;
       answer: string;
+      color?: string;
     }[]
   }
 }
