@@ -3,12 +3,8 @@ import { useEffect, useState } from "react";
 import Heading from "./Heading";
 import Question from "./Question";
 import Spinner from "@/components/Loading/Spinner";
-
-type GameData = {
-  question: {
-    image: string;
-  }
-}
+import Answers from "./Answers";
+import GameData from "./GameData.types";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
@@ -28,16 +24,17 @@ const QuizGame = ({ id } : { id: string }) => {
     getQuestion()
   }, [])
 
-  console.log(gameData)
-
   return (
-    <div className="px-3 md:pt-14 pt-24 flex flex-wrap h-screen items-center">
+    <div className="px-3 md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
       {
         gameData?.question
         ? 
           <>
             <Heading />
             <Question 
+              gameData={gameData}
+            />
+            <Answers 
               gameData={gameData}
             />
           </>
@@ -49,4 +46,5 @@ const QuizGame = ({ id } : { id: string }) => {
     </div>
   )
 }
+
 export default QuizGame;

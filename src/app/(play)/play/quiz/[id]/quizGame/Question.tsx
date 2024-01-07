@@ -1,6 +1,7 @@
 import Image from "next/image";
+import GameData from "./GameData.types";
 
-const Question = ({ gameData } : any ) => {
+const Question = ({ gameData } : {gameData: GameData} ) => {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {
