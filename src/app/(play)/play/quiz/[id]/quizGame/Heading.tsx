@@ -1,6 +1,6 @@
 const Heading = () => {
   return (
-    <div className="bg-white w-full flex flex-wrap items-center md:gap-32 gap-4">
+    <div className="bg-white w-full flex flex-wrap items-center md:gap-32 gap-4 top-0 left-0 absolute px-3 pt-3">
       <div className="flex-1 md:flex-none">
         <h6 className="font-bold text-lg w-fit">3/12</h6>
       </div>
