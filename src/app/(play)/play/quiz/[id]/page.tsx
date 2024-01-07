@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import StartQuiz from "./startQuiz/StartQuiz";
+import QuizGame from "./quizGame/PlayQuiz";
 
 const PlayQuiz = async ({ params } : { params: {id: string}}) => {  
   const { id } = params;
@@ -21,7 +22,9 @@ const PlayQuiz = async ({ params } : { params: {id: string}}) => {
             id={id}
           />
         ) : (
-          <></>
+          <QuizGame
+            id={id}
+          />
         )
       }
     </div>

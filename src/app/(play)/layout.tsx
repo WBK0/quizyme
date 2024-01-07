@@ -28,7 +28,7 @@ export default async function RootLayout ({
       <UserProvider>
         <body>
           <ToastProvider>
-            <div className='container mx-auto'>
+            <div>
               {children}
             </div>
           </ToastProvider>

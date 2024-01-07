@@ -81,6 +81,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         JSON.stringify({
           status: "Error",
           message: "Time for this question has already passed, ask for next question",
+          errorId: 102,
         }),
         { status: 400 }
       );
