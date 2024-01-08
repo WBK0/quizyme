@@ -45,8 +45,6 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
     });
   };
 
-  console.log(width)
-
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable" direction={width < 768 ? 'vertical' : 'horizontal'}>
@@ -65,7 +63,7 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
                 {(provided) => (
                   <div
                     key={answer.id}
-                    className={`bg-blue gap-4 mx-2.5 my-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
+                    className={`gap-4 mx-2.5 my-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
