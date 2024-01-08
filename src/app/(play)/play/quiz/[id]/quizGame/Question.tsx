@@ -3,7 +3,7 @@ import GameData from "./GameData.types";
 
 const Question = ({ gameData } : {gameData: GameData} ) => {
   return (
-    <div className="flex flex-col items-center gap-6 w-full">
+    <div className="flex flex-col items-center gap-6 w-full px-3">
       {
         gameData?.question?.image
         ? <Image

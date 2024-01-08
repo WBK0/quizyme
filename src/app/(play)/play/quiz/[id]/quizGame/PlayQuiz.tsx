@@ -25,7 +25,7 @@ const QuizGame = ({ id } : { id: string }) => {
   }, [])
 
   return (
-    <div className="px-3 md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
+    <div className="md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
       {
         gameData?.question
         ? 

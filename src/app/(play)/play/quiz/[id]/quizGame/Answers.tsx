@@ -12,12 +12,6 @@ const Answers = ({ gameData } : {gameData: GameData}) => {
         ? <Puzzle answers={answers} setAnswers={setAnswers}/>
         : null
       }
-      <button
-        type="button"
-        className="bg-black text-white px-16 rounded-full py-2.5 font-bold w-fit mx-auto hover:bg-white hover:text-black duration-300 hover:ring-2 hover:ring-black"
-      >
-        SUBMIT
-      </button>
     </div>
   )
 }

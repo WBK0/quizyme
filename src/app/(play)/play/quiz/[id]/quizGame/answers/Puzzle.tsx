@@ -1,6 +1,6 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import GameData from "../GameData.types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type PuzzleProps = {
   answers: GameData['question']['answers'];
@@ -9,6 +9,15 @@ type PuzzleProps = {
 
 const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow'];
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     setAnswers((prevAnswers) => {
@@ -36,14 +45,16 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
     });
   };
 
+  console.log(width)
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="droppable" direction="horizontal">
+      <Droppable droppableId="droppable" direction={width < 768 ? 'vertical' : 'horizontal'}>
         {(provided) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="flex flex-row w-full px-12"
+            className="grid md:grid-cols-4 grid-cols-1 grid-flow-row w-full lg:px-3"
           >
             {answers.map((answer, index) => (
               <Draggable
@@ -54,7 +65,7 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
                 {(provided) => (
                   <div
                     key={answer.id}
-                    className={`bg-blue w-1/4 gap-4 mx-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
+                    className={`bg-blue gap-4 mx-2.5 my-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -82,6 +93,12 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
           </div>
         )}
       </Droppable>
+      <button
+        type="button"
+        className="bg-black text-white px-16 rounded-full py-2.5 font-bold w-fit mx-auto hover:bg-white hover:text-black duration-300 hover:ring-2 hover:ring-black"
+      >
+        SUBMIT
+      </button>
     </DragDropContext>
   );
 };
