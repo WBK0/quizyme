@@ -7,6 +7,7 @@ type GameData = {
       id: string;
       answer: string;
       color?: string;
+      isCorrect?: boolean;
     }[]
   }
 }

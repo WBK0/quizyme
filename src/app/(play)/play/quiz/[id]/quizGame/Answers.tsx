@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import GameData from "./GameData.types";
 import Puzzle from "./answers/Puzzle";
 import Quiz from "./answers/Quiz";
+import Multiplechoice from "./answers/Multiplechoice";
 
 const Answers = ({ gameData } : {gameData: GameData}) => {
   const [answers, setAnswers] = useState<GameData['question']['answers']>(gameData.question.answers);
@@ -14,7 +15,7 @@ const Answers = ({ gameData } : {gameData: GameData}) => {
         : gameData?.question?.type === 'Quiz'
         ? <Quiz answers={answers}/>
         : gameData?.question?.type === 'Multiple choice'
-        ? <Quiz answers={answers}/>
+        ? <Multiplechoice answers={answers} setAnswers={setAnswers}/>
         : null
       }
     </div>
