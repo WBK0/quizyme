@@ -52,7 +52,7 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="grid md:grid-cols-4 grid-cols-1 grid-flow-row w-full lg:px-3"
+            className={`grid md:grid-cols-${answers.length} grid-cols-1 grid-flow-row w-full lg:px-3`}
           >
             {answers.map((answer, index) => (
               <Draggable

@@ -30,7 +30,7 @@ const Multiplechoice = ({ answers, setAnswers } : MultiplechoiceProps ) => {
   return (
     <div className="flex flex-wrap">
       <div
-        className="grid sm:grid-cols-2 lg:grid-cols-4 grid-cols-1 grid-flow-row w-full lg:px-3"
+        className={`grid sm:grid-cols-2 lg:grid-cols-${answers.length} grid-cols-1 grid-flow-row w-full lg:px-3`}
       >
         {answers.map((answer, index) => (
           <div

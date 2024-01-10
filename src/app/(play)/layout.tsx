@@ -27,6 +27,7 @@ export default async function RootLayout ({
     <html lang="en">
       <UserProvider>
         <body>
+          <div className='bg-yellow'></div>
           <ToastProvider>
             <div>
               {children}
