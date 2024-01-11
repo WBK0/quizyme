@@ -11,7 +11,7 @@ const Answers = ({ gameData, id } : {gameData: GameData, id: string}) => {
 
   const handleSubmit = (answer: string | string[]) => {
     if(correctAnswer) return;
-    
+
     toast.promise(
       async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/answer`, {
@@ -26,8 +26,6 @@ const Answers = ({ gameData, id } : {gameData: GameData, id: string}) => {
         });
         
         const dataResponse = await response.json();
-
-        console.log(dataResponse.correctAnswer)
 
         setCorrectAnswer(dataResponse.correctAnswer)
 
@@ -48,32 +46,34 @@ const Answers = ({ gameData, id } : {gameData: GameData, id: string}) => {
   return (
     <div className="w-full h-full flex flex-col gap-10">
       {
-        gameData?.question?.type === 'Puzzle'
-        ? <Puzzle 
-            quizAnswers={gameData.question.answers} 
-            handleSubmit={handleSubmit}
-            correctAnswer={correctAnswer}
-          />
-        : gameData?.question?.type === 'Quiz'
-        ? <Quiz 
-            answers={gameData.question.answers}
-            handleSubmit={handleSubmit}
-            correctAnswer={correctAnswer}
-          />
-        : gameData?.question?.type === 'Multiple choice'
-        ? <Multiplechoice 
-            quizAnswers={gameData.question.answers} 
-            handleSubmit={handleSubmit}
-            correctAnswer={correctAnswer}
-          />
-        : gameData?.question?.type === 'True / False'
-        ? <TrueFalse 
-            answers={gameData.question.answers}
-            handleSubmit={handleSubmit}
-            correctAnswer={correctAnswer}
-          />
-        : null
-      }
+        (() => {switch(gameData?.question?.type){
+          case 'Puzzle':
+            <Puzzle 
+              quizAnswers={gameData.question.answers} 
+              handleSubmit={handleSubmit}
+              correctAnswer={correctAnswer}
+            />
+          case 'Quiz':
+            return <Quiz 
+              answers={gameData.question.answers}
+              handleSubmit={handleSubmit}
+              correctAnswer={correctAnswer}
+            />
+          case 'Multiple choice':
+            return <Multiplechoice 
+              quizAnswers={gameData.question.answers} 
+              handleSubmit={handleSubmit}
+              correctAnswer={correctAnswer}
+            />
+          case 'True / False':
+            <TrueFalse 
+              answers={gameData.question.answers}
+              handleSubmit={handleSubmit}
+              correctAnswer={correctAnswer}
+            />
+          default:
+            return null
+        }})()}
     </div>
   )
 }

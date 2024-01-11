@@ -5,6 +5,7 @@ import Question from "./Question";
 import Spinner from "@/components/Loading/Spinner";
 import Answers from "./Answers";
 import GameData from "./GameData.types";
+import AfterAnswer from "./afterAnswer/page";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
@@ -29,6 +30,7 @@ const QuizGame = ({ id } : { id: string }) => {
       {
         gameData?.question
         ? 
+          0 + 1 == 2 ?
           <>
             <Heading />
             <Question 
@@ -39,6 +41,7 @@ const QuizGame = ({ id } : { id: string }) => {
               id={id}
             />
           </>
+          : <AfterAnswer />
         : 
           <div className="flex justify-center items-center h-screen absolute w-full left-0">
             <Spinner />
