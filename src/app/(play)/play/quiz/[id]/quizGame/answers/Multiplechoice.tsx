@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import GameData from "../GameData.types";
 
 type MultiplechoiceProps = {
-  answers: GameData['question']['answers'];
-  setAnswers: React.Dispatch<React.SetStateAction<GameData['question']['answers']>>;
+  quizAnswers: GameData['question']['answers'];
+  handleSubmit: (answer: string | string[]) => void;
+  correctAnswer: string | string[] | null;
 };
 
-const Multiplechoice = ({ answers, setAnswers } : MultiplechoiceProps ) => {
+const Multiplechoice = ({ quizAnswers, handleSubmit, correctAnswer } : MultiplechoiceProps ) => {
+  const [answers, setAnswers] = useState<GameData['question']['answers']>(quizAnswers);
+
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow']
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const Multiplechoice = ({ answers, setAnswers } : MultiplechoiceProps ) => {
         {answers.map((answer, index) => (
           <div
             key={index}
-            className={`gap-4 mx-2.5 my-2.5 min-h-[240px] ${colors[index]} cursor-pointer rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
+            className={`${correctAnswer && !correctAnswer.includes(answer.id) && 'opacity-50'} gap-4 mx-[2.65%] my-2.5 min-h-[240px] ${colors[index]} cursor-pointer rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
             onClick={() => handleChangeIsCorrect(index)}
           >
             <h1 className="text-center w-full text-xl">{answer.answer}</h1>
@@ -56,6 +59,7 @@ const Multiplechoice = ({ answers, setAnswers } : MultiplechoiceProps ) => {
       <button
         type="button"
         className="bg-black text-white px-16 rounded-full py-2.5 font-bold w-fit mx-auto hover:bg-white hover:text-black duration-300 hover:ring-2 hover:ring-black my-8"
+        onClick={() => handleSubmit(answers.filter((answer) => answer.isCorrect).map((answer) => answer.id))}
       >
         SUBMIT
       </button>

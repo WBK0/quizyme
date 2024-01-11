@@ -36,6 +36,7 @@ const QuizGame = ({ id } : { id: string }) => {
             />
             <Answers 
               gameData={gameData}
+              id={id}
             />
           </>
         : 

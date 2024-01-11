@@ -3,13 +3,15 @@ import GameData from "../GameData.types";
 import { useEffect, useState } from "react";
 
 type PuzzleProps = {
-  answers: GameData['question']['answers'];
-  setAnswers: React.Dispatch<React.SetStateAction<GameData['question']['answers']>>;
+  quizAnswers: GameData['question']['answers'];
+  handleSubmit: (answer: string | string[]) => void;
+  correctAnswer: string | string[] | null;
 };
 
-const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
+const Puzzle = ({ quizAnswers, handleSubmit, correctAnswer }: PuzzleProps) => {
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow'];
   const [width, setWidth] = useState(window.innerWidth);
+  const [answers, setAnswers] = useState<GameData['question']['answers']>(quizAnswers);
 
   useEffect(() => {
     function handleResize() {
@@ -45,6 +47,8 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
     });
   };
 
+  console.log(answers, correctAnswer)
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable" direction={width < 768 ? 'vertical' : 'horizontal'}>
@@ -52,7 +56,7 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`grid md:grid-cols-${answers.length} grid-cols-1 grid-flow-row w-full lg:px-3`}
+            className={`grid md:grid-cols-${quizAnswers.length} grid-cols-1 grid-flow-row w-full lg:px-3`}
           >
             {answers.map((answer, index) => (
               <Draggable
@@ -63,10 +67,12 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
                 {(provided) => (
                   <div
                     key={answer.id}
-                    className={`gap-4 mx-2.5 my-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
+                    className={`${correctAnswer && correctAnswer[index] !== answers[index].id && 'opacity-20'} gap-4 mx-2.5 my-2.5 min-h-[240px] ${answer.color || colors[index]} rounded-xl px-3 py-12 text-white font-bold flex items-center relative`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    {...provided.dragHandleProps}
+                    {
+                      ...!correctAnswer && {...provided.dragHandleProps}
+                    }
                     tabIndex={-1}
                   >
                     <button className="absolute top-3 right-3 cursor-grabbing">
@@ -94,6 +100,7 @@ const Puzzle = ({ answers, setAnswers }: PuzzleProps) => {
       <button
         type="button"
         className="bg-black text-white px-16 rounded-full py-2.5 font-bold w-fit mx-auto hover:bg-white hover:text-black duration-300 hover:ring-2 hover:ring-black"
+        onClick={() => handleSubmit(answers.map((answer) => answer.id))}
       >
         SUBMIT
       </button>

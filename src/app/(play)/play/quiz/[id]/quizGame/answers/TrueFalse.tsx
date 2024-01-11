@@ -1,6 +1,12 @@
 import GameData from "../GameData.types";
 
-const TrueFalse = ({ answers } : { answers: GameData['question']['answers'] }) => {
+type TrueFalseProps = {
+  answers: GameData['question']['answers'];
+  handleSubmit: (answer: string | string[]) => void;
+  correctAnswer: string | string[] | null;
+};
+
+const TrueFalse = ({ answers, handleSubmit, correctAnswer } : TrueFalseProps) => {
   const colors = ['bg-green', 'bg-red']
 
   return (
@@ -10,13 +16,14 @@ const TrueFalse = ({ answers } : { answers: GameData['question']['answers'] }) =
       {answers.map((answer, index) => (
         <div
           key={index}
-          className={`gap-4 mx-2.5 my-2.5 min-h-[240px] ${colors[index]} cursor-pointer rounded-xl px-3 py-12 text-white font-bold flex items-center relative hover:scale-105 duration-300`}
+          className={`${correctAnswer && correctAnswer !== answer.id && 'opacity-50'} gap-4 mx-[2.65%] my-2.5 min-h-[240px] ${colors[index]} cursor-pointer rounded-xl px-3 py-12 text-white font-bold flex items-center relative hover:scale-105 duration-300`}
+          onClick={() => handleSubmit(answer.id)}
         >
           <h1 className="text-center w-full text-xl">{answer.answer}</h1>
-        </div>
-      
+        </div>     
       ))}
     </div>
   )
 }
+
 export default TrueFalse;

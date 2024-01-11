@@ -137,35 +137,35 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       }
     }
 
-    const updateQuiz = await prisma.quizGame.update({
-      where: {
-        id: id,
-        userId: session.user.id,
-      },
-      data: {
-        points: {
-          increment: points
-        },
-        correctAnswers: {
-          increment: result === true ? 1 : 0
-        },
-        actualQuestion: {
-          increment: 1
-        },
-        timeToRespond: new Date(Date.now() + (quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]]?.time || 0) * 1000 + 5000), // 5 seconds for safety reasons
-        isFinished: quizGame.actualQuestion + 1 === quizGame.quiz.questions.length,
-      }
-    });
+    // const updateQuiz = await prisma.quizGame.update({
+    //   where: {
+    //     id: id,
+    //     userId: session.user.id,
+    //   },
+    //   data: {
+    //     points: {
+    //       increment: points
+    //     },
+    //     correctAnswers: {
+    //       increment: result === true ? 1 : 0
+    //     },
+    //     actualQuestion: {
+    //       increment: 1
+    //     },
+    //     timeToRespond: new Date(Date.now() + (quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion + 1]]?.time || 0) * 1000 + 5000), // 5 seconds for safety reasons
+    //     isFinished: quizGame.actualQuestion + 1 === quizGame.quiz.questions.length,
+    //   }
+    // });
 
-    if(!updateQuiz) {
-      return new Response(
-        JSON.stringify({
-          status: "Error",
-          message: "Failed to update quiz game",
-        }),
-        { status: 400 }
-      );
-    }
+    // if(!updateQuiz) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       status: "Error",
+    //       message: "Failed to update quiz game",
+    //     }),
+    //     { status: 400 }
+    //   );
+    // }
     
     return new Response(
       JSON.stringify({
