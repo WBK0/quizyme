@@ -66,3 +66,29 @@ body{
   border-radius: 16px; 
   min-height: 60px;
 }
+
+@keyframes leftToRight {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate-left-to-right {
+  animation: leftToRight 1s ease-out;
+}
+
+@keyframes upAfter6s {
+  0%, 100% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.animate-up-after-6s {
+  animation: upAfter6s 1s ease-out;
+}

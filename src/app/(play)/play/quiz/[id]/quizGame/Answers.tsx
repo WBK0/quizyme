@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GameData from "./GameData.types";
 import Puzzle from "./answers/Puzzle";
 import Quiz from "./answers/Quiz";
@@ -6,7 +6,13 @@ import Multiplechoice from "./answers/Multiplechoice";
 import TrueFalse from "./answers/TrueFalse";
 import { toast } from "react-toastify";
 
-const Answers = ({ gameData, id } : {gameData: GameData, id: string}) => {
+type AnsweredProps = {
+  gameData: GameData;
+  id: string;
+  setAnswered: React.Dispatch<React.SetStateAction<null | boolean>>;
+}
+
+const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | string[] | null>(null);
 
   const handleSubmit = (answer: string | string[]) => {
@@ -28,6 +34,10 @@ const Answers = ({ gameData, id } : {gameData: GameData, id: string}) => {
         const dataResponse = await response.json();
 
         setCorrectAnswer(dataResponse.correctAnswer)
+
+        setTimeout(() => {
+          setAnswered(true);
+        }, 3200)
 
         if(!dataResponse.isCorrect){
           throw new Error('Incorrect!');

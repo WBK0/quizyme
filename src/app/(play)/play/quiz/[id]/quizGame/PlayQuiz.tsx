@@ -9,6 +9,7 @@ import AfterAnswer from "./afterAnswer/page";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
+  const [answered, setAnswered] = useState<boolean | null>(null);
 
   const getQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
@@ -30,7 +31,6 @@ const QuizGame = ({ id } : { id: string }) => {
       {
         gameData?.question
         ? 
-          0 + 1 == 2 ?
           <>
             <Heading />
             <Question 
@@ -39,9 +39,14 @@ const QuizGame = ({ id } : { id: string }) => {
             <Answers 
               gameData={gameData}
               id={id}
+              setAnswered={setAnswered}
             />
+            {
+              answered
+              ? <AfterAnswer />
+              : null
+            }
           </>
-          : <AfterAnswer />
         : 
           <div className="flex justify-center items-center h-screen absolute w-full left-0">
             <Spinner />
