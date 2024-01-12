@@ -47,7 +47,7 @@ const Puzzle = ({ quizAnswers, handleSubmit, correctAnswer }: PuzzleProps) => {
     });
   };
 
-  console.log(answers, correctAnswer)
+  console.log(width)
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -56,7 +56,7 @@ const Puzzle = ({ quizAnswers, handleSubmit, correctAnswer }: PuzzleProps) => {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={`grid md:grid-cols-${quizAnswers.length} grid-cols-1 grid-flow-row w-full lg:px-3`}
+            className={`grid ${answers.length === 3 ? 'md:grid-cols-3' : answers.length === 4 ? 'md:grid-cols-4' : 'md:grid-cols-2'} grid-cols-1 grid-flow-row w-full lg:px-3`}
           >
             {answers.map((answer, index) => (
               <Draggable

@@ -9,7 +9,7 @@ import AfterAnswer from "./afterAnswer/page";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
-  const [answered, setAnswered] = useState<boolean | null>(null);
+  const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number} | null>(null);
 
   const getQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
@@ -43,7 +43,11 @@ const QuizGame = ({ id } : { id: string }) => {
             />
             {
               answered
-              ? <AfterAnswer />
+              ? <AfterAnswer 
+                  getQuestion={getQuestion}
+                  answered={answered}
+                  setAnswered={setAnswered}
+                />
               : null
             }
           </>

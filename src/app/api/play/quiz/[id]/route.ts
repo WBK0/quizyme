@@ -87,6 +87,28 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       );
     }
 
+    if(quizGame.isAsked === false){
+      const updateQuiz = await prisma.quizGame.update({
+        where: {
+          id: id
+        },
+        data: {
+          isAsked: true,
+          timeToRespond: new Date(Date.now() + (quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]]?.time || 0) * 1000 + 5000), // 5 seconds for safety reasons
+        }
+      });
+
+      if(!updateQuiz){
+        return new Response(
+          JSON.stringify({
+            status: "Error",
+            message: "Unexpected error occured",
+          }),
+          { status: 400 }
+        );
+      }
+    }
+
     const gameData = {
       id: quizGame.id,
       topic: quizGame.quiz.topic,

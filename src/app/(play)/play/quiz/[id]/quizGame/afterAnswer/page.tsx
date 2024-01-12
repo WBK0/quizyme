@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import CountUp from 'react-countup';
 
-const AfterAnswer = () => {
+type AfterAnswerProps = {
+  getQuestion: () => void;
+  answered: {pointsGet: number, pointsTotal: number};
+  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number} | null>>;
+}
+
+const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) => {
   const [countDown, setCountDown] = useState(3);
   const [step, setStep] = useState(0);
   const animatedContainerRef = useRef<HTMLDivElement | null>(null);
@@ -15,6 +21,10 @@ const AfterAnswer = () => {
     }, 1000)
   }
 
+  if(countDown === 2){
+    getQuestion();
+  }
+
   useEffect(() => {
     if (countDown === 0) {
       if (animatedContainerRef.current) {
@@ -25,6 +35,7 @@ const AfterAnswer = () => {
     const onAnimationEnd = () => {
       if(animatedContainerRef.current && animatedContainerRef.current.classList.contains("animate-up-after-6s")){
         animatedContainerRef.current.classList.add('hidden');
+        setAnswered(null);
       }
     };
 
@@ -46,7 +57,7 @@ const AfterAnswer = () => {
           step === 0 ?
           <>
             <h2 className="text-6xl font-black text-center text-white"> 
-              <CountUp start={150} end={403} duration={4} onEnd={() => setTimeout(() => {setStep(1), handleCountDown()}, 1000)} /> POINTS 
+              <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(1), handleCountDown()}, 1000)} /> POINTS 
             </h2>
             <h6 className="text-xl font-bold text-white">12 QUESTIONS LEFT</h6>
           </>

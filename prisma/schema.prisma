@@ -167,6 +167,7 @@ model QuizGame {
   timeToRespond  DateTime
   points         Int
   correctAnswers Int
+  isAsked        Boolean  @default(false)
   isStarted      Boolean  @default(false)
   isFinished     Boolean  @default(false)
   createdAt      DateTime @default(now())

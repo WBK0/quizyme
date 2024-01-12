@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameData from "./GameData.types";
 import Puzzle from "./answers/Puzzle";
 import Quiz from "./answers/Quiz";
@@ -9,11 +9,17 @@ import { toast } from "react-toastify";
 type AnsweredProps = {
   gameData: GameData;
   id: string;
-  setAnswered: React.Dispatch<React.SetStateAction<null | boolean>>;
+  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number} | null>>;
 }
 
 const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | string[] | null>(null);
+
+  console.log(gameData?.question?.type)
+
+  useEffect(() => {
+    setCorrectAnswer(null);
+  }, [gameData])
 
   const handleSubmit = (answer: string | string[]) => {
     if(correctAnswer) return;
@@ -36,7 +42,7 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
         setCorrectAnswer(dataResponse.correctAnswer)
 
         setTimeout(() => {
-          setAnswered(true);
+          setAnswered({pointsGet: dataResponse.pointsGet, pointsTotal: dataResponse.pointsTotal});
         }, 3200)
 
         if(!dataResponse.isCorrect){
@@ -56,33 +62,41 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
   return (
     <div className="w-full h-full flex flex-col gap-10">
       {
-        (() => {switch(gameData?.question?.type){
+        (() => {switch (gameData?.question?.type) {
           case 'Puzzle':
-            <Puzzle 
-              quizAnswers={gameData.question.answers} 
-              handleSubmit={handleSubmit}
-              correctAnswer={correctAnswer}
-            />
+            return (
+              <Puzzle
+                quizAnswers={gameData.question.answers}
+                handleSubmit={handleSubmit}
+                correctAnswer={correctAnswer}
+              />
+            );
           case 'Quiz':
-            return <Quiz 
-              answers={gameData.question.answers}
-              handleSubmit={handleSubmit}
-              correctAnswer={correctAnswer}
-            />
+            return (
+              <Quiz
+                answers={gameData.question.answers}
+                handleSubmit={handleSubmit}
+                correctAnswer={correctAnswer}
+              />
+            );
           case 'Multiple choice':
-            return <Multiplechoice 
-              quizAnswers={gameData.question.answers} 
-              handleSubmit={handleSubmit}
-              correctAnswer={correctAnswer}
-            />
+            return (
+              <Multiplechoice
+                quizAnswers={gameData.question.answers}
+                handleSubmit={handleSubmit}
+                correctAnswer={correctAnswer}
+              />
+            );
           case 'True / False':
-            <TrueFalse 
-              answers={gameData.question.answers}
-              handleSubmit={handleSubmit}
-              correctAnswer={correctAnswer}
-            />
+            return (
+              <TrueFalse
+                answers={gameData.question.answers}
+                handleSubmit={handleSubmit}
+                correctAnswer={correctAnswer}
+              />
+            );
           default:
-            return null
+            return null;
         }})()}
     </div>
   )
