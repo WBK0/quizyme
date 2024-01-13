@@ -32,7 +32,9 @@ const QuizGame = ({ id } : { id: string }) => {
         gameData?.question
         ? 
           <>
-            <Heading />
+            <Heading 
+              gameData={gameData}
+            />
             <Question 
               gameData={gameData}
             />
@@ -43,12 +45,14 @@ const QuizGame = ({ id } : { id: string }) => {
             />
             {
               answered
-              ? <AfterAnswer 
+              ? 
+                <AfterAnswer 
                   getQuestion={getQuestion}
                   answered={answered}
                   setAnswered={setAnswered}
                 />
-              : null
+              : 
+                null
             }
           </>
         : 

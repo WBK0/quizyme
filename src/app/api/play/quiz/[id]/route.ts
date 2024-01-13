@@ -76,7 +76,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       );
     }
 
-    if(new Date().getTime() > quizGame.timeToRespond.getTime()){
+    if(quizGame.isAsked && new Date().getTime() > quizGame.timeToRespond.getTime()){
       return new Response(
         JSON.stringify({
           status: "Error",

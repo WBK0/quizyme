@@ -3,6 +3,7 @@ type GameData = {
     image: string;
     question: string;
     type: 'Puzzle' | 'Quiz' | 'Multiple choice' | 'True / False';
+    time: number;
     answers: {
       id: string;
       answer: string;

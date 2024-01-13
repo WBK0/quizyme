@@ -46,7 +46,7 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
         }, 3200)
 
         if(!dataResponse.isCorrect){
-          throw new Error('Incorrect!');
+          throw new Error(dataResponse.message || 'Something went wrong');
         }
 
         return dataResponse;
@@ -54,7 +54,7 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
       {
         pending: 'Submitting answer...',
         success: 'Correct! Your answer is right.',
-        error: 'Incorrect! Your answer is wrong.'
+        error: { render: ({ data }: { data?: { message: string } }) => data?.message || 'Incorrect! Your answer is wrong' },
       }
     )
   }
