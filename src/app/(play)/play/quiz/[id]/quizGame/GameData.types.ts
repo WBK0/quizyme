@@ -1,4 +1,5 @@
 type GameData = {
+  timeToRespond: Date;
   question: {
     image: string;
     question: string;

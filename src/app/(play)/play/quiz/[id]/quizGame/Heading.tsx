@@ -3,14 +3,27 @@ import GameData from "./GameData.types";
 
 const Heading = ({ gameData } : { gameData: GameData}) => {
   const maxTime = gameData?.question?.time * 1000;
-  const [time, setTime] = useState<number>(maxTime);
-  
+  const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
+
+  const setTimer = () => {
+    setTime(new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500);
+  }
+
+  useEffect(() => {
+    setTimer();
+  }, [gameData?.question])
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTime((prev) => prev - 10);
     }, 10);
 
-    return () => clearInterval(intervalId);
+    document.addEventListener('visibilitychange', setTimer);
+
+    return () => {
+      document.removeEventListener('visibilitychange', setTimer);
+      clearInterval(intervalId)
+    };
   }, [])
 
   const percentage = (time * 100) / maxTime;
@@ -29,7 +42,7 @@ const Heading = ({ gameData } : { gameData: GameData}) => {
         <div 
           className="h-2 rounded-full" 
           style={{
-            width: (percentage + "%"),
+            width: (percentage <= 100 ? percentage + "%" : "100%"),
             backgroundColor: `${
               percentage > 55 ? 'rgb(148, 211, 156)'
               : percentage > 50 ? `rgb(${(55 - percentage) * 20 + 148}, ${211 - (55 - percentage) * 4.8}, ${156 - (55 - percentage) * 13.6})`
