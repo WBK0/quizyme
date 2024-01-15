@@ -11,6 +11,18 @@ const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
   const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number} | null>(null);
 
+  const nextQuestion = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/next`, {
+      method: 'POST',
+      cache: 'no-cache',
+    });
+    
+    const data = await response.json();
+
+    getQuestion();
+    
+  }
+
   const getQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
       method: 'GET',
@@ -18,6 +30,10 @@ const QuizGame = ({ id } : { id: string }) => {
     });
     
     const data = await response.json();
+
+    if(data.errorId === 102){
+      return nextQuestion();
+    }
 
     setGameData(data.data);
   }

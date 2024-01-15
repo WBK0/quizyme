@@ -15,7 +15,7 @@ const Heading = ({ gameData } : { gameData: GameData}) => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTime((prev) => prev - 10);
+      setTime((prev) => Number(((prev - 10) / 10).toFixed(0.01)) * 10);
     }, 10);
 
     document.addEventListener('visibilitychange', setTimer);
