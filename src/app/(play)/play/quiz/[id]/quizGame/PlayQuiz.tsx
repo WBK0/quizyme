@@ -9,7 +9,7 @@ import AfterAnswer from "./afterAnswer/page";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
-  const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number} | null>(null);
+  const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>(null);
 
   const nextQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/next`, {
@@ -20,7 +20,6 @@ const QuizGame = ({ id } : { id: string }) => {
     const data = await response.json();
 
     getQuestion();
-    
   }
 
   const getQuestion = async () => {

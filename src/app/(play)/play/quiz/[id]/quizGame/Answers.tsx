@@ -9,13 +9,11 @@ import { toast } from "react-toastify";
 type AnsweredProps = {
   gameData: GameData;
   id: string;
-  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number} | null>>;
+  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
 }
 
 const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | string[] | null>(null);
-
-  console.log(gameData?.question?.type)
 
   useEffect(() => {
     setCorrectAnswer(null);
@@ -42,7 +40,7 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
         setCorrectAnswer(dataResponse.correctAnswer)
 
         setTimeout(() => {
-          setAnswered({pointsGet: dataResponse.pointsGet, pointsTotal: dataResponse.pointsTotal});
+          setAnswered({pointsGet: dataResponse.pointsGet, pointsTotal: dataResponse.pointsTotal, questionsLeft: dataResponse.questionsLeft});
         }, 3200)
 
         if(!dataResponse.isCorrect){

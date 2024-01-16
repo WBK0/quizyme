@@ -3,8 +3,8 @@ import CountUp from 'react-countup';
 
 type AfterAnswerProps = {
   getQuestion: () => void;
-  answered: {pointsGet: number, pointsTotal: number};
-  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number} | null>>;
+  answered: {pointsGet: number, pointsTotal: number, questionsLeft: number};
+  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
 }
 
 const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) => {
@@ -59,7 +59,7 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) 
             <h2 className="text-6xl font-black text-center text-white"> 
               <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(1), handleCountDown()}, 1000)} /> POINTS 
             </h2>
-            <h6 className="text-xl font-bold text-white">12 QUESTIONS LEFT</h6>
+            <h6 className="text-xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
           </>
           : step === 1 ? (
             <div className="animate-left-to-right gap-12 flex items-center justify-center flex-col">

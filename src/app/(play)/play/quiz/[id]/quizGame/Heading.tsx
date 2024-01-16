@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import GameData from "./GameData.types";
 
-const Heading = ({ gameData } : { gameData: GameData}) => {
+const Heading = ({ gameData } : { gameData: GameData }) => {
   const maxTime = gameData?.question?.time * 1000;
   const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
 
   const setTimer = () => {
-    setTime(new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500);
+    setTime((new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500) > 0 ? (new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500) : 0);
   }
 
   useEffect(() => {
@@ -24,14 +24,14 @@ const Heading = ({ gameData } : { gameData: GameData}) => {
       document.removeEventListener('visibilitychange', setTimer);
       clearInterval(intervalId)
     };
-  }, [])
+  }, [gameData?.question])
 
   const percentage = (time * 100) / maxTime;
 
   return (
     <div className="bg-white w-full flex flex-wrap items-center md:gap-32 gap-4 top-0 left-0 absolute px-3 pt-3">
       <div className="flex-1 md:flex-none">
-        <h6 className="font-bold text-lg w-fit">3/12</h6>
+        <h6 className="font-bold text-lg w-fit">{gameData.actualQuestion + 1} / {gameData.numberOfQuestions}</h6>
       </div>
       <div 
         className="relative bg-gray-300 rounded-full h-2 flex-auto order-last md:order-none md:w-fit w-full duration-1000"

@@ -124,6 +124,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
           message: "Time to answer expired",
           pointsGet: 0,
           pointsTotal: quizGame.points,
+          questionsLeft: quizGame.quiz.questions.length - quizGame.actualQuestion - 1,
           errorId: 102
         }),
         { status: 200 }
@@ -201,6 +202,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
         correctAnswer: result === true ? answer : result,
         pointsGet: points,
         pointsTotal: quizGame.points + points,
+        questionsLeft: quizGame.quiz.questions.length - quizGame.actualQuestion - 1
       }),
       { status: 200 }
     );
