@@ -109,6 +109,15 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       }
     }
 
+    const shuffleArray = (array : {id: string, answer: string}[]) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      console.log(array)
+      return array;
+    };
+
     const gameData = {
       id: quizGame.id,
       topic: quizGame.quiz.topic,
@@ -120,10 +129,10 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       numberOfQuestions: quizGame.quiz.questions.length,
       question: {
         ...quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]],
-        answers: quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].answers.map((answer) => ({
+        answers: shuffleArray(quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].answers.map((answer) => ({
           id: answer.id,
           answer: answer.answer
-        }))
+        })))
       }
     };
 
