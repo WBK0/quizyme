@@ -69,10 +69,11 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
     if(quizGame.isFinished) {
       return new Response(
         JSON.stringify({
-          status: "Error",
+          status: "Success",
           message: "Quiz game already finished",
+          isFinished: true
         }),
-        { status: 400 }
+        { status: 200 }
       );
     }
 
