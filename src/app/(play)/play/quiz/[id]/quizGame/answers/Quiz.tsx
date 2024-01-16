@@ -9,8 +9,6 @@ type QuizProps = {
 const Quiz = ({ answers, handleSubmit, correctAnswer } : QuizProps) => {
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow']
 
-  console.log(answers.length)
-
   return (
     <div
       className={`grid sm:grid-cols-2 grid-cols-1 ${answers.length === 3 ? 'lg:grid-cols-3' : answers.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-2'} grid-flow-row w-full lg:px-3 xl:px-6`}

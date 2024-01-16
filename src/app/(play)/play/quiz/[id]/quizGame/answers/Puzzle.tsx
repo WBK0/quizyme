@@ -47,8 +47,6 @@ const Puzzle = ({ quizAnswers, handleSubmit, correctAnswer }: PuzzleProps) => {
     });
   };
 
-  console.log(width)
-
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable" direction={width < 768 ? 'vertical' : 'horizontal'}>

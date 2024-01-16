@@ -10,6 +10,7 @@ import AfterAnswer from "./afterAnswer/page";
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
   const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>(null);
+  const [stopTimer, setStopTimer] = useState(false);
 
   const nextQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/next`, {
@@ -49,6 +50,7 @@ const QuizGame = ({ id } : { id: string }) => {
           <>
             <Heading 
               gameData={gameData}
+              stopTimer={stopTimer}
             />
             <Question 
               gameData={gameData}
@@ -57,6 +59,7 @@ const QuizGame = ({ id } : { id: string }) => {
               gameData={gameData}
               id={id}
               setAnswered={setAnswered}
+              setStopTimer={setStopTimer}
             />
             {
               answered

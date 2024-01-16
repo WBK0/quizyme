@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import GameData from "./GameData.types";
 
-const Heading = ({ gameData } : { gameData: GameData }) => {
+type HeadingProps = {
+  gameData: GameData;
+  stopTimer: boolean;
+}
+
+const Heading = ({ gameData, stopTimer } : HeadingProps) => {
   const maxTime = gameData?.question?.time * 1000;
   const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
 
@@ -18,13 +23,17 @@ const Heading = ({ gameData } : { gameData: GameData }) => {
       setTime((prev) => Number(((prev - 10) / 10).toFixed(0.01)) * 10);
     }, 10);
 
+    if(stopTimer){
+      clearInterval(intervalId)
+    }
+
     document.addEventListener('visibilitychange', setTimer);
 
     return () => {
       document.removeEventListener('visibilitychange', setTimer);
       clearInterval(intervalId)
     };
-  }, [gameData?.question])
+  }, [gameData?.question, stopTimer])
 
   const percentage = (time * 100) / maxTime;
 

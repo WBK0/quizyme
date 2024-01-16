@@ -10,9 +10,10 @@ type AnsweredProps = {
   gameData: GameData;
   id: string;
   setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  setStopTimer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
+const Answers = ({ gameData, id, setAnswered, setStopTimer } : AnsweredProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | string[] | null>(null);
 
   useEffect(() => {
@@ -21,6 +22,8 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
 
   const handleSubmit = (answer: string | string[]) => {
     if(correctAnswer) return;
+
+    setStopTimer(true);
 
     toast.promise(
       async () => {
@@ -41,6 +44,7 @@ const Answers = ({ gameData, id, setAnswered } : AnsweredProps) => {
 
         setTimeout(() => {
           setAnswered({pointsGet: dataResponse.pointsGet, pointsTotal: dataResponse.pointsTotal, questionsLeft: dataResponse.questionsLeft});
+          setStopTimer(false);
         }, 3200)
 
         if(!dataResponse.isCorrect){
