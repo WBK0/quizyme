@@ -18,9 +18,9 @@ const QuizGame = ({ id } : { id: string }) => {
       cache: 'no-cache',
     });
     
-    const data = await response.json();
-
-    getQuestion();
+    if(response.ok){
+      getQuestion();
+    }
   }
 
   const getQuestion = async () => {

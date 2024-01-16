@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GameData from "./GameData.types";
+import { toast } from "react-toastify";
 
 type HeadingProps = {
   gameData: GameData;
@@ -37,6 +38,30 @@ const Heading = ({ gameData, stopTimer } : HeadingProps) => {
 
   const percentage = (time * 100) / maxTime;
 
+  const handleEndGame = async () => {
+    toast.promise(
+      async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${gameData.id}/end`, {
+          method: 'POST',
+          cache: 'no-cache',
+        });
+    
+        const data = await response.json();
+
+        if(!response.ok){
+          throw new Error(data.message || 'Something went wrong');
+        }
+
+        return data;
+      },
+      {
+        pending: 'Submitting end game request...',
+        success: 'Game ended successfully!',
+        error: { render: ({ data }: { data?: { message: string } }) => data?.message || 'An error occurred while ending the game' },
+      }
+    )
+  }
+
   return (
     <div className="bg-white w-full flex flex-wrap items-center md:gap-32 gap-4 top-0 left-0 absolute px-3 pt-3">
       <div className="flex-1 md:flex-none">
@@ -63,7 +88,10 @@ const Heading = ({ gameData, stopTimer } : HeadingProps) => {
         ></div>
       </div>
       <div className="flex-1 md:flex-none justify-end flex">
-        <button className="bg-red text-white px-6 rounded-full py-1 font-bold w-fit">
+        <button 
+          className="bg-red text-white px-6 rounded-full py-1 font-bold w-fit"
+          onClick={handleEndGame}
+        >
           END QUIZ
         </button>
       </div>

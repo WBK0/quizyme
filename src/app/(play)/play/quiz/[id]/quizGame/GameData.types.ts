@@ -1,4 +1,5 @@
 type GameData = {
+  id: string;
   timeToRespond: Date;
   actualQuestion: number;
   numberOfQuestions: number;
