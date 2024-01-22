@@ -7,6 +7,7 @@ import checkQuizAnswer from "./checkQuizAnswer";
 import checkPuzzleAnswer from "./checkPuzzleAnswer";
 import checkMultiplechoiceAnswer from "./checkMultiplechoiceAnswer";
 import checkTrueFalseAnswer from "./checkTrueFalseAnswer";
+import finishQuiz from "./finishQuiz";
 
 export const POST = async (req: NextRequest, { params } : {params : {id: string}}) => {
   try {
@@ -195,7 +196,13 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
     }
 
     if(quizGame.actualQuestion + 1 === quizGame.quiz.questions.length){
-      
+      await finishQuiz(
+        id,
+        quizGame.quiz.id,
+        session.user.id,
+        quizGame.points + points,
+        quizGame.correctAnswers + (result === true ? 1 : 0)
+      )
     }
     
     return new Response(
@@ -211,7 +218,6 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       { status: 200 }
     );
   } catch (error) {
-    console.log(error)
     return new Response(
       JSON.stringify({
         status: "Error",
