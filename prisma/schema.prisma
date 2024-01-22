@@ -36,23 +36,24 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String       @unique
+  email         String          @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  username      String?      @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  username      String?         @unique
   bio           String?
   interests     String[]
-  isComplete    Boolean      @default(false)
+  isComplete    Boolean         @default(false)
   Quiz          Quiz[]
   Flashcards    Flashcards[]
   QuizGame      QuizGame[]
+  QuizGameStats QuizGameStats[]
 }
 
 model VerificationToken {
@@ -105,7 +106,7 @@ type StatsQuestions {
 }
 
 model Quiz {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   topic          String
   visibility     String
   tags           String[]
@@ -113,16 +114,17 @@ model Quiz {
   image          String
   description    String
   collectionName String
-  collection     Collection     @relation(fields: [collectionName], references: [name])
+  collection     Collection      @relation(fields: [collectionName], references: [name])
   questions      Question[]
-  userId         String         @db.ObjectId
-  user           User           @relation(fields: [userId], references: [id])
-  codeId         String         @unique @db.ObjectId
-  code           Code           @relation(fields: [codeId], references: [id])
+  userId         String          @db.ObjectId
+  user           User            @relation(fields: [userId], references: [id])
+  codeId         String          @unique @db.ObjectId
+  code           Code            @relation(fields: [codeId], references: [id])
   stats          StatsQuestions
   quizGame       QuizGame[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  quizGameStats  QuizGameStats[]
 }
 
 type Flashcard {
@@ -157,19 +159,32 @@ model Flashcards {
 }
 
 model QuizGame {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  quizId         String   @db.ObjectId
-  userId         String   @db.ObjectId
-  quiz           Quiz     @relation(fields: [quizId], references: [id])
-  user           User     @relation(fields: [userId], references: [id])
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  quizId         String          @db.ObjectId
+  userId         String          @db.ObjectId
+  quiz           Quiz            @relation(fields: [quizId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
   questionsOrder Int[]
   actualQuestion Int
   timeToRespond  DateTime
   points         Int
   correctAnswers Int
-  isAsked        Boolean  @default(false)
-  isStarted      Boolean  @default(false)
-  isFinished     Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  isAsked        Boolean         @default(false)
+  isStarted      Boolean         @default(false)
+  isFinished     Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  quizGameStats  QuizGameStats[]
+}
+
+model QuizGameStats {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  quizId         String   @db.ObjectId
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+  quizGameId     String   @unique @db.ObjectId
+  quizGame       QuizGame @relation(fields: [quizGameId], references: [id])
+  points         Int
+  correctAnswers Int
+  quiz           Quiz     @relation(fields: [quizId], references: [id])
 }

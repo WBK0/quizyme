@@ -193,6 +193,10 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
         { status: 400 }
       );
     }
+
+    if(quizGame.actualQuestion + 1 === quizGame.quiz.questions.length){
+      
+    }
     
     return new Response(
       JSON.stringify({
