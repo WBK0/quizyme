@@ -11,9 +11,10 @@ type AnsweredProps = {
   id: string;
   setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
   setStopTimer: React.Dispatch<React.SetStateAction<boolean>>;
+  stopTimer: boolean;
 }
 
-const Answers = ({ gameData, id, setAnswered, setStopTimer } : AnsweredProps) => {
+const Answers = ({ gameData, id, setAnswered, setStopTimer, stopTimer } : AnsweredProps) => {
   const [correctAnswer, setCorrectAnswer] = useState<string | string[] | null>(null);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const Answers = ({ gameData, id, setAnswered, setStopTimer } : AnsweredProps) =>
   }, [gameData])
 
   const handleSubmit = (answer: string | string[]) => {
-    if(correctAnswer) return;
+    if(correctAnswer || stopTimer) return;
 
     setStopTimer(true);
 

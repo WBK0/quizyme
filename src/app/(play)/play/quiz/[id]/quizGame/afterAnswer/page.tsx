@@ -21,9 +21,11 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) 
     }, 1000)
   }
 
-  if(countDown === 2){
-    getQuestion();
-  }
+  useEffect(() => {
+    if(countDown === 2){
+      getQuestion();
+    }
+  }, [countDown])
 
   useEffect(() => {
     if (countDown === 0) {

@@ -88,8 +88,10 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       );
     }
 
+    let updateQuiz = null;
+
     if(quizGame.isAsked === false){
-      const updateQuiz = await prisma.quizGame.update({
+      updateQuiz = await prisma.quizGame.update({
         where: {
           id: id
         },
@@ -111,6 +113,9 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
     }
 
     const shuffleArray = (array : {id: string, answer: string}[]) => {
+      if(quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].type === 'True / False'){
+        return array;
+      }
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -121,7 +126,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
     const gameData = {
       id: quizGame.id,
       topic: quizGame.quiz.topic,
-      timeToRespond: quizGame.timeToRespond,
+      timeToRespond: updateQuiz?.timeToRespond || quizGame.timeToRespond,
       isStarted: quizGame.isStarted,
       isFinished: quizGame.isFinished,
       points: quizGame.points,

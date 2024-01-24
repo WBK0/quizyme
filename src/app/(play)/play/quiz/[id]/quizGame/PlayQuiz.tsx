@@ -54,6 +54,8 @@ const QuizGame = ({ id } : { id: string }) => {
             <Heading 
               gameData={gameData}
               stopTimer={stopTimer}
+              answered={answered}
+              setAnswered={setAnswered}
             />
             <Question 
               gameData={gameData}
@@ -63,6 +65,7 @@ const QuizGame = ({ id } : { id: string }) => {
               id={id}
               setAnswered={setAnswered}
               setStopTimer={setStopTimer}
+              stopTimer={stopTimer}
             />
             {
               answered

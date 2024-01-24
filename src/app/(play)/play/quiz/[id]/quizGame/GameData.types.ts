@@ -3,6 +3,7 @@ type GameData = {
   timeToRespond: Date;
   actualQuestion: number;
   numberOfQuestions: number;
+  points: number;
   question: {
     image: string;
     question: string;

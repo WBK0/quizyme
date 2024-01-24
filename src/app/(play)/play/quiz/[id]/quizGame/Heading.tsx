@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 type HeadingProps = {
   gameData: GameData;
   stopTimer: boolean;
+  answered: {pointsGet: number, pointsTotal: number, questionsLeft: number} | null;
+  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
 }
 
-const Heading = ({ gameData, stopTimer } : HeadingProps) => {
+const Heading = ({ gameData, stopTimer, answered, setAnswered } : HeadingProps) => {
   const maxTime = gameData?.question?.time * 1000;
   const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
 
@@ -37,6 +39,12 @@ const Heading = ({ gameData, stopTimer } : HeadingProps) => {
   }, [gameData?.question, stopTimer])
 
   const percentage = (time * 100) / maxTime;
+
+  if(time === 0){
+    if(!answered){
+      setAnswered({pointsGet: 0, pointsTotal: gameData.points, questionsLeft: gameData.numberOfQuestions - gameData.actualQuestion - 1})
+    }
+  }
 
   const handleEndGame = async () => {
     toast.promise(
