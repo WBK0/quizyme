@@ -80,7 +80,7 @@ const QuizGame = ({ id } : { id: string }) => {
           isFinished
           ? 
             <Finished
-              
+              id={id}
             />
           :
             <div className="flex justify-center items-center h-screen absolute w-full left-0">

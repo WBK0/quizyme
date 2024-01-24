@@ -19,9 +19,28 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
 
     const prisma = new PrismaClient();
 
-    const quizGameStats = await prisma.quizGameStats.findMany({
+    const userData = await prisma.quizGameStats.findUnique({
       where: {
         quizGameId: params.id,
+      },
+      include: {
+        quiz: true,
+      }
+    });
+
+    if(!userData) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Could not get quiz",
+        }),
+        { status: 500 }
+      );
+    }
+
+    const quizGameStats = await prisma.quizGameStats.findMany({
+      where: {
+        quizId: userData.quiz.id,
       },
       include: {
         user: true,
@@ -37,27 +56,8 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         { status: 500 }
       );
     }
-
-    const quiz = await prisma.quizGameStats.findUnique({
-      where: {
-        quizGameId: params.id,
-      },
-      include: {
-        quiz: true,
-      }
-    });
-
-    if(!quiz) {
-      return new Response(
-        JSON.stringify({
-          status: "Error",
-          message: "Could not get quiz",
-        }),
-        { status: 500 }
-      );
-    }
-
-    const data = quizGameStats.map((quizGameStat) => {
+    
+    let data = quizGameStats.map((quizGameStat) => {
       return {
         id: quizGameStat.id,
         points: quizGameStat.points,
@@ -70,11 +70,16 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       }
     });
 
+    data = data.sort((a, b) => b.points - a.points);
+
     return new Response(
       JSON.stringify({
         status: "Success",
         data: data,
-        answersLength: quiz.quiz.questions.length,
+        answersLength: userData.quiz.questions.length,
+        userPoints: userData.points,
+        userCorrectAnswers: userData.correctAnswers,
+        userPlace: data.findIndex((data) => data.user.id === session.user.id) + 1,
       }),
       { status: 200 }
     );
