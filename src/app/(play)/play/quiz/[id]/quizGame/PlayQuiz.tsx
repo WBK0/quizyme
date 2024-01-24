@@ -74,6 +74,7 @@ const QuizGame = ({ id } : { id: string }) => {
                   getQuestion={getQuestion}
                   answered={answered}
                   setAnswered={setAnswered}
+                  gameData={gameData}
                 />
               : 
                 null

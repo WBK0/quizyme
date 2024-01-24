@@ -1,18 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import CountUp from 'react-countup';
+import GameData from "../GameData.types";
 
 type AfterAnswerProps = {
   getQuestion: () => void;
   answered: {pointsGet: number, pointsTotal: number, questionsLeft: number};
   setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  gameData: GameData;
 }
 
-const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) => {
+const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAnswerProps) => {
   const [countDown, setCountDown] = useState(3);
   const [step, setStep] = useState(0);
   const animatedContainerRef = useRef<HTMLDivElement | null>(null);
 
+  console.log(gameData)
+
   const handleCountDown = () => {
+    if(gameData.actualQuestion === gameData.numberOfQuestions - 1){
+      console.log('psi kuta')
+      getQuestion();
+      return;
+    }
+
     setTimeout(() => {
       setCountDown((prev) => prev - 1)
       if(countDown > 0){
@@ -59,7 +69,7 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered } : AfterAnswerProps) 
           step === 0 ?
           <>
             <h2 className="text-6xl font-black text-center text-white"> 
-              <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(1), handleCountDown()}, 1000)} /> POINTS 
+              <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(gameData.actualQuestion === gameData.numberOfQuestions - 1 ? 0 : 1), handleCountDown()}, 1000)} /> POINTS 
             </h2>
             <h6 className="text-xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
           </>
