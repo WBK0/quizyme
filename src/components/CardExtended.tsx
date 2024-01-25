@@ -7,7 +7,8 @@ type CardExtendedProps = {
   color: string;
   type: string;
   topic: string;
-  authorId: string;
+  authorName: string;
+  authorImage: string;
   showDelete?: boolean;
   invitedBy?: string;
   scored?: number;
@@ -16,7 +17,7 @@ type CardExtendedProps = {
   status?: string;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorId, invitedBy, showDelete, scored, passed, status } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status } : CardExtendedProps) => {
   return (
     <div className='flex flex-col sm:flex-row gap-8 mt-12'>
       <Card
@@ -25,7 +26,8 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorId, invit
         color={color}
         type={type}
         topic={topic}
-        authorId={authorId}
+        authorName={authorName}
+        authorImage={authorImage}
         hideText={true}
         quantity={quantity}
       />
@@ -52,7 +54,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorId, invit
               scored && passed ? (
                 <>
                   <h6 className='font-semibold w-full'>Scored: <span className='font-black' style={{color: `var(--${color})`}}>{scored} Points</span></h6>
-                  <h6 className='font-semibold w-full'>Passed: <span className='font-black' style={{color: `var(--${color})`}}>{scored} / {quantity}</span></h6>
+                  <h6 className='font-semibold w-full'>Passed: <span className='font-black' style={{color: `var(--${color})`}}>{passed} / {quantity}</span></h6>
                 </>
               )
               :

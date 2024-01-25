@@ -1,18 +1,14 @@
 import CardExtended from "@/components/CardExtended";
+import UserData from "./UserData.type";
 
 type StudiesProps = {
   type: string;
-  content: {
-    image: string;
-    to: string;
-    type: string;
-    topic: string;
-    authorId: string;
-    quantity: number;
-  }[];
-}
+  content: UserData['quizzes'] | UserData['flashcards'];
+  authorName: string;
+  authorImage: string;
+};
 
-const Studies = ({ type, content } : StudiesProps) => {
+const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
   const colors = ['purple', 'green', 'yellow', 'lightblue'];
 
   return (
@@ -20,18 +16,23 @@ const Studies = ({ type, content } : StudiesProps) => {
       {
         content.length > 0 ? (
           <>
-            <h1 className="font-black text-3xl">{content.length} {type === 'quizzes' ? 'QUIZZES' : 'FLASHCARDS'}</h1>
+            <h1 className="font-black text-3xl">{content.length} {type === 'quiz' ? 'QUIZZES' : 'FLASHCARDS'}</h1>
             <div>
               {content.map((value, index) => (
                 <CardExtended 
-                  key={value.to}
+                  key={value.id}
                   image={value.image}
-                  to={value.to}
+                  to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll(' ', '-')}-${value.id}`}
                   color={colors[index % 4]}
-                  type={value.type}
+                  type={type}
                   topic={value.topic}
-                  authorId={value.authorId}
-                  quantity={value.quantity}
+                  authorName={authorName}
+                  authorImage={authorImage}
+                  quantity={
+                    type === 'quiz'
+                      ? (value as UserData['quizzes'][number]).numberOfQuestions
+                      : (value as UserData['flashcards'][number]).numberOfFlashcards
+                  }
                 />
               ))}
             </div>
@@ -39,7 +40,7 @@ const Studies = ({ type, content } : StudiesProps) => {
         )
         : (
           <h1 className="font-extrabold text-center text-2xl">
-            This user doesn't have any {type}
+            This user doesn't have any {type === 'quiz' ? 'quizzes' : 'flashcards'}
           </h1>
         )
       }

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import userPhoto from '@/public/userPhoto.svg';
 import Image from "next/image";
 
 type CardProps = {

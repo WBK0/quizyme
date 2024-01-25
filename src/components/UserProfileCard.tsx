@@ -1,16 +1,16 @@
 import Image from "next/image";
-import userPhoto from '@/public/userPhoto.svg';
 
 type UserProps = {
-  fullname: string;
+  name: string;
   username: string;
+  image: string;
 }
 
-const UserProfileCard = ({ fullname, username } : UserProps) => {
+const UserProfileCard = ({ name, username, image } : UserProps) => {
   return (
     <div className="flex flex-col items-center">
-      <Image src={userPhoto} alt="user image" width={96} height={96} />
-      <p className="font-bold text-2xl mt-4 mb-2">{fullname}</p>
+      <Image src={image} alt="user image" width={96} height={96} className="rounded-full"/>
+      <p className="font-bold text-2xl mt-4 mb-2">{name}</p>
       <p className="text-sm font-semibold text-gray-400">@{username}</p>
     </div>
   )

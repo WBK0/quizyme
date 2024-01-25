@@ -1,64 +1,48 @@
 import CardExtended from "@/components/CardExtended";
 import Searchbar from "@/components/Searchbar";
+import { useEffect, useState } from "react";
 
 type StudiedModalProps = {
   handleCloseModal: () => void;
   variant: 'quized' | 'learned';
+  username: string;
 }
 
-const data = [
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-    to: "/",
-    type: "quiz",
-    topic: "Cosmos",
-    authorId: "1",
-    quantity: 18
+type UserData = {
+  id: string,
+  topic: string,
+  tags: string[],
+  image: string,
+  description: string,
+  numberOfQuestions: number,
+  createdAt: Date,
+  correctAnswers: number,
+  points: string,
+  createdBy: {
+    id: string,
+    username: string,
+    image: string,
+    name: string
   }
-]
+}[]
 
-const StudiedModal = ({ handleCloseModal, variant} : StudiedModalProps) => {
+const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
+  const [data, setData] = useState<UserData>([]);
+
+  const getData = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${username}/quized`, {
+      method: 'GET'
+    });
+
+    const json = await response.json();
+
+    setData(json.data);
+  }
+
+  useEffect(() => {
+    getData();
+  }, [])
 
   return(
   <div className="fixed bg-black/50 z-30 w-full h-screen top-0 left-0">
@@ -73,16 +57,19 @@ const StudiedModal = ({ handleCloseModal, variant} : StudiedModalProps) => {
           <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
             <div className="max-w-3xl mx-auto">  
               {
-                data.map((user, index) => (
+                data.map((value, index) => (
                   <CardExtended 
-                    key={index}
-                    image={user.image}
-                    to={user.to}
+                    key={value.id}
+                    image={value.image}
+                    to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll(' ', '-')}-${value.id}`}
                     color={colors[index % 4]}
-                    type={user.type}
-                    topic={user.topic}
-                    authorId={user.authorId}
-                    quantity={user.quantity}
+                    type={'quiz'}
+                    topic={value.topic}
+                    scored={Number(value.points)}
+                    passed={value.correctAnswers}
+                    authorName={value.createdBy.name}
+                    authorImage={value.createdBy.image}
+                    quantity={value.numberOfQuestions}
                   />
                 ))
               }   

@@ -8,9 +8,8 @@ const SelectButton = ({ options, paramsName } : {options : string[], paramsName?
   const [type, setType] = useState<string>(params[paramsName || 'type'] || 'quizzes');
 
   const handleClick = (e : React.MouseEvent<HTMLButtonElement>) => {
-
     const target = e.target as HTMLButtonElement; // Get information about button
-
+    
     changeParam(paramsName || 'type', target.innerText.toLowerCase());
   }
 
