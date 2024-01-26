@@ -1,10 +1,12 @@
 import Recommendations from "@/components/Recommendations";
 import Routes from "./Routes";
 import UserData from "./UserData.type";
+import { revalidatePath } from "next/cache";
 
 const page = async ({ params } : { params : { username: string }}) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${params.username}`, {
-    method: 'GET'
+    method: 'GET',
+    cache: 'force-cache',
   });
 
   const json = await response.json();

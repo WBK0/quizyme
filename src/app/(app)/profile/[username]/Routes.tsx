@@ -9,6 +9,7 @@ import Recommendations from "@/components/Recommendations";
 import Studies from "./Studies";
 import { useEffect, useState } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
+import FollowButton from "./FollowButton";
 
 const Routes = ({ data } : { data: any }) => {
   const [showModal, setShowModal] = useState<number>(0);
@@ -39,12 +40,18 @@ const Routes = ({ data } : { data: any }) => {
       document.removeEventListener('keydown', closeModalOnEscape);
     }
   }, [])
+
+  console.log(data)
+
   return (
     <>
       <UserProfileCard 
         name={data.name}
         username={data.username}
         image={data.image}
+      />
+      <FollowButton
+        userId={data.id}
       />
       <Stats 
         data={data}

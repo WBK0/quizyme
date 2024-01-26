@@ -1,8 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 export const GET = async (req: Request, {params} : {params : {username: string}}) => {
   try {
     const { username } = params;
+
+    const session = await getServerSession(authOptions);
 
     if(!username) {
       return new Response(
@@ -18,7 +22,10 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
 
     const user = await prisma.user.findFirst({
       where: {
-        username: username
+        username: {
+          mode: 'insensitive',
+          equals: username
+        }
       },
       include: {
         Quiz: true,
