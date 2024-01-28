@@ -1,58 +1,50 @@
+import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import UserCard from "@/components/UserCard";
 import userPhoto1 from '@/public/userPhoto1.png';
-
-const data = [
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: true
-  },
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: true
-  },
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: false
-  },
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: false
-  },
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: true
-  },
-  {
-    userPhoto: userPhoto1,
-    firstname: "Bartłomiej",
-    lastname: "Ostojski",
-    username: "OstojskiB",
-    isFollowing: true
-  },
-]
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type FollowingModalProps = {
   handleCloseModal: () => void;
   variant: 'following' | 'followers';
+  userId: string;
 }
 
-const FollowingModal = ({ handleCloseModal, variant } : FollowingModalProps) => {
+type UserData = {
+  id: string;
+  name: string;
+  username: string;
+  image: string;
+  isFollowing: boolean;
+}[] | null;
+
+const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalProps) => {
+  const [data, setData] = useState<UserData>(null);
+  
+  const getData = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${userId}`);
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+
+      setData(json.data[variant]);
+    } catch (error) {
+      toast.error('An error occurred while trying to get the data.', {
+        toastId: 'followingModalError'
+      })
+      handleCloseModal();
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, [])
+
   return (
     <div className="fixed bg-black/50 z-30 w-full h-screen top-0 left-0">
       <div className="flex items-center h-full justify-center">
@@ -63,23 +55,32 @@ const FollowingModal = ({ handleCloseModal, variant } : FollowingModalProps) => 
             <div className="mt-8 max-w-2xl w-full">
               <Searchbar />
             </div>
-            <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
-              <div className="max-w-2xl mx-auto">  
-                {
-                  data.map((user, index) => (
-                    <UserCard 
-                      key={index} 
-                      userPhoto={user.userPhoto} 
-                      firstname={user.firstname} 
-                      lastname={user.lastname} 
-                      username={user.username} 
-                      isFollowing={user.isFollowing} 
-                    />
-                  ))
-                }   
-              </div>
-            </div>
-          </div>
+            {
+              data 
+              ? <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-small">
+                  <div className="max-w-2xl mx-auto">  
+                    {
+                      data.length > 0 ?
+                        data.map((user, index) => (
+                          <UserCard 
+                            key={index} 
+                            image={user.image} 
+                            name={user.name}
+                            username={user.username} 
+                            isFollowing={user.isFollowing} 
+                          />
+                        ))
+                      : <h2 className="text-center font-bold text-xl mt-4">
+                          {variant === 'following' ? 'This user is not following anyone yet.' : 'This user has no followers yet.'}
+                        </h2>
+                    }   
+                  </div>
+                </div>
+              : <div className="flex justify-center items-center w-full h-full pb-12">
+                  <Spinner />
+                </div>
+            }   
+          </div> 
         </div>
       </div>
     </div>

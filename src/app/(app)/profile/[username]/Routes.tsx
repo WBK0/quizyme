@@ -41,8 +41,6 @@ const Routes = ({ data } : { data: any }) => {
     }
   }, [])
 
-  console.log(data)
-
   return (
     <>
       <UserProfileCard 
@@ -114,7 +112,7 @@ const Routes = ({ data } : { data: any }) => {
                 <FollowingModal 
                   handleCloseModal={handleCloseModal}
                   variant="followers"
-                  
+                  userId={data.id}
                 />
               )
             case 4:
@@ -122,6 +120,7 @@ const Routes = ({ data } : { data: any }) => {
                 <FollowingModal 
                   handleCloseModal={handleCloseModal}
                   variant="following"
+                  userId={data.id}
                 />
               )
             default:
