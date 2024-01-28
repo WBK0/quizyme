@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import updateFollowers from "./updateFollowers";
 
 const FollowButton = ({ userId } : { userId: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -10,7 +11,6 @@ const FollowButton = ({ userId } : { userId: string }) => {
 
   const getFollowing = async() => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${userId}/isFollowing`);
-
     const json = await response.json();
 
     setIsFollowing(json.isFollowing);
@@ -45,6 +45,8 @@ const FollowButton = ({ userId } : { userId: string }) => {
         toast.error(error.message)
       getFollowing();
     }
+    updateFollowers();
+
   }
 
   useEffect(() => {
@@ -52,18 +54,19 @@ const FollowButton = ({ userId } : { userId: string }) => {
   }, [userId])
 
   return (
-    <div className="w-full flex mt-6">
-      <button
-        type="button"
-        className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer`}
-        onClick={handleFollow}
-        disabled={!session.data?.user}
-      >
-        {
-          isFollowing ? 'UNFOLLOW' : 'FOLLOW'
-        }
-      </button>
-    </div>
+    session.data?.user.id === userId ? null 
+    : <div className="w-full flex mt-6">
+        <button
+          type="button"
+          className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer`}
+          onClick={handleFollow}
+          disabled={!session.data?.user}
+        >
+          {
+            isFollowing ? 'UNFOLLOW' : 'FOLLOW'
+          }
+        </button>
+      </div>
   )
 }
 

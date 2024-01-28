@@ -29,6 +29,16 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
       );
     }
 
+    if(session?.user?.id === userId) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "You can't follow yourself",
+        }),
+        { status: 400 }
+      );
+    }
+
     const prisma = new PrismaClient();
 
     const follow = await prisma.follower.findFirst({
