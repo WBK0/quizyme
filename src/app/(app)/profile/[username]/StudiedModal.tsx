@@ -1,4 +1,5 @@
 import CardExtended from "@/components/CardExtended";
+import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import { useEffect, useState } from "react";
 
@@ -24,11 +25,11 @@ type UserData = {
     image: string,
     name: string
   }
-}[]
+}[] | null;
 
 const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  const [data, setData] = useState<UserData>([]);
+  const [data, setData] = useState<UserData>(null);
 
   const getData = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${username}/quized`, {
@@ -54,27 +55,38 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
           <div className="mt-8 max-w-2xl w-full">
             <Searchbar />
           </div>
-          <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
-            <div className="max-w-3xl mx-auto">  
-              {
-                data.map((value, index) => (
-                  <CardExtended 
-                    key={value.id}
-                    image={value.image}
-                    to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll(' ', '-')}-${value.id}`}
-                    color={colors[index % 4]}
-                    type={'quiz'}
-                    topic={value.topic}
-                    scored={Number(value.points)}
-                    passed={value.correctAnswers}
-                    authorName={value.createdBy.name}
-                    authorImage={value.createdBy.image}
-                    quantity={value.numberOfQuestions}
-                  />
-                ))
-              }   
-            </div>
-          </div>
+          {
+            data ?
+              <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
+                <div className="max-w-3xl mx-auto">  
+                  {
+                    data.length > 0 ?
+                      data.map((value, index) => (
+                        <CardExtended 
+                          key={value.id}
+                          image={value.image}
+                          to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll(' ', '-')}-${value.id}`}
+                          color={colors[index % 4]}
+                          type={'quiz'}
+                          topic={value.topic}
+                          scored={Number(value.points)}
+                          passed={value.correctAnswers}
+                          authorName={value.createdBy.name}
+                          authorImage={value.createdBy.image}
+                          quantity={value.numberOfQuestions}
+                        />
+                      ))
+                      : <h2 className="text-center font-bold text-xl mt-4">
+                          This user hasn't complete any {variant === 'quized' ? 'quiz' : 'flashcards'} yet.
+                        </h2>     
+                  }   
+                </div>
+              </div>
+            : <div className="flex justify-center items-center w-full h-full pb-12">
+                <Spinner />
+              </div>
+          }
+          
         </div>
       </div>
     </div>
