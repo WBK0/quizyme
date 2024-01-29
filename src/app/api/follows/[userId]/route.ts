@@ -77,6 +77,7 @@ export const GET = async (req: NextRequest, {params} : {params : {userId: string
           username: following.following.username,
           image: following.following.image,
           name: following.following.name,
+          userId: following.following.id,
           isFollowing: sessionUserFollows ? sessionUserFollows.some((follow) => follow.followingId === following.following.id) : false
         }
       }),

@@ -2,6 +2,7 @@ import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import UserCard from "@/components/UserCard";
 import userPhoto1 from '@/public/userPhoto1.png';
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -17,11 +18,14 @@ type UserData = {
   username: string;
   image: string;
   isFollowing: boolean;
+  userId: string;
 }[] | null;
 
 const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalProps) => {
   const [data, setData] = useState<UserData>(null);
-  
+  const [isSubmitting, setIsSubmitting] = useState<string | null>(null);
+  const session = useSession();
+
   const getData = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${userId}`);
@@ -39,6 +43,54 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
       })
       handleCloseModal();
     }
+    setIsSubmitting(null);
+  }
+
+  const handleFollow = async (userId : string) => {
+    try {
+      if(isSubmitting === userId){
+        throw new Error('Please wait a moment until your request.')
+      }
+      setIsSubmitting(userId);
+
+      if(!session.data?.user.id){
+        throw new Error('You must be logged in to follow someone.')
+      }else if(session.data?.user.id === userId){
+        throw new Error('You cannot follow yourself.')
+      }
+
+      setData(prevState => {
+        if(prevState){
+          return prevState.map(user => {
+            if(user.userId === userId){
+              return {
+                ...user,
+                isFollowing: !user.isFollowing
+              }
+            }
+            return user;
+          })
+        }
+        return null;
+      })
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${userId}/follow`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message)
+    }
+    getData();
   }
 
   useEffect(() => {
@@ -68,6 +120,7 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
                             name={user.name}
                             username={user.username} 
                             isFollowing={user.isFollowing} 
+                            handleFollow={() => handleFollow(user.userId)}
                           />
                         ))
                       : <h2 className="text-center font-bold text-xl mt-4">
