@@ -51,6 +51,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
           />
           <ActionButtons 
             type={data.type}
+            id={data.id}
           />
         </div>
         :

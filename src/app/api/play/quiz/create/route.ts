@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "User not logged in",
+          message: "Please login to create a quiz game",
         }),
         { status: 401 }
       );
