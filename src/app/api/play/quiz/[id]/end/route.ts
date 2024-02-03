@@ -80,6 +80,26 @@ export const POST = async (req: NextRequest, {params} : {params : {id: string}})
       );
     }
 
+    const quizStats = await prisma.quizGameStats.create({
+      data: {
+        quizId: quizGame.quizId,
+        userId: session.user.id,
+        quizGameId: id,
+        points: quizGame.points,
+        correctAnswers: quizGame.correctAnswers,
+      }
+    });
+
+    if(!quizStats) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Could not save quiz stats",
+        }),
+        { status: 500 }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         status: "Success",

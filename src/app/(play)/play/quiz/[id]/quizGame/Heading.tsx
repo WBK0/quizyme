@@ -7,9 +7,10 @@ type HeadingProps = {
   stopTimer: boolean;
   answered: {pointsGet: number, pointsTotal: number, questionsLeft: number} | null;
   setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  getQuestion: () => void;
 }
 
-const Heading = ({ gameData, stopTimer, answered, setAnswered } : HeadingProps) => {
+const Heading = ({ gameData, stopTimer, answered, setAnswered, getQuestion } : HeadingProps) => {
   const maxTime = gameData?.question?.time * 1000;
   const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
 
@@ -59,6 +60,8 @@ const Heading = ({ gameData, stopTimer, answered, setAnswered } : HeadingProps) 
         if(!response.ok){
           throw new Error(data.message || 'Something went wrong');
         }
+
+        getQuestion();
 
         return data;
       },

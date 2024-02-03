@@ -45,7 +45,7 @@ const Welcome = ({ setWelcomeScreen } : WelcomeProps) => {
       ref={animatedContainerRef}  
     >
       <div className="flex justify-center items-center h-full flex-col gap-8">
-        <h1 className="text-6xl font-black text-center text-white">GET READY FOR QUIZ</h1>
+        <h1 className="text-3xl sm:text-6xl font-black text-center text-white">GET READY FOR QUIZ</h1>
         <p className="font-black text-white text-8xl text-center">{count}</p>
       </div>
     </div>

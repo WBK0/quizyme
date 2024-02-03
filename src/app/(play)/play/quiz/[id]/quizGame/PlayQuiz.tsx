@@ -77,6 +77,7 @@ const QuizGame = ({ id } : { id: string }) => {
                 stopTimer={stopTimer}
                 answered={answered}
                 setAnswered={setAnswered}
+                getQuestion={getQuestion}
               />
               <Question 
                 gameData={gameData}
