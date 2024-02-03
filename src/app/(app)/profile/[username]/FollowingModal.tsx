@@ -5,6 +5,7 @@ import userPhoto1 from '@/public/userPhoto1.png';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import updateFollowers from "./updateFollowers";
 
 type FollowingModalProps = {
   handleCloseModal: () => void;
@@ -90,6 +91,7 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
       if(error instanceof Error)
         toast.error(error.message)
     }
+    updateFollowers();
     getData();
   }
 

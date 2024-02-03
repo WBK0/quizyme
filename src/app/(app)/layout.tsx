@@ -28,7 +28,7 @@ export default async function RootLayout ({
   return (
     <html lang="en">
       <UserProvider>
-        <body>
+        <body className=''>
           {/* TEMPORARY SET BACKGROUND YELLOW - DELETE IN FUTURE */}
           <div className='bg-yellow'></div>
           <ToastProvider>

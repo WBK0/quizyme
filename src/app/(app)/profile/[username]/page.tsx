@@ -5,7 +5,9 @@ import UserData from "./UserData.type";
 const page = async ({ params } : { params : { username: string }}) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${params.username}`, {
     method: 'GET',
-    cache: 'force-cache',
+    next: {
+      revalidate: 15,
+    }
   });
 
   const json = await response.json();
