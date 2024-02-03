@@ -132,6 +132,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       points: quizGame.points,
       actualQuestion: quizGame.actualQuestion,
       numberOfQuestions: quizGame.quiz.questions.length,
+      welcome: quizGame.actualQuestion === 0 && !quizGame.isAsked,
       question: {
         ...quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]],
         answers: shuffleArray(quizGame.quiz.questions[quizGame?.questionsOrder[quizGame.actualQuestion]].answers.map((answer) => ({

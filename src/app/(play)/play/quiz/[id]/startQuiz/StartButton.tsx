@@ -21,7 +21,6 @@ const StartButton = ({ id } : { id : string}) => {
       },
       {
         pending: 'Starting quiz...',
-        success: 'Get ready!',
         error: {
           render: ({ data }: { data?: { message: string } }) => data?.message || 'Something went wrong',
         },

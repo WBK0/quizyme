@@ -14,11 +14,8 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
   const [step, setStep] = useState(0);
   const animatedContainerRef = useRef<HTMLDivElement | null>(null);
 
-  console.log(gameData)
-
   const handleCountDown = () => {
     if(gameData.actualQuestion === gameData.numberOfQuestions - 1){
-      console.log('psi kuta')
       getQuestion();
       return;
     }

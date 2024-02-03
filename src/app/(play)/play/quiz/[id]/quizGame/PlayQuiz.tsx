@@ -7,12 +7,15 @@ import Answers from "./Answers";
 import GameData from "./GameData.types";
 import AfterAnswer from "./afterAnswer/page";
 import Finished from "./finished/page";
+import Welcome from "./welcome/Welcome";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
   const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>(null);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [stopTimer, setStopTimer] = useState(false);
+  const [welcomeScreen, setWelcomeScreen] = useState(false);
+  const [displayQuestion, setDisplayQuestion] = useState(false);
 
   const nextQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/next`, {
@@ -37,6 +40,15 @@ const QuizGame = ({ id } : { id: string }) => {
       return nextQuestion();
     }
 
+    if(data.data?.welcome){
+      setWelcomeScreen(true);
+      setTimeout(() => {
+        setDisplayQuestion(true);
+      }, 1000)
+    }else{
+      setDisplayQuestion(true);
+    }
+
     setIsFinished(data?.isFinished)
     setGameData(data.data);
   }
@@ -48,49 +60,61 @@ const QuizGame = ({ id } : { id: string }) => {
   return (
     <>
       {
-        gameData?.question
-        ? 
-          <div className="md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
-            <Heading 
-              gameData={gameData}
-              stopTimer={stopTimer}
-              answered={answered}
-              setAnswered={setAnswered}
-            />
-            <Question 
-              gameData={gameData}
-            />
-            <Answers 
-              gameData={gameData}
-              id={id}
-              setAnswered={setAnswered}
-              setStopTimer={setStopTimer}
-              stopTimer={stopTimer}
-            />
-            {
-              answered
-              ? 
-                <AfterAnswer 
-                  getQuestion={getQuestion}
-                  answered={answered}
-                  setAnswered={setAnswered}
-                  gameData={gameData}
-                />
-              : 
-                null
-            }
-          </div>
-        : 
-          isFinished
-          ? 
-            <Finished
-              id={id}
-            />
-          :
-            <div className="flex justify-center items-center h-screen absolute w-full left-0">
-              <Spinner />
-            </div>
+        welcomeScreen
+        ?
+          <Welcome 
+            setWelcomeScreen={setWelcomeScreen}
+          />
+        :
+          null
       }
+      {
+        displayQuestion && gameData?.question
+          ? 
+            <div className="md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
+              <Heading 
+                gameData={gameData}
+                stopTimer={stopTimer}
+                answered={answered}
+                setAnswered={setAnswered}
+              />
+              <Question 
+                gameData={gameData}
+              />
+              <Answers 
+                gameData={gameData}
+                id={id}
+                setAnswered={setAnswered}
+                setStopTimer={setStopTimer}
+                stopTimer={stopTimer}
+              />
+              {
+                answered
+                ? 
+                  <AfterAnswer 
+                    getQuestion={getQuestion}
+                    answered={answered}
+                    setAnswered={setAnswered}
+                    gameData={gameData}
+                  />
+                : 
+                  null
+              }
+            </div>
+          : 
+            isFinished
+            ? 
+              <Finished
+                id={id}
+              />
+            :
+              !welcomeScreen
+              ?
+                <div className="flex justify-center items-center h-screen absolute w-full left-0">
+                  <Spinner />
+                </div>
+              : null
+        } 
     </>
   )
 }
