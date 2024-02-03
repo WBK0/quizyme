@@ -21,28 +21,18 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
 
     const session = await getServerSession(authOptions);
 
-    if(!session?.user?.id) {
-      return new Response(
-        JSON.stringify({
-          status: "Error",
-          message: "User not logged in",
-        }),
-        { status: 401 }
-      );
-    }
-
-    connectToDB();
     const prisma = new PrismaClient();
 
     const quizGame = await prisma.quizGame.findUnique({
       where: {
         id: id,
-        userId: session.user.id,
       },
       include: {
         quiz: true,
       }
     });
+
+    
 
     if(!quizGame) {
       return new Response(
@@ -74,6 +64,16 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
           isFinished: true
         }),
         { status: 200 }
+      );
+    }
+
+    if(!session?.user?.id) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "User not logged in",
+        }),
+        { status: 401 }
       );
     }
 

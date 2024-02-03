@@ -1,6 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import checkMongoDBID from "@/utils/checkMongodbID";
-import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
@@ -41,7 +40,6 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    connectToDB();
     const prisma = new PrismaClient();
 
     const quiz = await prisma.quiz.findUnique({

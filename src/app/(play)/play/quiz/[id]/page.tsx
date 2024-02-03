@@ -1,16 +1,14 @@
-import { headers } from "next/headers";
 import StartQuiz from "./startQuiz/StartQuiz";
 import QuizGame from "./quizGame/PlayQuiz";
 
-const PlayQuiz = async ({ params } : { params: {id: string}}) => {  
+const PlayQuiz = async ({ params }: { params: {id: string} }) => {
   const { id } = params;
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
     method: 'GET',
-    headers: headers(),
     cache: 'no-cache',
   });
-  
+
   const quiz = await response.json();
 
   return (
@@ -28,6 +26,7 @@ const PlayQuiz = async ({ params } : { params: {id: string}}) => {
         )
       }
     </div>
-  )
-}
+  );
+};
+
 export default PlayQuiz;

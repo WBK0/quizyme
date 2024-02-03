@@ -1,5 +1,6 @@
 "use client";
-import { ToastContent, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import updateQuizData from "./updateQuizData";
 
 const StartButton = ({ id } : { id : string}) => {
 
@@ -15,18 +16,18 @@ const StartButton = ({ id } : { id : string}) => {
         if (!response.ok) {
           throw new Error(quiz.message || 'Something went wrong');
         }
+
+        updateQuizData();
       },
       {
         pending: 'Starting quiz...',
-        success: 'Quiz started!',
+        success: 'Get ready!',
         error: {
           render: ({ data }: { data?: { message: string } }) => data?.message || 'Something went wrong',
         },
       }
     );
   };
-  
-  
 
   return (
     <button
