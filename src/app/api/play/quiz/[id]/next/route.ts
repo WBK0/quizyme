@@ -3,6 +3,7 @@ import checkMongoDBID from "@/utils/checkMongodbID";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
+import finishQuiz from "../answer/finishQuiz";
 
 export const POST = async (req: NextRequest, { params } : {params : {id: string}}) => {
   try {
@@ -95,6 +96,16 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
         }),
         { status: 400 }
       );
+    }
+
+    if(quizGame.actualQuestion + 1 === quizGame.quiz.questions.length){
+      await finishQuiz(
+        id,
+        quizGame.quiz.id,
+        session.user.id,
+        quizGame.points,
+        quizGame.correctAnswers
+      )
     }
 
     return new Response(
