@@ -22,7 +22,7 @@ const NotFound = () => {
       <Link href="/search" className="mx-auto">
         <button
           type="button"
-          className="bg-black text-white px-12 py-3 rounded-full font-black shadow-small shadow-green duration-300 hover:scale-105"
+          className="bg-black text-white px-12 py-3 rounded-full font-black shadow-small shadow-green duration-300 hover:scale-105 hover:shadow-transparent"
         >
           Go to search
         </button>

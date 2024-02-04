@@ -11,13 +11,11 @@ const PlayQuiz = async ({ params }: { params: {id: string} }) => {
     method: 'GET',
     cache: 'no-cache',
   });
-
+  
   const quiz = await response.json();
 
   const session = await getServerSession(authOptions);
   
-  console.log(quiz)
-
   return (
     <div>
       {
