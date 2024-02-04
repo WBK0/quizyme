@@ -21,10 +21,11 @@ body{
   font-family: Onest;
 }
 
-.scroll-sm {
+
+/* .scroll-sm {
   scrollbar-width: thin;
   scrollbar-color: #f1f1f1;
-}
+} */
 
 .scroll-sm::-webkit-scrollbar {
   width: 4px;
@@ -58,9 +59,11 @@ body{
   background-color: transparent;
 }
 
-.scroll-sm-blue{
-  scrollbar-width: thin;
-  scrollbar-color: #0A66C2;
+@supports not selector(::-webkit-scrollbar) {
+  .scroll-sm-blue{
+    scrollbar-width: thin;
+    scrollbar-color: #0A66C2 #ffffff;
+  }
 }
 
 .scroll-sm-blue::-webkit-scrollbar {
@@ -95,7 +98,6 @@ body{
   background-color: #f1f1f1;
   border-radius: 4px;
 }
-
 
 /*
   Change toastify styles

@@ -8,6 +8,7 @@ type FinishedData = {
     };
     points: number;
     correctAnswers: number;
+    isFriend: boolean;
   }[]
   userPoints: number;
   userCorrectAnswers: number;

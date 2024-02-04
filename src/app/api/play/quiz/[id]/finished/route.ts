@@ -19,9 +19,19 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
 
     const prisma = new PrismaClient();
 
+    const user = await prisma.user.findFirst({
+      where: {
+        id: session.user.id,
+      },
+      include: {
+        Following: true
+      }
+    });
+
     const userData = await prisma.quizGameStats.findUnique({
       where: {
         quizGameId: params.id,
+        userId: session.user.id,
       },
       include: {
         quiz: true,
@@ -62,6 +72,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         id: quizGameStat.id,
         points: quizGameStat.points,
         correctAnswers: quizGameStat.correctAnswers,
+        isFriend: user?.Following.find((following) => following.followingId === quizGameStat.user.id) ? true : false,
         user: {
           id: quizGameStat.user.id,
           name: quizGameStat.user.name,
@@ -79,7 +90,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         answersLength: userData.quiz.questions.length,
         userPoints: userData.points,
         userCorrectAnswers: userData.correctAnswers,
-        userPlace: data.findIndex((data) => data.user.id === session.user.id) + 1,
+        userPlace: data.findIndex((data) => data.points === userData.points && data.user.id === session.user.id) + 1,
       }),
       { status: 200 }
     );
