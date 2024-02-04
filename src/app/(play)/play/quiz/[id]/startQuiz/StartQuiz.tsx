@@ -5,7 +5,7 @@ import StartButton from "./StartButton";
 const StartQuiz = async ({ quizSlug, id } : { quizSlug: string, id: string }) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${quizSlug}`);
   const quiz = await response.json();
-  
+
   return (
     <div className="flex flex-col items-center gap-4 px-3 justify-center min-h-screen">
       <div className="relative">

@@ -8,6 +8,7 @@ import GameData from "./GameData.types";
 import AfterAnswer from "./afterAnswer/page";
 import Finished from "./finished/page";
 import Welcome from "./welcome/Welcome";
+import NotFound from "../404/404";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
@@ -29,28 +30,38 @@ const QuizGame = ({ id } : { id: string }) => {
   }
 
   const getQuestion = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
-      method: 'GET',
-      cache: 'no-cache',
-    });
-    
-    const data = await response.json();
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}`, {
+        method: 'GET',
+        cache: 'no-cache',
+      });
+      
+      const data = await response.json();
+  
+      if(data.errorId === 102){
+        return nextQuestion();
+      }
 
-    if(data.errorId === 102){
-      return nextQuestion();
-    }
+      if(data.errorId === 103){
+        throw new Error(data.message)
+      }
 
-    if(data.data?.welcome){
-      setWelcomeScreen(true);
-      setTimeout(() => {
+      if(data.data?.welcome){
+        setWelcomeScreen(true);
+        setTimeout(() => {
+          setDisplayQuestion(true);
+        }, 1000)
+      }else{
         setDisplayQuestion(true);
-      }, 1000)
-    }else{
-      setDisplayQuestion(true);
+      }
+  
+      setIsFinished(data?.isFinished)
+      setGameData(data.data);
+    } catch (error) {
+      return(
+        <NotFound />
+      )
     }
-
-    setIsFinished(data?.isFinished)
-    setGameData(data.data);
   }
 
   useEffect(() => {

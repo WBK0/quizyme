@@ -1,6 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import checkMongoDBID from "@/utils/checkMongodbID";
-import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
@@ -32,13 +31,12 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       }
     });
 
-    
-
     if(!quizGame) {
       return new Response(
         JSON.stringify({
           status: "Error",
           message: "Invalid quiz game id provided",
+          errorId: 100,
         }),
         { status: 400 }
       );
@@ -49,6 +47,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         JSON.stringify({
           status: "Error",
           message: "Quiz game not started yet",
+          userId: quizGame.userId,
           errorId: 101,
           quizSlug: quizGame.quiz.topic.replaceAll(' ', '-') + '-' + quizGame.quiz.id
         }),
@@ -61,6 +60,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         JSON.stringify({
           status: "Success",
           message: "Quiz game already finished",
+          userId: quizGame.userId,
           isFinished: true
         }),
         { status: 200 }
@@ -72,6 +72,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         JSON.stringify({
           status: "Error",
           message: "User not logged in",
+          userId: quizGame.userId,
         }),
         { status: 401 }
       );
@@ -147,6 +148,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         status: "Success",
         message: "Quiz game fetched successfully",
         data: gameData,
+        userId: quizGame.userId,
       }),
       { status: 200 }
     );
