@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar/Navbar";
 import Heading from "./Heading";
 import Playground from "./Playground/Playground";
 import Author from "./Author";
+import ConceptList from "./Concepts/ConceptList";
+import Footer from "@/components/Footer/Footer";
 
 const Flashcards = () => {
   return (
@@ -13,7 +15,9 @@ const Flashcards = () => {
           <Playground />
           <Author />
         </div>
+        <ConceptList />
       </div>
+      <Footer />
     </div>
   )
 }
