@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import Panel from './Panel';
+import CardChangeAnimation from './CardChangeAnimation';
 
 const list = [
   {
@@ -23,30 +24,8 @@ const Playground = () => {
   const conceptRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
   const [animate, setAnimate] = useState<'left' | 'right' | null>(null);
+  const [animateText, setAnimateText] = useState<'concept' | 'definition'>('concept');
   const animateRef = useRef<HTMLDivElement>(null);
-
-  const handleAnimate = (direction: 'left' | 'right') => {
-    setAnimate(direction);
-
-    setTimeout(() => {
-      animateRef.current?.classList.add('scale-105');
-    }, 0)
-    setTimeout(() => {
-      if(direction === 'left') {
-        animateRef.current?.classList.add('left-[-10rem]')
-      }else{
-        animateRef.current?.classList.add('left-40')
-      }
-      animateRef.current?.classList.remove('duration-300')
-      animateRef.current?.classList.add('duration-500')
-    }, 300)
-    setTimeout(() => {
-      animateRef.current?.classList.add('opacity-0')
-    }, 300)
-    setTimeout(() => {
-      setAnimate(null);
-    }, 550)
-  }
 
   const calculateHeight = () => {
     if(!cardRef.current || !conceptRef.current || !definitionRef.current || !window) return;
@@ -76,19 +55,34 @@ const Playground = () => {
     if(cardRef.current) {
       cardRef.current.classList.toggle('rotate');
     }
+
+    if(cardRef.current?.classList.contains('rotate')) {
+      setAnimateText('definition');
+    } else {
+      setAnimateText('concept');
+    }
   }
 
   const handleCard = (method : 'increase' | 'decrease') => {
     if(method === 'increase') {
       if(card < list.length - 1) {
         setCard(card + 1)
-        handleAnimate('left');
+        setAnimate('left');
       }
     } else {
       if(card > 0) {
         setCard(card - 1)
-        handleAnimate('right');
+        setAnimate('right');
       }
+    }
+
+    if(cardRef.current?.classList.contains('rotate')) {
+      cardRef.current?.classList.add('skip-rotate-animation');
+      cardRef.current?.classList.remove('rotate');
+
+      setTimeout(() => {
+        cardRef.current?.classList.remove('skip-rotate-animation');
+      }, 100)
     }
   }
 
@@ -108,32 +102,16 @@ const Playground = () => {
 
   return (
     <>
-      {
-        animate ?
-          <div 
-            className='w-full absolute left-0 top-0 z-50 duration-300' 
-            ref={animateRef}
-            style={{
-              height: cardRef.current?.style.height,
-              width: cardRef.current?.clientWidth + 'px'
-            }}
-          >
-            <div 
-              className="bg-green rounded-2xl cursor-pointer flip-card-inner relative w-full h-full flex items-center justify-center" 
-            >
-              <p 
-                className="font-bold text-white text-lg md:text-2xl text-center py-5 px-3"
-              >
-                {
-                  animate === 'left' 
-                    ? list[card - 1][cardRef.current?.classList.contains('rotate') ? 'definition' : 'concept']
-                    : list[card + 1][cardRef.current?.classList.contains('rotate') ? 'definition' : 'concept']
-                }
-              </p>
-            </div>
-          </div>
-        : null
-      }
+      <CardChangeAnimation 
+        cardRef={cardRef}
+        animateRef={animateRef}
+        list={list}
+        animate={animate}
+        setAnimate={setAnimate}
+        card={card}
+        animateText={animateText}
+        setAnimateText={setAnimateText}
+      />
       <div 
         className='flip-card bg-transparent w-full aspect-video' 
         onClick={handleShowing}

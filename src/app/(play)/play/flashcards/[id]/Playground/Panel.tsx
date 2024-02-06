@@ -26,6 +26,7 @@ const Panel = ({ card, length, handleCard } : PanelProps) => {
         <button
           type="button"
           onClick={() => handleCard('decrease')}
+          disabled={card === 0}
         >
           <Image src={leftarrow} width={18} height={18} alt="leftarrow" />
         </button>
@@ -33,6 +34,7 @@ const Panel = ({ card, length, handleCard } : PanelProps) => {
         <button
           type="button"
           onClick={() => handleCard('increase')}
+          disabled={card === length - 1}
         >
           <Image src={rightarrow} width={18} height={18} alt="rightarrow" />
         </button>
