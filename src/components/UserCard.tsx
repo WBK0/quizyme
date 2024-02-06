@@ -1,11 +1,11 @@
-"use client";
 import Image from "next/image"
+import EasySpinner from "./Loading/EasySpinner";
 
 type UserCardProps = {
   image: string;
   username: string;
   name: string;
-  isFollowing?: boolean;
+  isFollowing: boolean | null;
   handleFollow: () => void;
   handleShare?: () => void;
 }
@@ -25,7 +25,11 @@ const UserCard = ({ image, name, username, isFollowing, handleFollow, handleShar
           : null
         }
         <button className={`w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black ${isFollowing ? 'bg-white text-black' : 'bg-black text-white'} hover:scale-105 duration-300`} onClick={handleFollow}>
-          {isFollowing ? 'Unfollow' : 'Follow'}
+          {
+            isFollowing === null ? <EasySpinner />
+          :
+            isFollowing ? 'Unfollow' : 'Follow'
+          }
         </button>
       </div>
     </div>
