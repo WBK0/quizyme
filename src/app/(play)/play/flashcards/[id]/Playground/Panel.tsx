@@ -8,10 +8,26 @@ import fullscreen from './svg/fullscreen.svg';
 type PanelProps = {
   card: number,
   length: number
-  handleCard: (method : 'increase' | 'decrease') => void
+  setCard: React.Dispatch<React.SetStateAction<number>>,
+  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | null>>,
+  list: any[]
 }
 
-const Panel = ({ card, length, handleCard } : PanelProps) => {
+const Panel = ({ card, length, setCard, setAnimate, list } : PanelProps) => {
+  const handleCard = (method : 'increase' | 'decrease') => {
+    if(method === 'increase') {
+      if(card < list.length - 1) {
+        setCard(card + 1)
+        setAnimate('left');
+      }
+    } else {
+      if(card > 0) {
+        setCard(card - 1)
+        setAnimate('right');
+      }
+    }
+  }
+
   return (
     <div className="px-3 flex justify-between py-2.5">
       <div className='flex gap-3 flex-1 justify-start'>
