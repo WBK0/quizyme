@@ -1,4 +1,4 @@
-import Button from "./Button"
+"use client";
 import Image from "next/image"
 
 type UserCardProps = {
