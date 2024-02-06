@@ -140,6 +140,7 @@ body{
 
 .flip-card-back {
   transform: rotateX(180deg);
+  
 }
 
 .flip-card-front, .flip-card-back {
@@ -160,3 +161,4 @@ body{
 .flip-card {
   perspective: 1000px;
 }
+
