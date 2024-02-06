@@ -133,3 +133,30 @@ body{
 .animate-up-after-6s {
   animation: upAfter6s 1s ease-out;
 }
+
+.flip-card-front {
+  transform: rotateX(0);
+}
+
+.flip-card-back {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-inner {
+  transition: transform 0.45s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.rotate .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card {
+  perspective: 1000px;
+}
