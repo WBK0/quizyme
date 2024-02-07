@@ -4,8 +4,9 @@ import shuffle from './svg/shuffle.svg';
 import leftarrow from './svg/leftarrow.svg';
 import rightarrow from './svg/rightarrow.svg';
 import fullscreen from './svg/fullscreen.svg';
+import pause from './svg/pause.svg';
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type PanelProps = {
   card: number,
@@ -16,17 +17,26 @@ type PanelProps = {
   flashcards: {
     concept: string,
     definition: string
-  }[]
-  disableShuffle: () => void
+  }[],
+  disableShuffle: () => void,
+  handleShowing: (byAutoPlay: boolean) => void,
+  autoPlay: boolean,
+  setAutoPlay: React.Dispatch<React.SetStateAction<boolean>>,
+  cardRef: React.MutableRefObject<HTMLDivElement | null>
 }
 
-const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcards, disableShuffle } : PanelProps) => {
+const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcards, disableShuffle, handleShowing, autoPlay, setAutoPlay, cardRef } : PanelProps) => {
   const [isShuffled, setIsShuffled] = useState(false);
 
-  const handleCard = (method : 'increase' | 'decrease') => {
+  const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
+    if(autoPlay && !byAutoPlay){
+      toast.error('Please pause the auto play to change the card manually')
+      return;
+    }
+
     if(method === 'increase') {
       if(card < flashcards.length - 1) {
-        setCard(card + 1)
+        setCard((prev) => prev + 1)
         setAnimate('left');
       }
     } else {
@@ -38,6 +48,11 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
   }
   
   const handleShuffle = () => {
+    if(autoPlay){
+      toast.error('Please pause the auto play to shuffle the flashcards')
+      return;
+    }
+
     if(isShuffled) {
       setIsShuffled(false);
 
@@ -57,14 +72,63 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
 
     setIsShuffled(true);
 
-    shuffleFlashcards(11);
+    shuffleFlashcards(Number((Math.random() * 1000).toFixed(0)));
   }
+
+  const handlePlay = () => {
+    console.log(card)
+    if(cardRef.current?.classList.contains('rotate')) {
+      if(card === flashcards.length - 1){
+        handlePause();
+        return;
+      }
+      handleCard('increase', true);
+    }else{
+      handleShowing(true);
+    }
+  }
+
+  const handleStart = () => {
+    toast.info('Auto play started', {
+      hideProgressBar: true,
+      autoClose: 1500
+    });
+
+    setAutoPlay(true);
+  }
+
+  const handlePause = () => {
+    toast.info('Auto play paused', {
+      hideProgressBar: true,
+      autoClose: 1500
+    });
+
+    setAutoPlay(false);
+  }
+
+  useEffect(() => {
+    if(!autoPlay) return;
+
+    const interval = setInterval(() => {
+      handlePlay();
+    }, 5000)
+    
+    return () => clearInterval(interval);
+  }, [autoPlay, card])
+
 
   return (
     <div className="px-3 flex justify-between py-2.5">
       <div className='flex gap-3 flex-1 justify-start'>
-        <button>
-          <Image src={play} width={14} alt="play" />
+        <button
+          type="button"
+          onClick={() => autoPlay ? handlePause() : handleStart()}
+        >
+          {
+            autoPlay
+            ? <Image src={pause} width={14} alt="pause" />
+            : <Image src={play} width={14} alt="play" />
+          }
         </button>
         <button
           type="button"
@@ -76,7 +140,7 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
       <div className='flex gap-3 sm:gap-6 grow justify-center'>
         <button
           type="button"
-          onClick={() => handleCard('decrease')}
+          onClick={() => handleCard('decrease', false)}
           disabled={card === 0}
         >
           <Image src={leftarrow} width={18} height={18} alt="leftarrow" />
@@ -84,7 +148,7 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
         <p className='font-black text-lg'>{card + 1} / {length}</p>
         <button
           type="button"
-          onClick={() => handleCard('increase')}
+          onClick={() => handleCard('increase', false)}
           disabled={card === length - 1}
         >
           <Image src={rightarrow} width={18} height={18} alt="rightarrow" />

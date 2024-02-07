@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 type CardProps = {
   cardRef: React.MutableRefObject<HTMLDivElement | null>,
   animateRef: React.MutableRefObject<HTMLDivElement | null>,
-  setAnimateText: React.Dispatch<React.SetStateAction<'concept' | 'definition'>>,
+  handleShowing: (byAutoPlay: boolean) => void,
   flashcards: {
     concept: string,
     definition: string
@@ -11,7 +11,7 @@ type CardProps = {
   card: number
 }
 
-const Card = ({ cardRef, animateRef, setAnimateText, flashcards, card } : CardProps) => {
+const Card = ({ cardRef, animateRef, handleShowing, flashcards, card } : CardProps) => {
   const conceptRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
   
@@ -53,22 +53,10 @@ const Card = ({ cardRef, animateRef, setAnimateText, flashcards, card } : CardPr
     calculateHeight();
   }, [card])
 
-  const handleShowing = () => {
-    if(cardRef.current) {
-      cardRef.current.classList.toggle('rotate');
-    }
-
-    if(cardRef.current?.classList.contains('rotate')) {
-      setAnimateText('definition');
-    } else {
-      setAnimateText('concept');
-    }
-  }
-
   return (
     <div 
       className='flip-card bg-transparent w-full aspect-video' 
-      onClick={handleShowing}
+      onClick={() => handleShowing(false)}
       ref={cardRef}
     >
       <div 
