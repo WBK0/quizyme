@@ -10,7 +10,7 @@ const Flashcards = async ({ params } : { params : { id: string }}) => {
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`)
   const data = await response.json();
-
+  
   return (
     <div>
       <Navbar />
@@ -21,7 +21,7 @@ const Flashcards = async ({ params } : { params : { id: string }}) => {
         <div className="max-w-4xl mx-auto mt-20 px-3">
           <div className="relative">
             <Playground 
-              list={data.data.flashcards}
+              flashcardsData={data.data.flashcards}
             />
           </div>
           <Author

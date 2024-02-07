@@ -4,19 +4,28 @@ import shuffle from './svg/shuffle.svg';
 import leftarrow from './svg/leftarrow.svg';
 import rightarrow from './svg/rightarrow.svg';
 import fullscreen from './svg/fullscreen.svg';
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 type PanelProps = {
   card: number,
   length: number
   setCard: React.Dispatch<React.SetStateAction<number>>,
-  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | null>>,
-  list: any[]
+  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>,
+  shuffleFlashcards: (seed : number) => void,
+  flashcards: {
+    concept: string,
+    definition: string
+  }[]
+  disableShuffle: () => void
 }
 
-const Panel = ({ card, length, setCard, setAnimate, list } : PanelProps) => {
+const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcards, disableShuffle } : PanelProps) => {
+  const [isShuffled, setIsShuffled] = useState(false);
+
   const handleCard = (method : 'increase' | 'decrease') => {
     if(method === 'increase') {
-      if(card < list.length - 1) {
+      if(card < flashcards.length - 1) {
         setCard(card + 1)
         setAnimate('left');
       }
@@ -27,6 +36,29 @@ const Panel = ({ card, length, setCard, setAnimate, list } : PanelProps) => {
       }
     }
   }
+  
+  const handleShuffle = () => {
+    if(isShuffled) {
+      setIsShuffled(false);
+
+      disableShuffle();
+
+      toast.info('Disable shuffling', {
+        hideProgressBar: true,
+        autoClose: 1500
+      });
+      return;
+    }
+
+    toast.info('Enable shuffling', {
+      hideProgressBar: true,
+      autoClose: 1500
+    });
+
+    setIsShuffled(true);
+
+    shuffleFlashcards(11);
+  }
 
   return (
     <div className="px-3 flex justify-between py-2.5">
@@ -34,7 +66,10 @@ const Panel = ({ card, length, setCard, setAnimate, list } : PanelProps) => {
         <button>
           <Image src={play} width={14} alt="play" />
         </button>
-        <button>
+        <button
+          type="button"
+          onClick={() => handleShuffle()}
+        >
           <Image src={shuffle} width={18} height={18} alt="shuffle" />
         </button>
       </div>

@@ -2,26 +2,32 @@ import { useEffect, useRef, useState } from "react";
 
 type CardChangeAnimationProps = {
   cardRef: React.MutableRefObject<HTMLDivElement | null>,
-  list: any[],
-  animate: 'left' | 'right' | null,
-  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | null>>,
+  flashcards: {
+    concept: string,
+    definition: string
+  }[],
+  animate: 'left' | 'right' | 'shuffle' | null,
+  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>,
   card: number,
   animateText: 'concept' | 'definition',
   setAnimateText: React.Dispatch<React.SetStateAction<'concept' | 'definition'>>,
   animateRef: React.MutableRefObject<HTMLDivElement | null>
 }
 
-const CardChangeAnimation = ({ cardRef, list, animate, setAnimate, card, animateText, setAnimateText, animateRef } : CardChangeAnimationProps) => {
-  const handleAnimate = (direction: 'left' | 'right') => {
+const CardChangeAnimation = ({ cardRef, flashcards, animate, setAnimate, card, animateText, setAnimateText, animateRef } : CardChangeAnimationProps) => {
+  const handleAnimate = (direction: 'left' | 'right' | 'shuffle') => {
     setTimeout(() => {
       animateRef.current?.classList.add('scale-105');
     }, 0)
     setTimeout(() => {
       if(direction === 'left') {
         animateRef.current?.classList.add('left-[-10rem]')
-      }else{
+      }else if(direction === 'right') {
         animateRef.current?.classList.add('left-40')
+      } else {
+        animateRef.current?.classList.add('top-40')
       }
+
       animateRef.current?.classList.remove('duration-300')
       animateRef.current?.classList.add('duration-500')
     }, 300)
@@ -58,9 +64,11 @@ const CardChangeAnimation = ({ cardRef, list, animate, setAnimate, card, animate
                 className="font-bold text-white text-lg md:text-2xl text-center py-5 px-3"
               >
                 {
-                  animate === 'left' 
-                    ? list[card - 1][animateText]
-                    : list[card + 1][animateText]
+                  animate === 'shuffle' ? 'Shuffling...'
+                  :
+                    animate === 'left' 
+                      ? flashcards[card - 1][animateText]
+                      : flashcards[card + 1][animateText]
                 }
               </p>
             </div>

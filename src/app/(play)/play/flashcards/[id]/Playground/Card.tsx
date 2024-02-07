@@ -4,11 +4,14 @@ type CardProps = {
   cardRef: React.MutableRefObject<HTMLDivElement | null>,
   animateRef: React.MutableRefObject<HTMLDivElement | null>,
   setAnimateText: React.Dispatch<React.SetStateAction<'concept' | 'definition'>>,
-  list: any[],
+  flashcards: {
+    concept: string,
+    definition: string
+  }[],
   card: number
 }
 
-const Card = ({ cardRef, animateRef, setAnimateText, list, card } : CardProps) => {
+const Card = ({ cardRef, animateRef, setAnimateText, flashcards, card } : CardProps) => {
   const conceptRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
   
@@ -78,7 +81,7 @@ const Card = ({ cardRef, animateRef, setAnimateText, list, card } : CardProps) =
           <p 
             className="font-bold text-white text-lg md:text-2xl text-center"
           >
-            {list[card].concept}
+            {flashcards[card].concept}
           </p>
         </div>
         <div 
@@ -88,7 +91,7 @@ const Card = ({ cardRef, animateRef, setAnimateText, list, card } : CardProps) =
           <p 
             className="font-bold text-white text-lg md:text-2xl text-center"
           >
-            {list[card].definition}
+            {flashcards[card].definition}
           </p>
         </div>
       </div>

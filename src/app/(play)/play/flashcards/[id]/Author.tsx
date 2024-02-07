@@ -26,9 +26,10 @@ const Author = ({ user } : AuthorProps) => {
       const data = await response.json();
 
       setIsFollowing(data.isFollowing);
-      setIsSubmitting(false);
     } catch (error) {
-      
+      setIsFollowing(false);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
