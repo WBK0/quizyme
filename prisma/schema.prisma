@@ -36,26 +36,27 @@ model Session {
 }
 
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  username      String?         @unique
-  bio           String?
-  interests     String[]
-  isComplete    Boolean         @default(false)
-  Quiz          Quiz[]
-  Flashcards    Flashcards[]
-  QuizGame      QuizGame[]
-  QuizGameStats QuizGameStats[]
-  Following     Follower[]      @relation("Following")
-  Followers     Follower[]      @relation("Followers")
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String           @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  accounts       Account[]
+  sessions       Session[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  username       String?          @unique
+  bio            String?
+  interests      String[]
+  isComplete     Boolean          @default(false)
+  Quiz           Quiz[]
+  Flashcards     Flashcards[]
+  QuizGame       QuizGame[]
+  QuizGameStats  QuizGameStats[]
+  Following      Follower[]       @relation("Following")
+  Followers      Follower[]       @relation("Followers")
+  FlashcardsGame FlashcardsGame[]
 }
 
 model Follower {
@@ -140,6 +141,7 @@ model Quiz {
 }
 
 type Flashcard {
+  id         String @default(cuid())
   concept    String
   definition String
 }
@@ -152,7 +154,7 @@ type StatsFlashcards {
 }
 
 model Flashcards {
-  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
   topic          String
   visibility     String
   tags           String[]
@@ -161,13 +163,14 @@ model Flashcards {
   flashcards     Flashcard[]
   stats          StatsFlashcards
   collectionName String
-  collection     Collection      @relation(fields: [collectionName], references: [name])
-  userId         String          @db.ObjectId
-  user           User            @relation(fields: [userId], references: [id])
-  codeId         String          @unique @db.ObjectId
-  code           Code            @relation(fields: [codeId], references: [id])
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  collection     Collection       @relation(fields: [collectionName], references: [name])
+  userId         String           @db.ObjectId
+  user           User             @relation(fields: [userId], references: [id])
+  codeId         String           @unique @db.ObjectId
+  code           Code             @relation(fields: [codeId], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  FlashcardsGame FlashcardsGame[]
 }
 
 model QuizGame {
@@ -199,4 +202,17 @@ model QuizGameStats {
   points         Int
   correctAnswers Int
   quiz           Quiz     @relation(fields: [quizId], references: [id])
+}
+
+model FlashcardsGame {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId    String     @db.ObjectId
+  userId          String     @db.ObjectId
+  flashcards      Flashcards @relation(fields: [flashcardsId], references: [id])
+  user            User       @relation(fields: [userId], references: [id])
+  shuffleSalt     Int
+  actualFlashcard Int
+  likedIds        String[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }

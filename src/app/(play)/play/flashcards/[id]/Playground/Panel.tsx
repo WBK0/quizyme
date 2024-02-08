@@ -76,7 +76,6 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
   }
 
   const handlePlay = () => {
-    console.log(card)
     if(cardRef.current?.classList.contains('rotate')) {
       if(card === flashcards.length - 1){
         handlePause();
