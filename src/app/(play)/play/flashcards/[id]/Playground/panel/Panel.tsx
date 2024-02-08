@@ -6,27 +6,12 @@ import rightarrow from './svg/rightarrow.svg';
 import fullscreen from './svg/fullscreen.svg';
 import pause from './svg/pause.svg';
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { handlePlay, handleStart, handlePause } from "./autoPlay";
 
-type PanelProps = {
-  card: number,
-  length: number
-  setCard: React.Dispatch<React.SetStateAction<number>>,
-  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>,
-  shuffleFlashcards: (seed : number) => void,
-  flashcards: {
-    concept: string,
-    definition: string
-  }[],
-  disableShuffle: () => void,
-  handleShowing: (byAutoPlay: boolean) => void,
-  autoPlay: boolean,
-  setAutoPlay: React.Dispatch<React.SetStateAction<boolean>>,
-  cardRef: React.MutableRefObject<HTMLDivElement | null>
-}
-
-const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcards, disableShuffle, handleShowing, autoPlay, setAutoPlay, cardRef } : PanelProps) => {
-  const [isShuffled, setIsShuffled] = useState(false);
+const Panel = () => {
+  const { actualCard, flashcards, autoPlay, setAutoPlay, setAnimate, setActualCard, setIsShuffled, isShuffled, disableShuffle, enableShuffle, flipCard, cardRef } = useContext(GameContext);
 
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -35,13 +20,13 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
     }
 
     if(method === 'increase') {
-      if(card < flashcards.length - 1) {
-        setCard((prev) => prev + 1)
+      if(actualCard < flashcards.length - 1) {
+        setActualCard((prev) => prev + 1)
         setAnimate('left');
       }
     } else {
-      if(card > 0) {
-        setCard(card - 1)
+      if(actualCard > 0) {
+        setActualCard((prev) => prev - 1)
         setAnimate('right');
       }
     }
@@ -72,56 +57,25 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
 
     setIsShuffled(true);
 
-    shuffleFlashcards(Number((Math.random() * 1000).toFixed(0)));
-  }
-
-  const handlePlay = () => {
-    if(cardRef.current?.classList.contains('rotate')) {
-      if(card === flashcards.length - 1){
-        handlePause();
-        return;
-      }
-      handleCard('increase', true);
-    }else{
-      handleShowing(true);
-    }
-  }
-
-  const handleStart = () => {
-    toast.info('Auto play started', {
-      hideProgressBar: true,
-      autoClose: 1500
-    });
-
-    setAutoPlay(true);
-  }
-
-  const handlePause = () => {
-    toast.info('Auto play paused', {
-      hideProgressBar: true,
-      autoClose: 1500
-    });
-
-    setAutoPlay(false);
+    enableShuffle(Number((Math.random() * 1000).toFixed(0)));
   }
 
   useEffect(() => {
     if(!autoPlay) return;
 
     const interval = setInterval(() => {
-      handlePlay();
+      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard });
     }, 5000)
     
     return () => clearInterval(interval);
-  }, [autoPlay, card])
-
+  }, [autoPlay, actualCard])
 
   return (
     <div className="px-3 flex justify-between py-2.5">
       <div className='flex gap-3 flex-1 justify-start'>
         <button
           type="button"
-          onClick={() => autoPlay ? handlePause() : handleStart()}
+          onClick={() => autoPlay ? handlePause({ setAutoPlay }) : handleStart({ setAutoPlay, flashcards, actualCard })}
         >
           {
             autoPlay
@@ -140,15 +94,15 @@ const Panel = ({ card, length, setCard, setAnimate, flashcards, shuffleFlashcard
         <button
           type="button"
           onClick={() => handleCard('decrease', false)}
-          disabled={card === 0}
+          disabled={actualCard === 0}
         >
           <Image src={leftarrow} width={18} height={18} alt="leftarrow" />
         </button>
-        <p className='font-black text-lg'>{card + 1} / {length}</p>
+        <p className='font-black text-lg'>{actualCard + 1} / {flashcards.length}</p>
         <button
           type="button"
           onClick={() => handleCard('increase', false)}
-          disabled={card === length - 1}
+          disabled={actualCard === flashcards.length - 1}
         >
           <Image src={rightarrow} width={18} height={18} alt="rightarrow" />
         </button>

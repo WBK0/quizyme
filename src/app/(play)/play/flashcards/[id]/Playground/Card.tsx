@@ -1,17 +1,9 @@
-import { useEffect, useRef } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { useContext, useEffect, useRef } from "react";
 
-type CardProps = {
-  cardRef: React.MutableRefObject<HTMLDivElement | null>,
-  animateRef: React.MutableRefObject<HTMLDivElement | null>,
-  handleShowing: (byAutoPlay: boolean) => void,
-  flashcards: {
-    concept: string,
-    definition: string
-  }[],
-  card: number
-}
+const Card = () => {
+  const { cardRef, animateRef, flipCard, flashcards, actualCard } = useContext(GameContext)
 
-const Card = ({ cardRef, animateRef, handleShowing, flashcards, card } : CardProps) => {
   const conceptRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
   
@@ -51,12 +43,12 @@ const Card = ({ cardRef, animateRef, handleShowing, flashcards, card } : CardPro
 
   useEffect(() => {
     calculateHeight();
-  }, [card])
+  }, [actualCard])
 
   return (
     <div 
       className='flip-card bg-transparent w-full aspect-video' 
-      onClick={() => handleShowing(false)}
+      onClick={() => flipCard(false)}
       ref={cardRef}
     >
       <div 
@@ -69,7 +61,7 @@ const Card = ({ cardRef, animateRef, handleShowing, flashcards, card } : CardPro
           <p 
             className="font-bold text-white text-lg md:text-2xl text-center"
           >
-            {flashcards[card].concept}
+            {flashcards[actualCard].concept}
           </p>
         </div>
         <div 
@@ -79,7 +71,7 @@ const Card = ({ cardRef, animateRef, handleShowing, flashcards, card } : CardPro
           <p 
             className="font-bold text-white text-lg md:text-2xl text-center"
           >
-            {flashcards[card].definition}
+            {flashcards[actualCard].definition}
           </p>
         </div>
       </div>

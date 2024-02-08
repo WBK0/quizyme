@@ -1,20 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { useContext, useEffect } from "react";
 
-type CardChangeAnimationProps = {
-  cardRef: React.MutableRefObject<HTMLDivElement | null>,
-  flashcards: {
-    concept: string,
-    definition: string
-  }[],
-  animate: 'left' | 'right' | 'shuffle' | null,
-  setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>,
-  card: number,
-  animateText: 'concept' | 'definition',
-  setAnimateText: React.Dispatch<React.SetStateAction<'concept' | 'definition'>>,
-  animateRef: React.MutableRefObject<HTMLDivElement | null>
-}
-
-const CardChangeAnimation = ({ cardRef, flashcards, animate, setAnimate, card, animateText, setAnimateText, animateRef } : CardChangeAnimationProps) => {
+const CardChangeAnimation = () => {
+  const { cardRef, flashcards, animate, setAnimate, actualCard, animateText, setAnimateText, animateRef } = useContext(GameContext);
+  
   const handleAnimate = (direction: 'left' | 'right' | 'shuffle') => {
     setTimeout(() => {
       animateRef.current?.classList.add('scale-105');
@@ -67,8 +56,8 @@ const CardChangeAnimation = ({ cardRef, flashcards, animate, setAnimate, card, a
                   animate === 'shuffle' ? 'Shuffling...'
                   :
                     animate === 'left' 
-                      ? flashcards[card - 1][animateText]
-                      : flashcards[card + 1][animateText]
+                      ? flashcards[actualCard - 1][animateText]
+                      : flashcards[actualCard + 1][animateText]
                 }
               </p>
             </div>
