@@ -23,12 +23,12 @@ const Card = () => {
           ? Number(cardRef.current?.offsetWidth) + "px"
           : Number(cardRef.current?.offsetWidth) * 0.5625 + "px"
 
-      if(animateRef.current){
-        if(animateRef.current.clientHeight < cardRef.current.clientHeight) {
-          animateRef.current.style.height = cardRef.current.style.height;
-          animateRef.current.style.width = cardRef.current.style.width;
-        }
+    if(animateRef.current){
+      if(animateRef.current.clientHeight < cardRef.current.clientHeight) {
+        animateRef.current.style.height = cardRef.current.style.height;
+        animateRef.current.style.width = cardRef.current.style.width;
       }
+    }
   }
 
   useEffect(() => {

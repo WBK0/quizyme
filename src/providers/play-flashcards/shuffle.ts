@@ -6,6 +6,8 @@ type DisableShuffleProps = {
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
   flashcardsSet: Flashcards;
   id: string;
+  filter: string;
+  likedIds: string[];
 }
 
 type EnableShuffleProps = {
@@ -15,8 +17,14 @@ type EnableShuffleProps = {
   id: string;
 }
 
-export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id } : DisableShuffleProps) => {
+export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, filter, likedIds } : DisableShuffleProps) => {
   setAnimate('shuffle');
+
+  if(filter === 'liked') {
+    flashcardsSet = flashcardsSet.filter(flashcard => likedIds.includes(flashcard.id));
+  }else if(filter === 'unliked') {
+    flashcardsSet = flashcardsSet.filter(flashcard => !likedIds.includes(flashcard.id));
+  }
 
   setFlashcards([...flashcardsSet]);
   updateGameData({ id, shuffleSalt: 0 })

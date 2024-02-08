@@ -9,8 +9,7 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
 const ConceptList = () => {
-  const { flashcards, id, gameLikedIds } = useContext(GameContext);
-  const [likedIds, setLikedIds] = useState<string[]>(gameLikedIds || []);
+  const { flashcardsSet, id, likedIds, setLikedIds } = useContext(GameContext);
 
   const session = useSession();
 
@@ -38,7 +37,7 @@ const ConceptList = () => {
       </h3>
       <div className="flex flex-col gap-2">
         {
-          flashcards.map((item, index) => (
+          flashcardsSet.map((item, index) => (
             <div key={index} className="flex flex-col sm:flex-row justify-between py-2.5 bg-yellow rounded-2xl px-4 h-full">
               <div className="font-bold text-lg w-full sm:w-1/2 md:w-2/6 py-2 sm:py-0 border-b-3 sm:border-b-0 sm:border-r-3 border-black flex items-center pr-0 sm:pr-2">
                 <span>{item.concept}</span>

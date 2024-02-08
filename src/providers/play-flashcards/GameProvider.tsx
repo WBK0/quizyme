@@ -2,6 +2,8 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { disableShuffle, enableShuffle } from "./shuffle";
 import { flipCard } from "./flipCard";
+import { filterFlashcards } from "./filterFlashcards";
+import { toast } from "react-toastify";
 
 export type Flashcards = {
   id: string;
@@ -39,7 +41,11 @@ export const GameContext = createContext({
   isShuffled: false as boolean,
   setIsShuffled: (() => {}) as React.Dispatch<React.SetStateAction<boolean>>,
   id: '' as string,
-  gameLikedIds: [] as string[]
+  filter: 'all' as 'all' | 'liked' | 'unliked',
+  setFilter: (() => {}) as React.Dispatch<React.SetStateAction<'all' | 'liked' | 'unliked'>>,
+  flashcardsSet: [] as Flashcards,
+  likedIds: [] as string[],
+  setLikedIds: (() => {}) as React.Dispatch<React.SetStateAction<string[]>>
 });
 
 export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
@@ -49,6 +55,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   const [autoPlay, setAutoPlay] = useState(false);
   const [animateText, setAnimateText] = useState<'concept' | 'definition'>('concept');
   const [isShuffled, setIsShuffled] = useState(flashcardsGameData?.shuffleSalt > 0 ? true : false);
+  const [filter, setFilter] = useState<'all' | 'liked' | 'unliked'>('all');
+  const [likedIds, setLikedIds] = useState<string[]>(flashcardsGameData?.likedIds || []);
   const cardRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<HTMLDivElement>(null);
 
@@ -61,6 +69,23 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
       }, 100)
     }
   }, [actualCard]) 
+
+  useEffect(() => {
+    filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard})
+  }, [filter])
+
+  useEffect(() => {
+    if(filter === 'liked' || filter === 'unliked'){
+
+      if(filter === 'liked' && likedIds.length === 0){
+        toast.error(`You don't have any liked flashcards, setting filter to 'all'`);
+      }else if(filter === 'unliked' && flashcardsSet.length - likedIds.length === 0){
+        toast.error(`You don't have any unliked flashcards, setting filter to 'all'`);
+      }
+
+      filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: true, actualCard})
+    }
+  }, [likedIds])
 
   useEffect(() => {
     if(flashcardsGameData?.shuffleSalt > 0){
@@ -76,7 +101,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setActualCard,
         animate,
         setAnimate: setAnimate,
-        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id }),
+        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id, likedIds, filter}),
         enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id }),
         flipCard: (byAutoPlay: boolean) => flipCard(byAutoPlay, { autoPlay, cardRef, setAnimateText }),
         cardRef: cardRef,
@@ -88,7 +113,11 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setIsShuffled,
         isShuffled,
         id: id,
-        gameLikedIds: flashcardsGameData?.likedIds || []
+        filter: filter,
+        setFilter: setFilter,
+        flashcardsSet,
+        likedIds: likedIds,
+        setLikedIds: setLikedIds
       }}
     >
       {children}
