@@ -19,7 +19,9 @@ const Study = async ({ params } : { params : { slug: string }}) => {
 
   const url = data.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + data.id;
 
-  if(url !== encodeURIComponent(slug)) {
+  console.log(decodeURIComponent(slug));
+
+  if(url !== decodeURIComponent(slug)) {
     return <NotFound />
   }
 

@@ -5,9 +5,10 @@ import { handlePlay } from "./autoPlay";
 import LeftPanel from "./LeftPanel";
 import MiddlePanel from "./MiddlePanel";
 import RightPanel from "./RightPanel";
+import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 
 const Panel = () => {
-  const { actualCard, flashcards, autoPlay, setAutoPlay, flipCard, cardRef, setActualCard, setAnimate } = useContext(GameContext);
+  const { actualCard, flashcards, autoPlay, setAutoPlay, flipCard, cardRef, setActualCard, setAnimate, id, } = useContext(GameContext);
 
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -19,11 +20,13 @@ const Panel = () => {
       if(actualCard < flashcards.length - 1) {
         setActualCard((prev) => prev + 1)
         setAnimate('left');
+        updateGameData({ id, actualFlashcard: actualCard + 1})
       }
     } else {
       if(actualCard > 0) {
-        setActualCard((prev) => prev - 1)
+        setActualCard((prev) => prev - 1);
         setAnimate('right');
+        updateGameData({ id, actualFlashcard: actualCard - 1})
       }
     }
   }

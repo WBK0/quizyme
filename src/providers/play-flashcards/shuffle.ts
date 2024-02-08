@@ -1,24 +1,28 @@
 import { Flashcards } from "./GameProvider";
+import { updateGameData } from "./updateGameData";
 
 type DisableShuffleProps = {
   setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>;
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
   flashcardsSet: Flashcards;
+  id: string;
 }
 
 type EnableShuffleProps = {
   setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>;
   flashcards: Flashcards;
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
+  id: string;
 }
 
-export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet } : any) => {
+export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id } : DisableShuffleProps) => {
   setAnimate('shuffle');
 
   setFlashcards([...flashcardsSet]);
+  updateGameData({ id, shuffleSalt: 0 })
 }
 
-export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards } : any) => {
+export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards, id } : EnableShuffleProps) => {
   setAnimate('shuffle');
 
   function customRandom(seed : number) {
@@ -41,4 +45,6 @@ export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashc
   }
 
   setFlashcards([...flashcardsTEMP]);
+
+  updateGameData({ id, shuffleSalt: seed })
 }

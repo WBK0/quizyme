@@ -17,7 +17,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
     }
 
     const prisma = new PrismaClient();
-
+    
     const flashcards = await prisma.flashcards.findUnique({
       where: {
         id: id,
@@ -57,6 +57,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       { status: 200 }
     );
   } catch (error) {
+    console.log(error)
     return new Response(
       JSON.stringify({
         status: "Error",

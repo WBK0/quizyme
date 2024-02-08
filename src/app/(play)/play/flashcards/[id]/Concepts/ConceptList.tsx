@@ -1,15 +1,27 @@
+"use client";
 import Image from "next/image";
 import heart from './heart.svg';
 import heartfill from './heartfill.svg';
+import { useContext, useEffect, useState } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 
-type ConceptListProps = {
-  list: {
-    concept: string,
-    definition: string
-  }[]
-}
+const ConceptList = () => {
+  const { flashcards, id, gameLikedIds } = useContext(GameContext);
+  const [likedIds, setLikedIds] = useState<string[]>(gameLikedIds || []);
 
-const ConceptList = ({ list } : ConceptListProps) => {
+  const handleLike = (cardId : string) => {
+    if(likedIds.includes(cardId)) {
+      setLikedIds((prev) => prev.filter((item) => item !== cardId))
+    } else {
+      setLikedIds((prev) => [...prev, cardId])
+    }
+  }
+
+  useEffect(() => {
+    updateGameData({ id, likedIds });
+  }, [likedIds])
+
   return (
     <div className="px-3 h-full">
       <h3 className="font-black text-xl mb-12">
@@ -17,7 +29,7 @@ const ConceptList = ({ list } : ConceptListProps) => {
       </h3>
       <div className="flex flex-col gap-2">
         {
-          list.map((item, index) => (
+          flashcards.map((item, index) => (
             <div key={index} className="flex flex-col sm:flex-row justify-between py-2.5 bg-yellow rounded-2xl px-4 h-full">
               <div className="font-bold text-lg w-full sm:w-1/2 md:w-2/6 py-2 sm:py-0 border-b-3 sm:border-b-0 sm:border-r-3 border-black flex items-center pr-0 sm:pr-2">
                 <span>{item.concept}</span>
@@ -25,9 +37,15 @@ const ConceptList = ({ list } : ConceptListProps) => {
               <div className="font-medium text-md w-full sm:w-1/2 md:w-4/6 sm:pl-2 py-2 md:py-0 flex items-center justify-between flex-wrap md:flex-nowrap">
                 <p className="w-fit pr-3 sm:pl-2 py-2 sm:py-0">{item.definition}</p>
                 <button
+                  type="button"
                   className="w-8 h-8 ml-auto"
+                  onClick={() => handleLike(item.id)}
                 >
-                  <Image src={heart} alt="Like concept" width={32} height={32} />
+                  <Image 
+                    src={likedIds.includes(item.id) ? heartfill : heart} 
+                    alt="Heart icon" 
+                    width={32} height={32} 
+                  />
                 </button>
               </div>
             </div>

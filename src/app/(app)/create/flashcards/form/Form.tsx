@@ -8,10 +8,6 @@ const Form = () => {
   const { handleSubmit, append, move } = useContext(UseFormContext);
   const { setLastEddited } = useContext(DataContext);
 
-  const onSubmit = async (data : any) => {
-    console.log(data);
-  }
-
   const handleAppend = () => {
     append({
       concept: '',
@@ -26,7 +22,7 @@ const Form = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-20">
+    <form className="mt-20">
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
@@ -46,7 +42,6 @@ const Form = () => {
           )}
         </Droppable>
       </DragDropContext>
-      
     </form>
   )
 }

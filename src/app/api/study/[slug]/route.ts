@@ -6,8 +6,6 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
   const prisma = new PrismaClient();
   const { slug } = params;
 
-  console.log(slug)
-
   if(!slug) {
     return new Response(
       JSON.stringify({
@@ -23,13 +21,11 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
   }
 
   const id = slug.split('-')[countOccurrences(slug, '-')];
-  const topic = slug.split('-').slice(0, countOccurrences(slug, '-')).join(' ');
 
   const result = await prisma.$transaction([
     prisma.quiz.findFirst({
       where: {
         id: id,
-        topic: topic
       },
       include: {
         user: true,
@@ -40,7 +36,6 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
     prisma.flashcards.findFirst({
       where: {
         id: id,
-        topic: topic
       },
       include: {
         user: true,

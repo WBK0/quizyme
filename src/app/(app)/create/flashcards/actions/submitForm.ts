@@ -59,7 +59,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
       removeLocalStorage();
       setFormValues({});
     
-      router.push(`/study/${formValues.topic.replaceAll(' ', '-')}-${data.id}`);
+      router.push(`/study/${formValues.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${data.id}`);
     },
     {
       pending: 'Creating flashcards...',

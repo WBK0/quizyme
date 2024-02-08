@@ -12,6 +12,13 @@ export type Flashcards = {
 interface GameFlashcardsProvider {
   children: React.ReactNode;
   flashcardsSet: Flashcards;
+  id: string;
+  flashcardsGameData: {
+    id: string;
+    shuffleSalt: number;
+    actualFlashcard: number;
+    likedIds: string[];
+  }
 }
 
 export const GameContext = createContext({
@@ -30,16 +37,18 @@ export const GameContext = createContext({
   animateText: 'concept' as 'concept' | 'definition',
   setAnimateText: (() => {}) as React.Dispatch<React.SetStateAction<'concept' | 'definition'>>,
   isShuffled: false as boolean,
-  setIsShuffled: (() => {}) as React.Dispatch<React.SetStateAction<boolean>>
+  setIsShuffled: (() => {}) as React.Dispatch<React.SetStateAction<boolean>>,
+  id: '' as string,
+  gameLikedIds: [] as string[]
 });
 
-export default function GameProvider({ children, flashcardsSet }: GameFlashcardsProvider) {
-  const [actualCard, setActualCard] = useState(0);
-  const [flashcards, setFlashcards] = useState([...flashcardsSet]);
+export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
+  const [actualCard, setActualCard] = useState(flashcardsGameData.actualFlashcard || 0);
+  const [flashcards, setFlashcards] = useState([...flashcardsSet] || []);
   const [animate, setAnimate] = useState<'left' | 'right' | 'shuffle' | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [animateText, setAnimateText] = useState<'concept' | 'definition'>('concept');
-  const [isShuffled, setIsShuffled] = useState(false);
+  const [isShuffled, setIsShuffled] = useState(flashcardsGameData.shuffleSalt > 0 ? true : false);
   const cardRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +62,12 @@ export default function GameProvider({ children, flashcardsSet }: GameFlashcards
     }
   }, [actualCard]) 
 
+  useEffect(() => {
+    if(flashcardsGameData.shuffleSalt > 0){
+      enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id });
+    }
+  }, [flashcardsGameData])
+
   return (
     <GameContext.Provider
       value={{
@@ -61,8 +76,8 @@ export default function GameProvider({ children, flashcardsSet }: GameFlashcards
         setActualCard,
         animate,
         setAnimate: setAnimate,
-        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet }),
-        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards }),
+        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id }),
+        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id }),
         flipCard: (byAutoPlay: boolean) => flipCard(byAutoPlay, { autoPlay, cardRef, setAnimateText }),
         cardRef: cardRef,
         animateRef: animateRef,
@@ -71,7 +86,9 @@ export default function GameProvider({ children, flashcardsSet }: GameFlashcards
         animateText,
         setAnimateText,
         setIsShuffled,
-        isShuffled
+        isShuffled,
+        id: id,
+        gameLikedIds: flashcardsGameData.likedIds
       }}
     >
       {children}
