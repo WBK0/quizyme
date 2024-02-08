@@ -10,15 +10,17 @@ import NotFound from "./404";
 const Study = async ({ params } : { params : { slug: string }}) => {
   const { slug } = params;
 
-  let data;
-
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${slug}`, {
     cache: 'no-cache',
   });
   
-  if(response.ok){
-    const json = await response.json();
-    data = json.data;
+  const json = await response.json();
+  const data = json.data;
+
+  const url = data.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + data.id;
+
+  if(url !== encodeURIComponent(slug)) {
+    return <NotFound />
   }
 
   return (
