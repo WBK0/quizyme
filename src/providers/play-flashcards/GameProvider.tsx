@@ -43,12 +43,12 @@ export const GameContext = createContext({
 });
 
 export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
-  const [actualCard, setActualCard] = useState(flashcardsGameData.actualFlashcard || 0);
+  const [actualCard, setActualCard] = useState(flashcardsGameData?.actualFlashcard || 0);
   const [flashcards, setFlashcards] = useState([...flashcardsSet] || []);
   const [animate, setAnimate] = useState<'left' | 'right' | 'shuffle' | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [animateText, setAnimateText] = useState<'concept' | 'definition'>('concept');
-  const [isShuffled, setIsShuffled] = useState(flashcardsGameData.shuffleSalt > 0 ? true : false);
+  const [isShuffled, setIsShuffled] = useState(flashcardsGameData?.shuffleSalt > 0 ? true : false);
   const cardRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +63,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   }, [actualCard]) 
 
   useEffect(() => {
-    if(flashcardsGameData.shuffleSalt > 0){
+    if(flashcardsGameData?.shuffleSalt > 0){
       enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id });
     }
   }, [flashcardsGameData])
@@ -88,7 +88,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setIsShuffled,
         isShuffled,
         id: id,
-        gameLikedIds: flashcardsGameData.likedIds
+        gameLikedIds: flashcardsGameData?.likedIds || []
       }}
     >
       {children}

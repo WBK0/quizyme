@@ -5,12 +5,21 @@ import heartfill from './heartfill.svg';
 import { useContext, useEffect, useState } from "react";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const ConceptList = () => {
   const { flashcards, id, gameLikedIds } = useContext(GameContext);
   const [likedIds, setLikedIds] = useState<string[]>(gameLikedIds || []);
 
+  const session = useSession();
+
   const handleLike = (cardId : string) => {
+    if(!session.data){
+      toast.error('Please sign in to like the flashcards');
+      return;
+    }
+
     if(likedIds.includes(cardId)) {
       setLikedIds((prev) => prev.filter((item) => item !== cardId))
     } else {

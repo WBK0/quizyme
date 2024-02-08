@@ -1,8 +1,8 @@
 import StartQuiz from "./startQuiz/StartQuiz";
 import QuizGame from "./quizGame/PlayQuiz";
-import NotFound from "./404/404";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import NotFound from "@/components/404/404";
 
 const PlayQuiz = async ({ params }: { params: {id: string} }) => {
   const { id } = params;
@@ -20,7 +20,11 @@ const PlayQuiz = async ({ params }: { params: {id: string} }) => {
     <div>
       {
           quiz.errorId === 100 || session?.user.id !== quiz.userId ? (
-            <NotFound />
+            <NotFound
+              message="Sorry, the quiz you are looking for does not exist!"
+              redirectTo="search"
+              url="/search"
+            />
           )
         : 
           quiz.errorId === 101 ? (
