@@ -9,9 +9,11 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { headers } from "next/headers";
 import GameProvider from "@/providers/play-flashcards/GameProvider";
 import NotFound from "@/components/404/404";
+import WelcomeQuizModal from "./welcomeModal/WelcomeQuizModal";
 
 const Flashcards = async ({ params } : { params : { id: string }}) => {
   const { id } = params;
+
 
   const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`,
   {
@@ -35,14 +37,15 @@ const Flashcards = async ({ params } : { params : { id: string }}) => {
     const flashcardsGame = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user`, {
       headers: headers()
     })
-    
+
     flashcardsGameData = await flashcardsGame.json();
-  }else{
-    // Make there a modal to inform user to login to better experience
   }
 
   return (
     <div className="overflow-x-hidden">
+      {
+        !session ? <WelcomeQuizModal /> : null
+      }
       <Navbar />
       <div className="pt-20 md:pt-28 container mx-auto lg:px-20">
         <GameProvider 
