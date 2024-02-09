@@ -6,7 +6,7 @@ import FinishedData from './finishedData.type';
 import UserResult from './UserResult';
 import Ranking from './Ranking';
 import Buttons from './Buttons';
-import NotFound from '../../404/404';
+import NotFound from '@/components/404/404';
 
 const Finished = ({ id } : { id: string }) => {
   const [data, setData] = useState<FinishedData>(null);
@@ -39,7 +39,11 @@ const Finished = ({ id } : { id: string }) => {
     <>
     {
       error ?
-        <NotFound />
+        <NotFound 
+          message="Sorry, the quiz you are looking for does not exist!"
+          redirectTo="search"
+          url="/search"
+        />
       :
         data
           ? 

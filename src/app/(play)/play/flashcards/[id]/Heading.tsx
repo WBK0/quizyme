@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { toast } from "react-toastify";
 
 const Heading = ({ topic } : { topic: string }) => {
-  const { setFilter, filter } = useContext(GameContext);
+  const { setFilter, filter, filterFlashcards } = useContext(GameContext);
 
   const handleFilter = (filter: 'liked' | 'unliked' | 'all') => {
     toast.info(`Set learing mode to ${filter} concepts`, {
@@ -14,6 +14,7 @@ const Heading = ({ topic } : { topic: string }) => {
     })
 
     setFilter(filter);
+    filterFlashcards(filter);
   }
 
   return (

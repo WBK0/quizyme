@@ -8,7 +8,7 @@ import GameData from "./GameData.types";
 import AfterAnswer from "./afterAnswer/page";
 import Finished from "./finished/page";
 import Welcome from "./welcome/Welcome";
-import NotFound from "../404/404";
+import NotFound from "@/components/404/404";
 
 const QuizGame = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
@@ -59,7 +59,11 @@ const QuizGame = ({ id } : { id: string }) => {
       setGameData(data.data);
     } catch (error) {
       return(
-        <NotFound />
+        <NotFound
+          message="Sorry, the quiz you are looking for does not exist!"
+          redirectTo="home"
+          url="/"
+        />
       )
     }
   }

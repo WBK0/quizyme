@@ -45,7 +45,8 @@ export const GameContext = createContext({
   setFilter: (() => {}) as React.Dispatch<React.SetStateAction<'all' | 'liked' | 'unliked'>>,
   flashcardsSet: [] as Flashcards,
   likedIds: [] as string[],
-  setLikedIds: (() => {}) as React.Dispatch<React.SetStateAction<string[]>>
+  setLikedIds: (() => {}) as React.Dispatch<React.SetStateAction<string[]>>,
+  filterFlashcards: (() => {}) as (filter: 'liked' | 'unliked' | 'all') => void
 });
 
 export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
@@ -69,10 +70,6 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
       }, 100)
     }
   }, [actualCard]) 
-
-  useEffect(() => {
-    filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard})
-  }, [filter])
 
   useEffect(() => {
     if(filter === 'liked' || filter === 'unliked'){
@@ -117,7 +114,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setFilter: setFilter,
         flashcardsSet,
         likedIds: likedIds,
-        setLikedIds: setLikedIds
+        setLikedIds: setLikedIds,
+        filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard})
       }}
     >
       {children}

@@ -13,10 +13,6 @@ type FilterFlashcards = {
 }
 
 export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard, actualCard } : FilterFlashcards) => {
-  if(!skipChangeActualCard){
-    setActualCard(0)
-  }
-
   if(filter === 'liked') {
     flashcardsSet = flashcardsSet.filter(flashcard => likedIds.includes(flashcard.id));
 
@@ -28,6 +24,10 @@ export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedId
 
       setFilter('all')
       return;
+    }
+
+    if(!skipChangeActualCard){
+      setActualCard(0)
     }
 
     if(actualCard + 1 > flashcardsSet.length){
@@ -49,12 +49,20 @@ export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedId
       return;
     }
 
+    if(!skipChangeActualCard){
+      setActualCard(0)
+    }
+    
     if(actualCard + 1 > flashcardsSet.length){
       setActualCard(flashcardsSet.length - 1)
     }
 
     setFlashcards([...flashcardsSet])
   }else if(filter === 'all') {
+    if(!skipChangeActualCard){
+      setActualCard(0)
+    }
+    
     setFlashcards([...flashcardsSet])
   }
 }

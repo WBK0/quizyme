@@ -35,13 +35,14 @@ const Flashcards = async ({ params } : { params : { id: string }}) => {
     const flashcardsGame = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user`, {
       headers: headers()
     })
+    
     flashcardsGameData = await flashcardsGame.json();
   }else{
     // Make there a modal to inform user to login to better experience
   }
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Navbar />
       <div className="pt-20 md:pt-28 container mx-auto lg:px-20">
         <GameProvider 
