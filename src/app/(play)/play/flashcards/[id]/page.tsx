@@ -1,19 +1,15 @@
-import Navbar from "@/components/Navbar/Navbar";
-import Heading from "./Heading";
-import Playground from "./Playground/Playground";
-import Author from "./Author";
-import ConceptList from "./Concepts/ConceptList";
-import Footer from "@/components/Footer/Footer";
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { headers } from "next/headers";
 import GameProvider from "@/providers/play-flashcards/GameProvider";
 import NotFound from "@/components/404/404";
-import WelcomeQuizModal from "./welcomeModal/WelcomeQuizModal";
+import WelcomeQuizModal from "./mainPage/welcomeModal/WelcomeQuizModal";
+import MainPage from "./mainPage/MainPage";
+import Fullscreen from "./fullscreen/Fullscreen";
 
-const Flashcards = async ({ params } : { params : { id: string }}) => {
+const Flashcards = async ({ params, searchParams } : { params : { id: string }, searchParams: {fullscreen?: string}}) => {
   const { id } = params;
-
 
   const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`,
   {
@@ -43,31 +39,20 @@ const Flashcards = async ({ params } : { params : { id: string }}) => {
 
   return (
     <div className="overflow-x-hidden">
-      {
-        !session ? <WelcomeQuizModal /> : null
-      }
-      <Navbar />
-      <div className="pt-20 md:pt-28 container mx-auto lg:px-20">
-        <GameProvider 
-          flashcardsSet={flashcardsSet.data?.flashcards || []} 
-          id={id}
-          flashcardsGameData={flashcardsGameData?.data}
-        >
-          <Heading 
-            topic={flashcardsSet.data?.topic}
-          />
-          <div className="max-w-4xl mx-auto mt-20 px-3">
-            <div className="relative">
-              <Playground />
-            </div>
-            <Author
-              user={flashcardsSet.data?.user}
-            />
-          </div>
-          <ConceptList />
-        </GameProvider>
-      </div>
-      <Footer />
+      <GameProvider 
+        flashcardsSet={flashcardsSet.data?.flashcards || []} 
+        id={id}
+        flashcardsGameData={flashcardsGameData?.data}
+      >
+        {
+          !session ? <WelcomeQuizModal /> : null
+        }
+        {
+          searchParams.fullscreen === "true" 
+          ? <Fullscreen />
+          : <MainPage flashcardsSet={flashcardsSet.data} />
+        }
+      </GameProvider>
     </div>
   )
 }

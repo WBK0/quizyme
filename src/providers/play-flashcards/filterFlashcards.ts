@@ -26,12 +26,12 @@ export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedId
       return;
     }
 
-    if(!skipChangeActualCard){
-      setActualCard(0)
-    }
-
     if(actualCard + 1 > flashcardsSet.length){
       setActualCard(flashcardsSet.length - 1)
+    }
+
+    if(!skipChangeActualCard){
+      setActualCard(0)
     }
 
     setFlashcards([...flashcardsSet])
@@ -49,12 +49,12 @@ export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedId
       return;
     }
 
-    if(!skipChangeActualCard){
-      setActualCard(0)
-    }
-    
     if(actualCard + 1 > flashcardsSet.length){
       setActualCard(flashcardsSet.length - 1)
+    }
+
+    if(!skipChangeActualCard){
+      setActualCard(0)
     }
 
     setFlashcards([...flashcardsSet])
@@ -62,7 +62,7 @@ export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedId
     if(!skipChangeActualCard){
       setActualCard(0)
     }
-    
+
     setFlashcards([...flashcardsSet])
   }
 }
