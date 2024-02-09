@@ -1,7 +1,9 @@
+import Heading from "./Heading";
+
 const Fullscreen = () => {
   return (
     <div>
-      <h1>Fullscreen</h1>   
+      <Heading />
     </div>
   )
 }
