@@ -1,7 +1,7 @@
-const Card = () => {
-  return (
-    <div>Card</div>
-  )
-}
+// const Fullscreen = () => {
+//   return (
+//     <Card />
+//   )
+// }
 
-export default Card;
+// export default Card;

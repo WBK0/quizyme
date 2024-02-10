@@ -1,11 +1,11 @@
 "use client";
+import Card from "../mainPage/Playground/Card";
 
 type PlaygroundProps = {  
   topic: string;
 }
 
 const Playground = ({ topic } : PlaygroundProps) => {
-
   return (
     <div className="flex flex-col items-center">
       <h1 
@@ -13,7 +13,11 @@ const Playground = ({ topic } : PlaygroundProps) => {
       >
         {topic}
       </h1>
-      
+      <div className="max-w-6xl w-full mx-auto">
+        <Card 
+          likeButton={true}
+        />
+      </div>
     </div>
   )
 }

@@ -1,7 +1,9 @@
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { useContext, useEffect, useRef } from "react";
+import heart from './heart.svg';
+import Image from "next/image";
 
-const Card = () => {
+const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
   const { cardRef, animateRef, flipCard, flashcards, actualCard } = useContext(GameContext)
 
   const conceptRef = useRef<HTMLDivElement>(null);
@@ -52,14 +54,24 @@ const Card = () => {
       ref={cardRef}
     >
       <div 
-        className="bg-green rounded-2xl cursor-pointer flip-card-inner relative w-full h-full flex items-center justify-center" 
+        className='bg-green rounded-2xl cursor-pointer flip-card-inner relative w-full h-full flex items-center justify-center'
       >
+         {
+            likeButton ? <>
+            <button className="absolute flip-card-front right-3 top-3">
+              <Image src={heart} width={32} height={32} alt="Like button" />
+            </button>
+            <button className="absolute flip-card-back right-3 bottom-3">
+              <Image src={heart} width={32} height={32} alt="Like button" />
+            </button></>
+            : null
+          }
         <div 
           className='flip-card-front absolute flex justify-center items-center w-full h-fit py-5 px-3'
           ref={conceptRef}
         >
           <p 
-            className="font-bold text-white text-lg md:text-2xl text-center"
+            className='font-bold text-white text-lg md:text-2xl text-center'
           >
             {flashcards[actualCard].concept}
           </p>
