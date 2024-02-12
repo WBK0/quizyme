@@ -13,7 +13,7 @@ const Playground = ({ topic } : PlaygroundProps) => {
       >
         {topic}
       </h1>
-      <div className="max-w-6xl w-full mx-auto">
+      <div className="max-w-6xl w-full mx-auto px-3">
         <Card 
           likeButton={true}
         />
