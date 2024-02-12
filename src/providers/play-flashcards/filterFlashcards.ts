@@ -10,9 +10,19 @@ type FilterFlashcards = {
   setFilter: React.Dispatch<React.SetStateAction<'all' | 'liked' | 'unliked'>>;
   skipChangeActualCard: boolean;
   actualCard: number;
+  autoPlay: boolean;
 }
 
-export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard, actualCard } : FilterFlashcards) => {
+export const filterFlashcards = ({ filter, flashcardsSet, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard, actualCard, autoPlay } : FilterFlashcards) => {
+  if(autoPlay){
+    toast.update('changeFilter',{
+      render: "Please pause the auto play to change the card manually",
+      type: 'error',
+    });
+
+    return 'error';
+  }
+  
   if(filter === 'liked') {
     flashcardsSet = flashcardsSet.filter(flashcard => likedIds.includes(flashcard.id));
 

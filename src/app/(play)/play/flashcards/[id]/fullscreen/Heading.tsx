@@ -25,7 +25,7 @@ const Heading = () => {
           </button>
         </div>
       </div>
-      <div className="h-1 bg-blue duration-500" style={{width: (actualCard + 1) * 100 / flashcards.length + "%"}} />
+      <div className="h-1 bg-blue duration-500" style={{width: (actualCard) * 100 / (flashcards.length - 1) + "%"}} />
     </div>
   )
 }

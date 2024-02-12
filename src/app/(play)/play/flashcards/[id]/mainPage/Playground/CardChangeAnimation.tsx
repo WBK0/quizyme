@@ -55,7 +55,7 @@ const CardChangeAnimation = ({ likeButton = false } : { likeButton?: boolean }) 
             {
               likeButton ?
                 <button className="absolute flip-card-front right-3 top-3">
-                  <Image src={likedIds.some(value => value === flashcards[actualCard + (animate === 'left' ? -1 : 1)].id) ? heartfill : heart} width={32} height={32} alt="Like button" />
+                  <Image src={likedIds.some(value => value === flashcards[actualCard + (animate === 'left' ? -1 : 1)]?.id) ? heartfill : heart} width={32} height={32} alt="Like button" />
                 </button>
               : null
             }

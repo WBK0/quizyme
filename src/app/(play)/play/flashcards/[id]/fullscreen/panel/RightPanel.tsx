@@ -16,8 +16,11 @@ const RightPanel = () => {
       toastId: 'changeFilter'
     })
 
+    const isError = filterFlashcards(filter);
+
+    if(isError) return;
+
     setFilter(filter);
-    filterFlashcards(filter);
   }
 
   return (

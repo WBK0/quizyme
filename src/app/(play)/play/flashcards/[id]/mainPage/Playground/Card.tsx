@@ -45,12 +45,8 @@ const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
     }
   }, [])
 
-  useEffect(() => {
-    calculateHeight();
-  }, [actualCard])
-
-  const handleLike = () => {
-    flipCard(false)
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
 
     if(likedIds.some(value => value === flashcards[actualCard].id)){
       setLikedIds((prev) => prev.filter(value => value !== flashcards[actualCard].id))
@@ -73,10 +69,10 @@ const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
          {
             likeButton ? 
             <>
-              <button className="absolute flip-card-front right-3 top-3" onClick={handleLike}>
+              <button type="button" className="absolute flip-card-front right-3 top-3" onClick={(e) => handleLike(e)}>
                 <Image src={likedIds.some(value => value === flashcards[actualCard].id) ? heartfill : heart} width={32} height={32} alt="Like button" />
               </button>
-              <button className="absolute flip-card-back right-3 bottom-3" onClick={handleLike}>
+              <button type="button" className="absolute flip-card-back right-3 bottom-3" onClick={(e) => handleLike(e)}>
                 <Image src={likedIds.some(value => value === flashcards[actualCard].id) ? heartfill : heart} width={32} height={32} alt="Like button" />
               </button>
             </>

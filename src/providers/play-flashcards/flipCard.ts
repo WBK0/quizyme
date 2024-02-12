@@ -8,7 +8,9 @@ type FlipCardProps = {
 
 export const flipCard = (byAutoPlay: boolean, { autoPlay, cardRef, setAnimateText } : FlipCardProps) => {
   if(autoPlay && !byAutoPlay){
-    toast.error('Please pause the auto play to reverse flashcard manually')
+    toast.error('Please pause the auto play to reverse flashcard manually', {
+      toastId: 'flipCard',
+    })
     return;
   }
 

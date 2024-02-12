@@ -46,7 +46,7 @@ export const GameContext = createContext({
   flashcardsSet: [] as Flashcards,
   likedIds: [] as string[],
   setLikedIds: (() => {}) as React.Dispatch<React.SetStateAction<string[]>>,
-  filterFlashcards: (() => {}) as (filter: 'liked' | 'unliked' | 'all') => void
+  filterFlashcards: (() => {}) as (filter: 'liked' | 'unliked' | 'all') => void | string,
 });
 
 export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
@@ -80,7 +80,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         toast.error(`You don't have any unliked flashcards, setting filter to 'all'`);
       }
 
-      filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: true, actualCard})
+      filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: true, actualCard, autoPlay: false})
     }
   }, [likedIds])
 
@@ -115,7 +115,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         flashcardsSet,
         likedIds: likedIds,
         setLikedIds: setLikedIds,
-        filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard})
+        filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard, autoPlay})
       }}
     >
       {children}
