@@ -1,5 +1,7 @@
 "use client";
 import Card from "../mainPage/Playground/Card";
+import CardChangeAnimation from "../mainPage/Playground/CardChangeAnimation";
+import Panel from "./panel/Panel";
 
 type PlaygroundProps = {  
   topic: string;
@@ -13,10 +15,16 @@ const Playground = ({ topic } : PlaygroundProps) => {
       >
         {topic}
       </h1>
-      <div className="max-w-6xl w-full mx-auto px-3">
-        <Card 
-          likeButton={true}
-        />
+      <div className="px-3 max-w-6xl w-full mx-auto ">
+        <div className="relative">
+          <CardChangeAnimation
+            likeButton={true}
+          />
+          <Card 
+            likeButton={true}
+          />
+          <Panel />
+        </div>
       </div>
     </div>
   )

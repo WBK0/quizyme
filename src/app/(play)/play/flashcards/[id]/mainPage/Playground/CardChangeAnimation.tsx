@@ -1,8 +1,11 @@
+import Image from "next/image";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { useContext, useEffect } from "react";
+import heart from './heart.svg';
+import heartfill from './heartfill.svg';
 
-const CardChangeAnimation = () => {
-  const { cardRef, flashcards, animate, setAnimate, actualCard, animateText, setAnimateText, animateRef } = useContext(GameContext);
+const CardChangeAnimation = ({ likeButton = false } : { likeButton?: boolean }) => {
+  const { cardRef, flashcards, animate, setAnimate, actualCard, animateText, setAnimateText, animateRef, likedIds } = useContext(GameContext);
   
   const handleAnimate = (direction: 'left' | 'right' | 'shuffle') => {
     setTimeout(() => {
@@ -48,7 +51,15 @@ const CardChangeAnimation = () => {
           >
             <div 
               className="bg-green rounded-2xl cursor-pointer flip-card-inner relative w-full h-full flex items-center justify-center" 
-            >
+            > 
+            {
+              likeButton ?
+                <button className="absolute flip-card-front right-3 top-3">
+                  <Image src={likedIds.some(value => value === flashcards[actualCard + (animate === 'left' ? -1 : 1)].id) ? heartfill : heart} width={32} height={32} alt="Like button" />
+                </button>
+              : null
+            }
+            
               <p 
                 className="font-bold text-white text-lg md:text-2xl text-center py-5 px-3"
               >
