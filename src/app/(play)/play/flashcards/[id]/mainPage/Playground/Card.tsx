@@ -67,7 +67,7 @@ const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
         className='bg-green rounded-2xl cursor-pointer flip-card-inner relative w-full h-full flex items-center justify-center'
       >
          {
-            likeButton ? 
+          likeButton ? 
             <>
               <button type="button" className="absolute flip-card-front right-3 top-3" onClick={(e) => handleLike(e)}>
                 <Image src={likedIds.some(value => value === flashcards[actualCard].id) ? heartfill : heart} width={32} height={32} alt="Like button" />

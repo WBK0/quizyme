@@ -2,11 +2,21 @@
 import Image from "next/image";
 import flashcardsIcon from "./flashcards.svg";
 import arrowDown from './arrowDown.svg';
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import useUrlParams from "@/hooks/useUrlParams";
+import EasySpinner from "@/components/Loading/EasySpinner";
 
 const Heading = () => {
+  const [loading, setLoading] = useState(false);
   const { actualCard, flashcards } = useContext(GameContext);
+
+  const { changeParam } = useUrlParams()
+
+  const handleQuit = () => {
+    setLoading(true);
+    changeParam('fullscreen', 'false');
+  }
 
   return (
     <div className="flex flex-col">
@@ -20,8 +30,15 @@ const Heading = () => {
           <p className="font-black text-lg">{actualCard + 1} / {flashcards.length}</p>
         </div>
         <div className="flex-1 flex justify-end order-3">
-          <button className="bg-red rounded-full py-1.5 sm:py-2 px-6 sm:px-12 text-white font-bold duration-300 hover:scale-105 ">
-            QUIT
+          <button 
+            className="bg-red rounded-full py-1.5 sm:py-2 w-24 sm:w-32 text-white font-bold duration-300 hover:scale-105"
+            onClick={handleQuit}
+          >
+            {
+              !loading 
+                ? 'QUIT'
+                : <EasySpinner />
+            }
           </button>
         </div>
       </div>

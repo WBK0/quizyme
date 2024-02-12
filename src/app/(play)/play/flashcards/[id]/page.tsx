@@ -1,4 +1,3 @@
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { headers } from "next/headers";
@@ -11,10 +10,7 @@ import Fullscreen from "./fullscreen/Fullscreen";
 const Flashcards = async ({ params, searchParams } : { params : { id: string }, searchParams: {fullscreen?: string}}) => {
   const { id } = params;
 
-  const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`,
-  {
-    cache: "no-cache",
-  })
+  const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`);
   const flashcardsSet = await flashcards.json();
 
   if(!flashcards.ok){

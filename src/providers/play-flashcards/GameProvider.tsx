@@ -4,6 +4,7 @@ import { disableShuffle, enableShuffle } from "./shuffle";
 import { flipCard } from "./flipCard";
 import { filterFlashcards } from "./filterFlashcards";
 import { toast } from "react-toastify";
+import Spinner from "@/components/Loading/Spinner";
 
 export type Flashcards = {
   id: string;
@@ -115,7 +116,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         flashcardsSet,
         likedIds: likedIds,
         setLikedIds: setLikedIds,
-        filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard, autoPlay})
+        filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard, autoPlay}),
       }}
     >
       {children}
