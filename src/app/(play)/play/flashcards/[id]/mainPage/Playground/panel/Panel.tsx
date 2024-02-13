@@ -8,7 +8,7 @@ import RightPanel from "./RightPanel";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 
 const Panel = () => {
-  const { actualCard, flashcards, autoPlay, setAutoPlay, flipCard, cardRef, setActualCard, setAnimate, id, } = useContext(GameContext);
+  const { actualCard, flashcards, autoPlay, setAutoPlay, flipCard, cardRef, setActualCard, setAnimate, id, setIsEnded } = useContext(GameContext);
 
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -35,7 +35,7 @@ const Panel = () => {
     if(!autoPlay) return;
 
     const interval = setInterval(() => {
-      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard });
+      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard, fullscreen: false, setIsEnded, id});
     }, 5000)
     
     return () => clearInterval(interval);

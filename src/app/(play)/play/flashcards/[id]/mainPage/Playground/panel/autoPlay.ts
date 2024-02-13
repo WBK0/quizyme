@@ -1,3 +1,4 @@
+import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 import { toast } from "react-toastify";
 
 type HandlePlayProps = {
@@ -7,6 +8,9 @@ type HandlePlayProps = {
   handleCard: (method: 'increase' | 'decrease', byAutoPlay: boolean) => void;
   flipCard: (byAutoPlay: boolean) => void;
   setAutoPlay: React.Dispatch<React.SetStateAction<boolean>>;
+  fullscreen?: boolean;
+  setIsEnded: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
 }
 
 type HandleStartProps = {
@@ -19,9 +23,14 @@ type HandlePauseProps = {
   setAutoPlay: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const handlePlay = ({ cardRef, actualCard, flashcards, handleCard, flipCard, setAutoPlay } : HandlePlayProps) => {
+export const handlePlay = ({ cardRef, actualCard, flashcards, handleCard, flipCard, setAutoPlay, fullscreen = false, setIsEnded, id} : HandlePlayProps) => {
   if(cardRef.current?.classList.contains('rotate')) {
     if(actualCard === flashcards.length - 1){
+      if(fullscreen){
+        setIsEnded(true);
+        updateGameData({id, isEnded: true });
+      }
+
       handlePause({ setAutoPlay });
       return;
     }

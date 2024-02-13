@@ -1,10 +1,26 @@
 import Image from "next/image";
 import confirm from './confirm.svg';
-import flashcards from './flashcards.svg';
+import flashcardsIcon from './flashcards.svg';
 import test from './test.svg';
 import arrowLeft from './arrowLeft.svg';
+import { useContext } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 
 const EndScreen = () => {
+  const { flashcards, setActualCard, setIsEnded, id } = useContext(GameContext)
+
+  const handlePreviousCard = () => {
+    updateGameData({id, isEnded: false})
+    setIsEnded(false)
+  }
+
+  const handleReset = () => {
+    updateGameData({id, isEnded: false, actualFlashcard: 0})
+    setIsEnded(false)
+    setActualCard(0)
+  }
+
   return (
     <div className="items-center flex flex-col md:h-screen w-full justify-center container mx-auto px-3">
       <div className="h-1/3 pt-28 md:pt-24">
@@ -27,8 +43,9 @@ const EndScreen = () => {
           <button
             type="button"
             className="bg-black rounded-full py-6 text-white font-bold w-full text-lg lg:text-2xl duration-300 hover:scale-105"
+            onClick={handleReset}
           >
-            <span className="flex justify-center gap-4 items-center"><Image src={flashcards} height={32} alt="flashcards" className="h-6 md:h-8" /> LEARN ONE MORE TIME</span>
+            <span className="flex justify-center gap-4 items-center"><Image src={flashcardsIcon} height={32} alt="flashcards" className="h-6 md:h-8" /> LEARN ONE MORE TIME</span>
           </button>
           <button
             type="button"
@@ -40,10 +57,14 @@ const EndScreen = () => {
       </div>
       <div className="h-1/3 w-full max-w-5xl mx-auto pt-12">
         <div className="flex justify-left w-full">
-          <div className="cursor-pointer flex gap-2">
+          <button 
+            type="button"
+            className="cursor-pointer flex items-center gap-2"
+            onClick={handlePreviousCard}
+          >
             <Image src={arrowLeft} width={20} alt="arrow left" /> 
             <p className="font-extrabold">Return to last flashcard</p>
-          </div>
+          </button>
         </div> 
       </div>
     </div>
