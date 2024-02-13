@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}) => {
   try {
     const { id } = params;
-    const { shuffleSalt, actualFlashcard, likedIds } = await req.json();
+    const { shuffleSalt, actualFlashcard, likedIds, isEnded } = await req.json();
 
     const session = await getServerSession(authOptions);
 
@@ -48,7 +48,8 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
       data: {
         shuffleSalt,
         actualFlashcard,
-        likedIds
+        likedIds,
+        isEnded
       }
     });
 

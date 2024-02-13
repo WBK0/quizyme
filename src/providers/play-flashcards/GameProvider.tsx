@@ -21,6 +21,7 @@ interface GameFlashcardsProvider {
     shuffleSalt: number;
     actualFlashcard: number;
     likedIds: string[];
+    isEnded: boolean;
   }
 }
 
@@ -48,6 +49,8 @@ export const GameContext = createContext({
   likedIds: [] as string[],
   setLikedIds: (() => {}) as React.Dispatch<React.SetStateAction<string[]>>,
   filterFlashcards: (() => {}) as (filter: 'liked' | 'unliked' | 'all') => void | string,
+  setIsEnded: (() => {}) as React.Dispatch<React.SetStateAction<boolean>>,
+  isEnded: false as boolean
 });
 
 export default function GameProvider({ children, flashcardsSet, id, flashcardsGameData }: GameFlashcardsProvider) {
@@ -59,6 +62,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   const [isShuffled, setIsShuffled] = useState(flashcardsGameData?.shuffleSalt > 0 ? true : false);
   const [filter, setFilter] = useState<'all' | 'liked' | 'unliked'>('all');
   const [likedIds, setLikedIds] = useState<string[]>(flashcardsGameData?.likedIds || []);
+  const [isEnded, setIsEnded] = useState(flashcardsGameData?.isEnded || false);
   const cardRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<HTMLDivElement>(null);
 
@@ -117,6 +121,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         likedIds: likedIds,
         setLikedIds: setLikedIds,
         filterFlashcards: (filter: 'liked' | 'unliked' | 'all') => filterFlashcards({ flashcardsSet, filter, setFlashcards, likedIds, setActualCard, setFilter, skipChangeActualCard: false, actualCard, autoPlay}),
+        setIsEnded,
+        isEnded
       }}
     >
       {children}

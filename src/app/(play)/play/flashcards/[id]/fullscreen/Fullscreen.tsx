@@ -1,5 +1,9 @@
+"use client";
+import { useContext } from "react";
 import Heading from "./Heading";
 import Playground from "./Playground";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import EndScreen from "./end/EndScreen";
 
 type FullscreenProps = {
   flashcardsSet: {
@@ -14,10 +18,15 @@ type FullscreenProps = {
 }
 
 const Fullscreen = ({ flashcardsSet } : FullscreenProps) => {
+  const { isEnded } = useContext(GameContext);
   return (
     <div>
       <Heading />
-      <Playground topic={flashcardsSet.topic}/>
+      {
+        isEnded
+        ? <EndScreen />
+        : <Playground topic={flashcardsSet.topic}/>
+      }
     </div>
   )
 }

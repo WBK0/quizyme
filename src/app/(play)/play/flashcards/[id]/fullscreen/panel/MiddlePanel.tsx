@@ -7,7 +7,7 @@ import { updateGameData } from "@/providers/play-flashcards/updateGameData"
 import { toast } from "react-toastify"
 
 const MiddlePanel = () => {
-  const { actualCard, flashcards, autoPlay, setActualCard, setAnimate, id } = useContext(GameContext)
+  const { actualCard, flashcards, autoPlay, setActualCard, setAnimate, id, setIsEnded } = useContext(GameContext)
   
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -16,10 +16,17 @@ const MiddlePanel = () => {
     }
 
     if(method === 'increase') {
+      console.log(actualCard, flashcards.length)
+
       if(actualCard < flashcards.length - 1) {
+
         setActualCard((prev) => prev + 1)
         setAnimate('left');
         updateGameData({ id, actualFlashcard: actualCard + 1})
+      }
+      else if(actualCard === flashcards.length - 1) {
+        setIsEnded(true);
+        updateGameData({ id, isEnded: true})
       }
     } else {
       if(actualCard > 0) {
@@ -36,14 +43,13 @@ const MiddlePanel = () => {
         type="button"
         onClick={() => handleCard('decrease', false)}
         disabled={actualCard === 0}
-        >
+      >
         <Image src={leftarrow} width={18} height={18} alt="leftarrow" />
-        </button>
-        <button
+      </button>
+      <button
         type="button"
         onClick={() => handleCard('increase', false)}
-        disabled={actualCard === flashcards.length - 1}
-        >
+      >
         <Image src={rightarrow} width={18} height={18} alt="rightarrow" />
       </button>
     </div>

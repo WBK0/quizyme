@@ -9,7 +9,7 @@ type PlaygroundProps = {
 
 const Playground = ({ topic } : PlaygroundProps) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pt-16">
       <h1 
         className="font-bold text-xl my-12"
       >

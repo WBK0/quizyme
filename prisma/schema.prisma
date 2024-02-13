@@ -213,6 +213,7 @@ model FlashcardsGame {
   shuffleSalt     Int
   actualFlashcard Int
   likedIds        String[]
+  isEnded         Boolean    @default(false)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
 }

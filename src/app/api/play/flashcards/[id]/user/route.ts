@@ -43,6 +43,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         shuffleSalt: true,
         actualFlashcard: true,
         likedIds: true,
+        isEnded: true
       }
     });
 

@@ -31,6 +31,7 @@ const Flashcards = async ({ params, searchParams } : { params : { id: string }, 
     })
 
     flashcardsGameData = await flashcardsGame.json();
+  
   }
 
   return (

@@ -3,9 +3,10 @@ type UpdateGameData = {
   actualFlashcard?: number;
   likedIds?: string[];
   shuffleSalt?: number;
+  isEnded?: boolean;
 };
 
-export const updateGameData = ({id, actualFlashcard, likedIds, shuffleSalt} : UpdateGameData) => {
+export const updateGameData = ({id, actualFlashcard, likedIds, shuffleSalt, isEnded} : UpdateGameData) => {
   return fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/update`, {
     method: 'PATCH',
     headers: {
@@ -14,7 +15,8 @@ export const updateGameData = ({id, actualFlashcard, likedIds, shuffleSalt} : Up
     body: JSON.stringify({
       actualFlashcard: actualFlashcard,
       likedIds,
-      shuffleSalt
+      shuffleSalt,
+      isEnded
     })
   });
 }

@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import flashcardsIcon from "./flashcards.svg";
 import arrowDown from './arrowDown.svg';
@@ -19,7 +18,7 @@ const Heading = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col fixed w-full bg-white">
       <div className="w-full flex justify-between px-3 sm:px-6 py-2 flex-wrap sm:flex-nowrap">
         <div className="flex-1 flex items-center gap-2 sm:gap-3 order-1">
           <Image src={flashcardsIcon} width={38} height={38} alt="Flashcards icon" />
