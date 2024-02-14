@@ -33,8 +33,9 @@ const CardChangeAnimation = ({ likeButton = false } : { likeButton?: boolean }) 
   }
 
   useEffect(() => {
-    if(animate)
+    if(animate){
       handleAnimate(animate);
+    } 
   }, [animate])
 
   return (

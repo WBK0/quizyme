@@ -4,7 +4,6 @@ import { disableShuffle, enableShuffle } from "./shuffle";
 import { flipCard } from "./flipCard";
 import { filterFlashcards } from "./filterFlashcards";
 import { toast } from "react-toastify";
-import Spinner from "@/components/Loading/Spinner";
 
 export type Flashcards = {
   id: string;
@@ -59,7 +58,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   const [animate, setAnimate] = useState<'left' | 'right' | 'shuffle' | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [animateText, setAnimateText] = useState<'concept' | 'definition'>('concept');
-  const [isShuffled, setIsShuffled] = useState(flashcardsGameData?.shuffleSalt > 0 ? true : false);
+  const [isShuffled, setIsShuffled] = useState(false);
   const [filter, setFilter] = useState<'all' | 'liked' | 'unliked'>('all');
   const [likedIds, setLikedIds] = useState<string[]>(flashcardsGameData?.likedIds || []);
   const [isEnded, setIsEnded] = useState(flashcardsGameData?.isEnded || false);
@@ -90,8 +89,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   }, [likedIds])
 
   useEffect(() => {
-    if(flashcardsGameData?.shuffleSalt > 0){
-      enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id });
+    if(flashcardsGameData?.shuffleSalt > 0 && !isShuffled){
+      enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id, setIsShuffled });
     }
   }, [flashcardsGameData])
 
@@ -103,8 +102,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setActualCard,
         animate,
         setAnimate: setAnimate,
-        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id, likedIds, filter}),
-        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id }),
+        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id, likedIds, filter, setIsShuffled }),
+        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id, setIsShuffled }),
         flipCard: (byAutoPlay: boolean) => flipCard(byAutoPlay, { autoPlay, cardRef, setAnimateText }),
         cardRef: cardRef,
         animateRef: animateRef,

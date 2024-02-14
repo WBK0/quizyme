@@ -8,6 +8,7 @@ type DisableShuffleProps = {
   id: string;
   filter: string;
   likedIds: string[];
+  setIsShuffled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type EnableShuffleProps = {
@@ -15,9 +16,10 @@ type EnableShuffleProps = {
   flashcards: Flashcards;
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
   id: string;
+  setIsShuffled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, filter, likedIds } : DisableShuffleProps) => {
+export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, filter, likedIds, setIsShuffled } : DisableShuffleProps) => {
   setAnimate('shuffle');
 
   if(filter === 'liked') {
@@ -27,10 +29,11 @@ export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, f
   }
 
   setFlashcards([...flashcardsSet]);
-  updateGameData({ id, shuffleSalt: 0 })
+  updateGameData({ id, shuffleSalt: 0 });
+  setIsShuffled(false);
 }
 
-export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards, id } : EnableShuffleProps) => {
+export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards, id, setIsShuffled } : EnableShuffleProps) => {
   setAnimate('shuffle');
 
   function customRandom(seed : number) {
@@ -55,4 +58,6 @@ export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashc
   setFlashcards([...flashcardsTEMP]);
 
   updateGameData({ id, shuffleSalt: seed })
+
+  setIsShuffled(true);
 }
