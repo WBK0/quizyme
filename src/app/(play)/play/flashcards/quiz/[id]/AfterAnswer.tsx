@@ -74,7 +74,7 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
         {
           step === 0 ?
           <>
-            <h6 className="text-5xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
+            <h6 className="text-5xl font-black text-white"><p className="text-8xl text-center mb-6">{answered.questionsLeft}</p> {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT </h6>
           </>
           : step === 1 ? (
             <div className="animate-left-to-right gap-12 flex items-center justify-center flex-col">

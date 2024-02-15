@@ -89,7 +89,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
     let points = 0;
 
     if(flashcardsQuizGame?.timeToRespond < new Date()){
-      const updateQuiz = await prisma.quizGame.update({
+      const updateQuiz = await prisma.flashcardQuiz.update({
         where: {
           id: id,
           userId: session.user.id,
@@ -143,15 +143,12 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       );
     }
 
-    const updateQuiz = await prisma.quizGame.update({
+    const updateQuiz = await prisma.flashcardQuiz.update({
       where: {
         id: id,
         userId: session.user.id,
       },
       data: {
-        points: {
-          increment: points
-        },
         correctAnswers: {
           increment: result === true ? 1 : 0
         },
@@ -193,6 +190,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
       { status: 200 }
     );
   } catch (error) {
+    console.log(error)
     return new Response(
       JSON.stringify({
         status: "Error",
