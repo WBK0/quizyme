@@ -57,6 +57,7 @@ model User {
   Following      Follower[]       @relation("Following")
   Followers      Follower[]       @relation("Followers")
   FlashcardsGame FlashcardsGame[]
+  FlashcardQuiz  FlashcardQuiz[]
 }
 
 model Follower {
@@ -216,4 +217,30 @@ model FlashcardsGame {
   isEnded         Boolean    @default(false)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+}
+
+type FlashcardQuestion {
+  id       String   @default(cuid())
+  question String
+  answers  Answer[]
+  time     Int      @default(45)
+  type     String
+}
+
+model FlashcardQuiz {
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId   String              @db.ObjectId
+  topic          String
+  image          String
+  actualQuestion Int
+  questions      FlashcardQuestion[]
+  correctAnswers Int                 @default(0)
+  userId         String              @db.ObjectId
+  user           User                @relation(fields: [userId], references: [id])
+  timeToRespond  DateTime
+  isAsked        Boolean             @default(false)
+  isStarted      Boolean             @default(false)
+  isFinished     Boolean             @default(false)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
 }
