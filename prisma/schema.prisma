@@ -36,28 +36,29 @@ model Session {
 }
 
 model User {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  name           String?
-  email          String           @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String?
-  accounts       Account[]
-  sessions       Session[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  username       String?          @unique
-  bio            String?
-  interests      String[]
-  isComplete     Boolean          @default(false)
-  Quiz           Quiz[]
-  Flashcards     Flashcards[]
-  QuizGame       QuizGame[]
-  QuizGameStats  QuizGameStats[]
-  Following      Follower[]       @relation("Following")
-  Followers      Follower[]       @relation("Followers")
-  FlashcardsGame FlashcardsGame[]
-  FlashcardQuiz  FlashcardQuiz[]
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  name               String?
+  email              String               @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  accounts           Account[]
+  sessions           Session[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  username           String?              @unique
+  bio                String?
+  interests          String[]
+  isComplete         Boolean              @default(false)
+  Quiz               Quiz[]
+  Flashcards         Flashcards[]
+  QuizGame           QuizGame[]
+  QuizGameStats      QuizGameStats[]
+  Following          Follower[]           @relation("Following")
+  Followers          Follower[]           @relation("Followers")
+  FlashcardsGame     FlashcardsGame[]
+  FlashcardQuiz      FlashcardQuiz[]
+  FlashcardQuizStats FlashcardQuizStats[]
 }
 
 model Follower {
@@ -155,23 +156,24 @@ type StatsFlashcards {
 }
 
 model Flashcards {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  topic          String
-  visibility     String
-  tags           String[]
-  image          String
-  description    String
-  flashcards     Flashcard[]
-  stats          StatsFlashcards
-  collectionName String
-  collection     Collection       @relation(fields: [collectionName], references: [name])
-  userId         String           @db.ObjectId
-  user           User             @relation(fields: [userId], references: [id])
-  codeId         String           @unique @db.ObjectId
-  code           Code             @relation(fields: [codeId], references: [id])
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  FlashcardsGame FlashcardsGame[]
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  topic              String
+  visibility         String
+  tags               String[]
+  image              String
+  description        String
+  flashcards         Flashcard[]
+  stats              StatsFlashcards
+  collectionName     String
+  collection         Collection           @relation(fields: [collectionName], references: [name])
+  userId             String               @db.ObjectId
+  user               User                 @relation(fields: [userId], references: [id])
+  codeId             String               @unique @db.ObjectId
+  code               Code                 @relation(fields: [codeId], references: [id])
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  FlashcardsGame     FlashcardsGame[]
+  FlashcardQuizStats FlashcardQuizStats[]
 }
 
 model QuizGame {
@@ -228,19 +230,31 @@ type FlashcardQuestion {
 }
 
 model FlashcardQuiz {
-  id             String              @id @default(auto()) @map("_id") @db.ObjectId
-  flashcardsId   String              @db.ObjectId
-  topic          String
-  image          String
-  actualQuestion Int
-  questions      FlashcardQuestion[]
-  correctAnswers Int                 @default(0)
-  userId         String              @db.ObjectId
-  user           User                @relation(fields: [userId], references: [id])
-  timeToRespond  DateTime
-  isAsked        Boolean             @default(false)
-  isStarted      Boolean             @default(false)
-  isFinished     Boolean             @default(false)
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId       String              @db.ObjectId
+  topic              String
+  image              String
+  actualQuestion     Int
+  questions          FlashcardQuestion[]
+  correctAnswers     Int                 @default(0)
+  userId             String              @db.ObjectId
+  user               User                @relation(fields: [userId], references: [id])
+  timeToRespond      DateTime
+  isAsked            Boolean             @default(false)
+  isStarted          Boolean             @default(false)
+  isFinished         Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  FlashcardQuizStats FlashcardQuizStats?
+}
+
+model FlashcardQuizStats {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId    String        @db.ObjectId
+  userId          String        @db.ObjectId
+  user            User          @relation(fields: [userId], references: [id])
+  flashcardQuizId String        @unique @db.ObjectId
+  flashcardQuiz   FlashcardQuiz @relation(fields: [flashcardQuizId], references: [id])
+  correctAnswers  Int           @default(0)
+  flashcards      Flashcards    @relation(fields: [flashcardsId], references: [id])
 }
