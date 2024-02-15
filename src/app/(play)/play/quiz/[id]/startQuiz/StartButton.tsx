@@ -39,7 +39,7 @@ const StartButton = ({ id, type } : { id : string, type: 'quiz' | 'flashcards' }
   return (
     <button
       type="button"
-      className="bg-black hover:scale-105 duration-300 text-white font-bold py-3 w-56 rounded-full shadow-small shadow-lightblue"
+      className="bg-black hover:scale-105 duration-300 text-white font-bold py-3 w-60 rounded-full shadow-small shadow-lightblue"
       onClick={handleStart}
     >
       START

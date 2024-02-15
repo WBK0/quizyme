@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import NotFound from "@/components/404/404";
 import StartQuiz from "../../../quiz/[id]/startQuiz/StartQuiz";
+import PlayQuiz from "./PlayQuiz";
 
 const PlayFlashcardsQuiz = async ({ params }: { params: {id: string} }) => {
   const { id } = params;
@@ -29,13 +30,15 @@ const PlayFlashcardsQuiz = async ({ params }: { params: {id: string} }) => {
         flashcards.errorId === 101 ? (
           <StartQuiz 
             slug={flashcards.slug}
-            id={flashcards.flashcardsId}
+            id={id}
             type="flashcards"
           />
         ) 
       :
         (
-          <></>
+          <PlayQuiz
+            id={id}
+          />
         )
       } 
     </div>

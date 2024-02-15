@@ -6,8 +6,6 @@ const StartQuiz = async ({ slug, id, type } : { slug: string, id: string, type: 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${slug}`);
   const data = await response.json();
 
-  console.log(data)
-
   return (
     <div className="flex flex-col items-center gap-4 px-3 justify-center min-h-screen">
       <div className="relative">

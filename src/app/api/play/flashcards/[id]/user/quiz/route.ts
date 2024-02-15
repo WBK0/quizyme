@@ -46,8 +46,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
           message: "Quiz game not started yet",
           userId: flashcardsQuizGame.userId,
           errorId: 101,
-          slug: flashcardsQuizGame.topic.replaceAll(' ', '-') + '-' + flashcardsQuizGame.flashcardsId,
-          flashcardsId: flashcardsQuizGame.flashcardsId,
+          slug: flashcardsQuizGame.topic.replaceAll(' ', '-') + '-' + flashcardsQuizGame.flashcardsId
         }),
         { status: 400 }
       );
