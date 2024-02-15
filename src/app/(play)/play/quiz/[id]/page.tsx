@@ -29,8 +29,9 @@ const PlayQuiz = async ({ params }: { params: {id: string} }) => {
         : 
           quiz.errorId === 101 ? (
             <StartQuiz 
-              quizSlug={quiz.quizSlug}
+              slug={quiz.quizSlug}
               id={id}
+              type="quiz"
             />
           ) 
         :

@@ -2,22 +2,30 @@
 import { toast } from "react-toastify";
 import updateQuizData from "./updateQuizData";
 
-const StartButton = ({ id } : { id : string}) => {
+const StartButton = ({ id, type } : { id : string, type: 'quiz' | 'flashcards' }) => {
 
   const handleStart = async () => {
     toast.promise(
       async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/start`, {
-          method: 'POST',
-          cache: 'no-cache',
-        });
+        let response;
+        if (type === 'quiz') {
+          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/start`, {
+            method: 'POST',
+            cache: 'no-cache',
+          });
+        } else {
+          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/start`, {
+            method: 'POST',
+            cache: 'no-cache',
+          });
+        }
   
-        const quiz = await response.json();
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error(quiz.message || 'Something went wrong');
+          throw new Error(data.message || 'Something went wrong');
         }
 
-        updateQuizData();
+        updateQuizData({ type});
       },
       {
         pending: 'Starting quiz...',
