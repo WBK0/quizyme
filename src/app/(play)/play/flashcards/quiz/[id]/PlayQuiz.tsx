@@ -5,14 +5,14 @@ import Welcome from "../../../quiz/[id]/quizGame/welcome/Welcome";
 import Question from "../../../quiz/[id]/quizGame/Question";
 import Finished from "../../../quiz/[id]/quizGame/finished/page";
 import Spinner from "@/components/Loading/Spinner";
-import Heading from "../../../quiz/[id]/quizGame/Heading";
 import GameData from "./GameData.type";
 import Answers from "./Answers";
 import AfterAnswer from "./AfterAnswer";
+import Heading from "./Heading";
 
 const PlayQuiz = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
-  const [answered, setAnswered] = useState<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>(null);
+  const [answered, setAnswered] = useState<{ questionsLeft: number } | null>(null);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [welcomeScreen, setWelcomeScreen] = useState(false);

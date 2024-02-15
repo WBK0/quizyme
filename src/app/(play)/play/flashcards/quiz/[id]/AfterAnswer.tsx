@@ -4,8 +4,8 @@ import GameData from "./GameData.type";
 
 type AfterAnswerProps = {
   getQuestion: () => void;
-  answered: {pointsGet: number, pointsTotal: number, questionsLeft: number};
-  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  answered: {questionsLeft: number};
+  setAnswered: React.Dispatch<React.SetStateAction<{ questionsLeft: number} | null>>;
   gameData: GameData;
 }
 
