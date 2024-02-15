@@ -1,10 +1,13 @@
 "use client";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 
 const Heading = ({ topic } : { topic: string }) => {
-  const { setFilter, filter, filterFlashcards } = useContext(GameContext);
+  const { setFilter, filter, filterFlashcards, id } = useContext(GameContext);
+
+  const router = useRouter();
 
   const handleFilter = (filter: 'liked' | 'unliked' | 'all') => {
     toast.info(`Set learing mode to ${filter} concepts`, {
@@ -15,6 +18,31 @@ const Heading = ({ topic } : { topic: string }) => {
 
     setFilter(filter);
     filterFlashcards(filter);
+  }
+
+  const handleQuiz = () => {
+    toast.promise(
+      async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/create`, {
+          method: 'POST',
+          cache: 'no-cache',
+        });
+
+        const data = await response.json();
+
+        if(!response.ok){
+          throw new Error(data.error)
+        }
+
+        router.push(`/play/flashcards/quiz/${data.quizId}`)
+      
+      },
+      {
+        pending: 'Creating quiz from flashcards...',
+        success: 'Quiz created!',
+        error: { render: ({ data }: { data?: { message: string } }) => data?.message || 'An error occurred while creating quiz from flashcards' },
+      }
+    )
   }
 
   return (
@@ -28,8 +56,9 @@ const Heading = ({ topic } : { topic: string }) => {
         </button>
         <button
           className="bg-black text-white shadow-small shadow-green w-full rounded-2xl py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"
+          onClick={handleQuiz}
         >
-          Test
+          Go quiz
         </button>
         <button
           className="bg-black text-white shadow-small shadow-green rounded-2xl py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"

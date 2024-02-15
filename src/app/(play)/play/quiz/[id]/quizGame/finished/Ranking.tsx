@@ -8,12 +8,14 @@ type RankingProps = {
       name: string;
     },
     points: number;
+    correctAnswers?: number;
   }[],
   type: 'friends' | 'global';
+  isQuiz: boolean;
+  answersLength?: number;
 }
 
-const Ranking = ({ data, type } : RankingProps) => {
-
+const Ranking = ({ data, type, isQuiz, answersLength } : RankingProps) => {
   data.filter(user => user.isFriend);
 
   return (
@@ -30,9 +32,16 @@ const Ranking = ({ data, type } : RankingProps) => {
                 <Image src={user.user.image} alt="Profile picture" width={40} height={40} className='rounded-full' />
                 <p className='font-semibold'>{user.user.name}</p>
               </div>
-              <div>
-                <p className='text-right'>{user.points} Points</p>
-              </div>
+              {
+                isQuiz 
+                ?
+                  <div>
+                    <p className='text-right'>{user.points} Points</p>
+                  </div>
+                : <div>
+                    <p className='text-right'>{user.correctAnswers} / {answersLength} Correct</p>
+                  </div>
+              }
             </div>
           ))}
           {

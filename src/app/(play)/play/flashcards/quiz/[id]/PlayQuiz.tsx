@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import NotFound from "@/components/404/404";
 import Welcome from "../../../quiz/[id]/quizGame/welcome/Welcome";
 import Question from "../../../quiz/[id]/quizGame/Question";
-import Finished from "../../../quiz/[id]/quizGame/finished/page";
 import Spinner from "@/components/Loading/Spinner";
 import GameData from "./GameData.type";
 import Answers from "./Answers";
 import AfterAnswer from "./AfterAnswer";
 import Heading from "./Heading";
+import Finished from "./Finished";
 
 const PlayQuiz = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();

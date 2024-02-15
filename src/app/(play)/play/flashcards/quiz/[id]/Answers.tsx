@@ -7,7 +7,7 @@ import GameData from "./GameData.type";
 type AnsweredProps = {
   gameData: GameData;
   id: string;
-  setAnswered: React.Dispatch<React.SetStateAction<{pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  setAnswered: React.Dispatch<React.SetStateAction<{questionsLeft: number} | {pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
   setStopTimer: React.Dispatch<React.SetStateAction<boolean>>;
   stopTimer: boolean;
 }
