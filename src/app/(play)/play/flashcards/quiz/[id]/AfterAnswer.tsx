@@ -16,8 +16,10 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setStep(1);
       handleCountDown();
+      if(gameData.actualQuestion !== gameData.numberOfQuestions - 1){
+        setStep(1);
+      }
     }, 4000)
 
     return () => clearTimeout(timeout);

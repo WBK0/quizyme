@@ -18,7 +18,7 @@ const StartQuiz = async ({ slug, id, type } : { slug: string, id: string, type: 
         <h1 className="font-bold text-center mt-6 text-xl">Guest the questions about <span className="font-black">{data.data.topic}{data.data.topic.includes("!") ? '' : '!'}</span></h1>
       </div>
       <div className="flex gap-4 flex-wrap justify-center mt-6">
-        <StartButton id={id} type="quiz" />
+        <StartButton id={id} type={type} />
         <BackButton quizSlug={slug} type={type} />
       </div>
     </div>

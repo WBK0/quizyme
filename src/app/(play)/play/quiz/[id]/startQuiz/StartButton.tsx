@@ -4,17 +4,19 @@ import updateQuizData from "./updateQuizData";
 
 const StartButton = ({ id, type } : { id : string, type: 'quiz' | 'flashcards' }) => {
 
+  console.log(type)
+
   const handleStart = async () => {
     toast.promise(
       async () => {
         let response;
         if (type === 'quiz') {
-          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/start`, {
+          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${id}/start`, {
             method: 'POST',
             cache: 'no-cache',
           });
         } else {
-          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/start`, {
+          response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/start`, {
             method: 'POST',
             cache: 'no-cache',
           });
