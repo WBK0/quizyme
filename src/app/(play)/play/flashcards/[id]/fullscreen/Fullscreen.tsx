@@ -1,6 +1,6 @@
 "use client";
 import { useContext } from "react";
-import Heading from "./Heading";
+import Heading from "./heading/Heading";
 import Playground from "./Playground";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import EndScreen from "./end/EndScreen";
