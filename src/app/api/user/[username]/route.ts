@@ -33,6 +33,7 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
         QuizGameStats: true,
         Followers: true,
         Following: true,
+        FlashcardsGame: true
       }
     });
 
@@ -78,7 +79,7 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
         }
       }),
       playedQuizzes: user.QuizGameStats.length,
-      playedFlashcards: 13, // TO DO 
+      playedFlashcards: user.FlashcardsGame.length,
       followers: user.Followers.length,
       following: user.Following.length,
     }

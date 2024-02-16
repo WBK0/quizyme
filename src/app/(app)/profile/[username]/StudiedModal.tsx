@@ -32,7 +32,9 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
   const [data, setData] = useState<UserData>(null);
 
   const getData = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${username}/quized`, {
+    const url = variant === 'quized' ? `${process.env.NEXT_PUBLIC_API}/user/${username}/quized` : `${process.env.NEXT_PUBLIC_API}/user/${username}/learned`;
+
+    const response = await fetch(url, {
       method: 'GET'
     });
 
@@ -70,6 +72,7 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
                           type={'quiz'}
                           topic={value.topic}
                           scored={Number(value.points)}
+                          status={value.correctAnswers > 0 ? 'Test passed' : 'Learning'}
                           passed={value.correctAnswers}
                           authorName={value.createdBy.name}
                           authorImage={value.createdBy.image}

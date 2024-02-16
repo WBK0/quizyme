@@ -208,17 +208,18 @@ model QuizGameStats {
 }
 
 model FlashcardsGame {
-  id              String     @id @default(auto()) @map("_id") @db.ObjectId
-  flashcardsId    String     @db.ObjectId
-  userId          String     @db.ObjectId
-  flashcards      Flashcards @relation(fields: [flashcardsId], references: [id])
-  user            User       @relation(fields: [userId], references: [id])
-  shuffleSalt     Int
-  actualFlashcard Int
-  likedIds        String[]
-  isEnded         Boolean    @default(false)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId        String               @db.ObjectId
+  userId              String               @db.ObjectId
+  flashcards          Flashcards           @relation(fields: [flashcardsId], references: [id])
+  user                User                 @relation(fields: [userId], references: [id])
+  shuffleSalt         Int
+  actualFlashcard     Int
+  likedIds            String[]
+  isEnded             Boolean              @default(false)
+  flashcardsQuizStats FlashcardQuizStats[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
 type FlashcardQuestion {
@@ -249,12 +250,14 @@ model FlashcardQuiz {
 }
 
 model FlashcardQuizStats {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  flashcardsId    String        @db.ObjectId
-  userId          String        @db.ObjectId
-  user            User          @relation(fields: [userId], references: [id])
-  flashcardQuizId String        @unique @db.ObjectId
-  flashcardQuiz   FlashcardQuiz @relation(fields: [flashcardQuizId], references: [id])
-  correctAnswers  Int           @default(0)
-  flashcards      Flashcards    @relation(fields: [flashcardsId], references: [id])
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  flashcardsId     String          @db.ObjectId
+  userId           String          @db.ObjectId
+  user             User            @relation(fields: [userId], references: [id])
+  flashcardQuizId  String          @unique @db.ObjectId
+  flashcardQuiz    FlashcardQuiz   @relation(fields: [flashcardQuizId], references: [id])
+  correctAnswers   Int             @default(0)
+  flashcards       Flashcards      @relation(fields: [flashcardsId], references: [id])
+  flashcardsGameId String?         @db.ObjectId
+  flashcardsGame   FlashcardsGame? @relation(fields: [flashcardsGameId], references: [id])
 }

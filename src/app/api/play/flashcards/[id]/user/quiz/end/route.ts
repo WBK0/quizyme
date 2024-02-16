@@ -38,6 +38,23 @@ export const POST = async (req: NextRequest, {params} : {params : {id: string}})
       );
     }
 
+    const flashcardGame = await prisma.flashcardsGame.findFirst({
+      where: {
+        flashcardsId: flashcardQuizGame.flashcardsId,
+        userId: session.user.id,
+      }
+    });
+
+    if(!flashcardGame) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Not found flashcard game for this quiz game",
+        }),
+        { status: 400 }
+      );
+    }
+
     if(!flashcardQuizGame.isStarted) {
       return new Response(
         JSON.stringify({
@@ -83,6 +100,7 @@ export const POST = async (req: NextRequest, {params} : {params : {id: string}})
         userId: session.user.id,
         flashcardQuizId: id,
         correctAnswers: flashcardQuizGame.correctAnswers,
+        flashcardsGameId: flashcardGame.id
       }
     });
 

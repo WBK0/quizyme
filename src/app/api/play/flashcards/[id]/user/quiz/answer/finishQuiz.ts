@@ -4,12 +4,30 @@ const finishQuiz = async (quizGameId: string, flashcardsId: string, userId: stri
   try {
     const prisma = new PrismaClient();
 
+    const flashcardGame = await prisma.flashcardsGame.findFirst({
+      where: {
+        flashcardsId: flashcardsId,
+        userId: userId,
+      }
+    });
+
+    if(!flashcardGame) {
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Not found flashcard game for this quiz game",
+        }),
+        { status: 400 }
+      );
+    }
+
     const quizStats = await prisma.flashcardQuizStats.create({
       data: {
         flashcardsId: flashcardsId,
         userId: userId,
         flashcardQuizId: quizGameId,
         correctAnswers: correctAnswers,
+        flashcardsGameId: flashcardGame.id
       }
     });
 

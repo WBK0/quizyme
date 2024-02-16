@@ -19,7 +19,7 @@ type CardExtendedProps = {
 
 const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status } : CardExtendedProps) => {
   return (
-    <div className='flex flex-col sm:flex-row gap-8 mt-12'>
+    <div className='flex flex-col sm:flex-row gap-8 mt-12 items-center'>
       <Card
         image={image}
         to={to}
@@ -59,10 +59,16 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
               )
               :
               status ? (
-                <h6 className='font-semibold'>
-                  Status:  
-                  <span className='font-black' style={{color: `var(--${color})`}}> {status}</span>
-                </h6>
+                <>
+                  <h6 className='font-semibold w-full'>
+                    Status:  
+                    <span className='font-black' style={{color: `var(--${color})`}}> {status}</span>
+                  </h6>
+                  <h6 className='font-semibold w-full'>
+                    Passed:  
+                    <span className='font-black' style={{color: `var(--${color})`}}> {passed} / {quantity}</span>
+                  </h6>
+                </>
               )
               :
               (
