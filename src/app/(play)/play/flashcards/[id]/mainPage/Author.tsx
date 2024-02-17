@@ -1,4 +1,5 @@
 "use client"
+import Share from "@/components/Share/Share";
 import UserCard from "@/components/UserCard";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -15,6 +16,7 @@ type AuthorProps = {
 const Author = ({ user } : AuthorProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     getFollowStatus();
@@ -31,6 +33,14 @@ const Author = ({ user } : AuthorProps) => {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  const handleClose = () => {
+    setShowModal(() => !showModal);
+  }
+
+  const handleShare = () => {
+    setShowModal(() => !showModal);
   }
 
   const handleFollow = async () => {
@@ -62,15 +72,22 @@ const Author = ({ user } : AuthorProps) => {
   }
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 pb-24">
       <UserCard 
         image={user.image}
         name={user.name}
         username={user.username}
         isFollowing={isFollowing}
         handleFollow={handleFollow}
-        handleShare={handleFollow}
+        handleShare={handleShare}
       />
+      {
+        showModal 
+        ? <Share 
+            handleClose={handleClose}
+          />
+        : null
+      }
     </div>
   )
 }

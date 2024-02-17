@@ -12,7 +12,7 @@ type UserCardProps = {
 
 const UserCard = ({ image, name, username, isFollowing, handleFollow, handleShare } : UserCardProps) => {
   return (
-    <div className="flex w-full mt-6 items-center pb-24">
+    <div className="flex w-full mt-6 items-center">
       <Image src={image} alt="User photo" width={64} height={64} className="rounded-full h-16" />
       <div className="flex flex-col justify-center ml-3">
         <p className="font-bold text-sm sm:text-lg mr-2">{name}</p>
