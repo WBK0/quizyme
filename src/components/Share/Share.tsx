@@ -4,6 +4,7 @@ import Searchbar from "../Searchbar";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import Spinner from "../Loading/Spinner";
+import EasySpinner from "../Loading/EasySpinner";
 
 type Friends = {
   id: string;
@@ -18,8 +19,31 @@ type ShareProps = {
   studyId: string;
 }
 
+type IsSharing = {
+  [id: string]: boolean;
+}[]
+
 const Share = ({ handleClose, type, studyId } : ShareProps) => {
   const [friends, setFriends] = useState<Friends>(null);
+  const [isSharing, setIsSharing] = useState<IsSharing>([]);
+  const [invited, setInvited] = useState<string[] | null>(null);
+
+  const getInvited = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends/invited/${studyId}`);
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+
+      setInvited(json.data);
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message || 'An error occurred while trying to get the data.');
+    }
+  }
 
   const getFriends = async () => {
     try {
@@ -39,7 +63,13 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
   }
 
   const handleShare = async (inviteeId : string) => {
+    if(isSharing.some((item) => item[inviteeId])){
+      return;
+    }
+
     try {
+      setIsSharing(prev => [...prev, { [inviteeId]: true }]);
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends/invite`, {
         method: 'POST',
         headers: {
@@ -57,14 +87,19 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
       if(!response.ok){
         throw new Error(json.message);
       }
+
+      setInvited(prev => prev ? [...prev, inviteeId] : [inviteeId])
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message || 'An error occurred while trying to invite friends.');
+    } finally{
+      setIsSharing(prev => prev.filter(item => !item[inviteeId]));
     }
   }
 
   useEffect(() => {
     getFriends();
+    getInvited();
   }, [])
 
   return (
@@ -84,7 +119,7 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
           </div>
           <div className="overflow-y-auto scroll-sm pr-2 sm:pl-2 h-full flex flex-col gap-4 mt-6">
             {
-              !friends ? 
+              !friends || !invited ? 
                 <div className="flex justify-center h-full items-center pb-12">
                   <Spinner />
                 </div>
@@ -99,9 +134,14 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
                     <div className="flex-1 flex justify-end items-end gap-3 sm:gap-6 flex-col sm:flex-row">
                       {
                         <button 
-                        onClick={() => handleShare(friend.id)} 
-                        className="w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black bg-black text-white hover:scale-105 duration-300">
-                          Share
+                          onClick={() => handleShare(friend.id)} 
+                          disabled={isSharing.some((item) => item[friend.id]) || invited.includes(friend.id)}
+                          className={`w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black ${invited.includes(friend.id) ? 'bg-white' : 'bg-black'} ${invited.includes(friend.id) ? 'text-black' : 'text-white'} hover:scale-105 duration-300`}>
+                            {
+                              isSharing.some((item) => item[friend.id])
+                              ? <EasySpinner />
+                              : invited.includes(friend.id) ? 'Invited' : 'Share'
+                            }
                         </button>
                       }
                     </div>
