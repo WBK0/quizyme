@@ -14,14 +14,16 @@ type Friends = {
 
 type ShareProps = {
   handleClose: () => void;
+  type: 'flashcards' | 'quiz';
+  studyId: string;
 }
 
-const Share = ({ handleClose } : ShareProps) => {
+const Share = ({ handleClose, type, studyId } : ShareProps) => {
   const [friends, setFriends] = useState<Friends>(null);
 
   const getFriends = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/invite`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends`);
 
       const json = await response.json();
 
@@ -33,6 +35,31 @@ const Share = ({ handleClose } : ShareProps) => {
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message || 'An error occurred while trying to get the data.');
+    }
+  }
+
+  const handleShare = async (inviteeId : string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends/invite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          type: type,
+          studyId: studyId,
+          inviteeId: inviteeId
+        })
+      });
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message || 'An error occurred while trying to invite friends.');
     }
   }
 
@@ -72,7 +99,7 @@ const Share = ({ handleClose } : ShareProps) => {
                     <div className="flex-1 flex justify-end items-end gap-3 sm:gap-6 flex-col sm:flex-row">
                       {
                         <button 
-                        onClick={() => {}} 
+                        onClick={() => handleShare(friend.id)} 
                         className="w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black bg-black text-white hover:scale-105 duration-300">
                           Share
                         </button>

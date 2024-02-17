@@ -1,7 +1,8 @@
 "use client"
 import Share from "@/components/Share/Share";
 import UserCard from "@/components/UserCard";
-import { useEffect, useState } from "react";
+import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type AuthorProps = {
@@ -17,6 +18,8 @@ const Author = ({ user } : AuthorProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { id } = useContext(GameContext);
 
   useEffect(() => {
     getFollowStatus();
@@ -85,6 +88,8 @@ const Author = ({ user } : AuthorProps) => {
         showModal 
         ? <Share 
             handleClose={handleClose}
+            type="flashcards"
+            studyId={id}
           />
         : null
       }

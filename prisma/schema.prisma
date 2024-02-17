@@ -59,6 +59,8 @@ model User {
   FlashcardsGame     FlashcardsGame[]
   FlashcardQuiz      FlashcardQuiz[]
   FlashcardQuizStats FlashcardQuizStats[]
+  Inviter            Invitation[]         @relation("Inviter")
+  Invitee            Invitation[]         @relation("Invitee")
 }
 
 model Follower {
@@ -140,6 +142,7 @@ model Quiz {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   quizGameStats  QuizGameStats[]
+  Invitation     Invitation[]
 }
 
 type Flashcard {
@@ -174,6 +177,7 @@ model Flashcards {
   updatedAt          DateTime             @updatedAt
   FlashcardsGame     FlashcardsGame[]
   FlashcardQuizStats FlashcardQuizStats[]
+  Invitation         Invitation[]
 }
 
 model QuizGame {
@@ -260,4 +264,19 @@ model FlashcardQuizStats {
   flashcards       Flashcards      @relation(fields: [flashcardsId], references: [id])
   flashcardsGameId String?         @db.ObjectId
   flashcardsGame   FlashcardsGame? @relation(fields: [flashcardsGameId], references: [id])
+}
+
+model Invitation {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  type         String
+  inviterId    String      @db.ObjectId
+  inviteeId    String      @db.ObjectId
+  inviter      User        @relation("Inviter", fields: [inviterId], references: [id])
+  invitee      User        @relation("Invitee", fields: [inviteeId], references: [id])
+  quizId       String?     @db.ObjectId
+  quiz         Quiz?       @relation(fields: [quizId], references: [id])
+  flashcardsId String?     @db.ObjectId
+  flashcards   Flashcards? @relation(fields: [flashcardsId], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
