@@ -1,5 +1,5 @@
 "use client"
-import Share from "@/components/Share/Share";
+import Share from "@/components/ShareModal/Share";
 import UserCard from "@/components/UserCard";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { useContext, useEffect, useState } from "react";
