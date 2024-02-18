@@ -1,5 +1,6 @@
 import Image from "next/image"
 import EasySpinner from "./Loading/EasySpinner";
+import { useSession } from "next-auth/react";
 
 type UserCardProps = {
   image: string;
@@ -24,7 +25,10 @@ const UserCard = ({ image, name, username, isFollowing, handleFollow, handleShar
           ? <button onClick={handleShare} className="w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black bg-black text-white hover:scale-105 duration-300">Share</button>
           : null
         }
-        <button className={`w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black ${isFollowing ? 'bg-white text-black' : 'bg-black text-white'} hover:scale-105 duration-300`} onClick={handleFollow}>
+        <button 
+          className={`w-28 sm:w-40 py-2.5 rounded-full font-bold ring-2 ring-black ${isFollowing ? 'bg-white text-black' : 'bg-black text-white'} hover:scale-105 duration-300`} 
+          onClick={handleFollow}
+        >
           {
             isFollowing === null ? <EasySpinner />
           :

@@ -20,6 +20,22 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
   const [invited, setInvited] = useState<string[] | null>(null);
   const [friends, setFriends] = useState<Friends>(null);
 
+  useEffect(() => {
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape'){
+        handleClose();
+      }
+    });
+
+    return () => {
+      window.removeEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){
+          handleClose();
+        }
+      });
+    }
+  }, [])
+
   const getInvited = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends/invited/${studyId}`);

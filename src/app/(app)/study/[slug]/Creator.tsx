@@ -1,31 +1,98 @@
-import Image from "next/image";
+"use client";
+import Share from "@/components/ShareModal/Share";
+import UserCard from "@/components/UserCard";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type CreatorProps = {
   user: {
+    id: string;
     image: any;
     name: string;
     username: string;
-  }
+  },
+  type: 'flashcards' | 'quiz',
+  studyId: string
 }
 
-const Creator = ({ user } : CreatorProps) => {
+const Creator = ({ user, type, studyId } : CreatorProps) => {
+  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
+  const [shareModal, setShareModal] = useState<boolean>(false);
+
+  const session = useSession();
+
+  const handleFollow = async () => {
+    try {
+      if(session.status === 'unauthenticated'){
+        toast.error('You need to be logged in to follow a user.');
+        return;
+      }
+
+      if(session.data?.user?.id === user.id){
+        toast.error('You cannot follow yourself.');
+        return;
+      }
+
+      if(isFollowing === null){
+        return;
+      }
+
+      setIsFollowing(null);
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${user.id}/follow`, {
+        method: 'PATCH'
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message);
+      }
+
+      setIsFollowing(data.message === 'Unfollowed' ? false : true);
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message || 'An error occurred while trying to follow the user.');
+
+      getFollowStatus();
+    }
+  }
+
+  const getFollowStatus = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/follows/${user.id}/isFollowing`)
+      const data = await response.json();
+
+      setIsFollowing(data.isFollowing);
+    } catch (error) {
+      setIsFollowing(false);
+    }
+  }
+
+  useEffect(() => {
+    getFollowStatus();
+  }, [])
+
   return (
-    <div className="flex mt-16 mx-auto max-w-2xl justify-between flex-col sm:flex-row">
-      <div className="flex gap-4 items-center">
-        <Image src={user.image} alt='user image' width={50} height={50} className="rounded-full" />
-        <div className="flex flex-col">
-          <p className="font-bold">{user.name}</p>
-          <p className="text-gray-300 text-sm">@{user.username}</p>
-        </div>
-      </div>
-      <div className="flex gap-2 mt-5 sm:mt-0">
-        <button className="border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-md sm:px-12">
-          SHARE
-        </button>
-        <button className="border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-md sm:px-12">
-          Follow
-        </button>
-      </div>
+    <div className="flex mt-16 mx-auto max-w-3xl justify-between flex-col sm:flex-row">
+      <UserCard
+        image={user.image}
+        username={user.username}
+        name={user.name}
+        isFollowing={isFollowing}
+        handleFollow={handleFollow}
+        handleShare={() => setShareModal(true)}
+      />
+      {
+        shareModal
+        ? <Share 
+            handleClose={() => setShareModal(false)}
+            type={type}
+            studyId={studyId}
+          />
+        : null
+      }
     </div>
   )
 }

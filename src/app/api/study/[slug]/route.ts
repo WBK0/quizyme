@@ -59,6 +59,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
     collectionName: quizResults?.collectionName,
     createdAt: quizResults?.createdAt,
     user: {
+      id: quizResults?.user?.id,
       name: quizResults?.user?.name,
       image: quizResults?.user?.image,
       username: quizResults?.user?.username,
@@ -77,6 +78,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
     collectionName: flashcardResults?.collectionName,
     createdAt: flashcardResults?.createdAt,
     user: {
+      id: flashcardResults?.user?.id,
       name: flashcardResults?.user?.name,
       image: flashcardResults?.user?.image,
       username: flashcardResults?.user?.username,

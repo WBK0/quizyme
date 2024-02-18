@@ -39,7 +39,7 @@ const Heading = ({ topic } : { topic: string }) => {
       },
       {
         pending: 'Creating quiz from flashcards...',
-        success: 'Quiz created!',
+        success: 'Quiz created! You will be soon redirected!',
         error: { render: ({ data }: { data?: { message: string } }) => data?.message || 'An error occurred while creating quiz from flashcards' },
       }
     )

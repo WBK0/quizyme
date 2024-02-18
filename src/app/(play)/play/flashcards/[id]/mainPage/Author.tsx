@@ -2,6 +2,7 @@
 import Share from "@/components/ShareModal/Share";
 import UserCard from "@/components/UserCard";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -18,6 +19,8 @@ const Author = ({ user } : AuthorProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const session = useSession();
 
   const { id } = useContext(GameContext);
 
@@ -51,6 +54,11 @@ const Author = ({ user } : AuthorProps) => {
       if(isSubmitting){
         throw new Error('Please wait a moment before following again.');
       };
+
+      if(session.data?.user?.id === user.id){
+        toast.error('You cannot follow yourself.');
+        return;
+      }
 
       setIsFollowing(following => !following)
       setIsSubmitting(true);

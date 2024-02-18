@@ -19,8 +19,6 @@ const Study = async ({ params } : { params : { slug: string }}) => {
 
   const url = data.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + data.id;
 
-  console.log(decodeURIComponent(slug));
-
   if(url !== decodeURIComponent(slug)) {
     return <NotFound />
   }
@@ -39,7 +37,11 @@ const Study = async ({ params } : { params : { slug: string }}) => {
             type={data.type}
           />
           <h1 className="font-bold text-center mt-12 text-xl">Guest the questions about <span className="font-black">{data.topic}{data.topic.includes("!") ? '' : '!'}</span></h1>
-          <Creator user={data.user} />
+          <Creator 
+            user={data.user} 
+            studyId={data.id}
+            type={data.type}
+          />
           <About
             description={data.description}
             type={data.type}
