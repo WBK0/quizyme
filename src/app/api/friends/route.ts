@@ -46,20 +46,16 @@ export const GET = async () => {
       );
     }
 
-    const friends = user.Following.map((following) => {
-      if(user.Following.find((follower) => {
-        follower.id !== following.id
-      })){
-        return null;
+    const friends = user.Followers.map((follower) => {
+      if(user.Followers.some((item) => (item.followerId === follower.followerId))){
+        return {
+          id: follower.followerId,
+          name: follower.follower.name,
+          image: follower.follower.image,
+          username: follower.follower.username
+        };
       }
-
-      return {
-        id: following.followingId,
-        name: following.following.name,
-        username: following.following.username,
-        image: following.following.image,
-      }
-    });
+    })
 
     return new Response(
       JSON.stringify({

@@ -58,7 +58,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                 </>
               )
               :
-              status ? (
+              type === 'flashcards' && status ? (
                 <>
                   <h6 className='font-semibold w-full'>
                     Status:  

@@ -9,8 +9,11 @@ type ActionButtonsProps = {
 }
 
 const ActionButtons = ({ type, id } : ActionButtonsProps) => {
-
   const router = useRouter();
+
+  const handleGoLearn = () => {
+    router.push(`/play/flashcards/${id}`);
+  }
 
   const handleGoQuiz = async () => {
     try {
@@ -32,7 +35,6 @@ const ActionButtons = ({ type, id } : ActionButtonsProps) => {
       }
 
       router.push(`/play/quiz/${json.gameId}`);
-
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message)
@@ -46,7 +48,7 @@ const ActionButtons = ({ type, id } : ActionButtonsProps) => {
         onClick={
           type === 'quiz' 
           ? handleGoQuiz 
-          : () => {}
+          : handleGoLearn
         }
       >
         GO {type === 'quiz' ? 'QUIZ' : 'LEARN'}
