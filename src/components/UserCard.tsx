@@ -1,6 +1,6 @@
 import Image from "next/image"
 import EasySpinner from "./Loading/EasySpinner";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type UserCardProps = {
   image: string;
@@ -14,11 +14,13 @@ type UserCardProps = {
 const UserCard = ({ image, name, username, isFollowing, handleFollow, handleShare } : UserCardProps) => {
   return (
     <div className="flex w-full mt-6 items-center">
-      <Image src={image} alt="User photo" width={64} height={64} className="rounded-full h-16" />
-      <div className="flex flex-col justify-center ml-3">
-        <p className="font-bold text-sm sm:text-lg mr-2">{name}</p>
-        <p className="font-light text-xs break-all mr-2">@{username}</p>
-      </div>
+      <Link href={`/profile/${username}`} className="flex">
+        <Image src={image} alt="User photo" width={64} height={64} className="rounded-full h-16" />
+        <div className="flex flex-col justify-center ml-3">
+          <p className="font-bold text-sm sm:text-lg mr-2">{name}</p>
+          <p className="font-light text-xs break-all mr-2">@{username}</p>
+        </div>
+      </Link>
       <div className="flex-1 flex justify-end items-end gap-3 sm:gap-6 flex-col sm:flex-row">
         {
           handleShare 
