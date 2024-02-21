@@ -5,9 +5,10 @@ import { useRef } from "react";
 
 type SearchbarProps = {
   onChange?: (value: string) => void;
+  value?: string;
 }
 
-const Searchbar = ({ onChange } : SearchbarProps) => {
+const Searchbar = ({ onChange, value } : SearchbarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   return (
@@ -18,6 +19,7 @@ const Searchbar = ({ onChange } : SearchbarProps) => {
         placeholder="Search..."
         className="w-full bg-transparent outline-none placeholder-gray-400 font-bold text-xl mr-4"
         ref={inputRef}
+        value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
       />
     </div>

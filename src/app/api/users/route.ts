@@ -9,6 +9,7 @@ export const GET = async (req: NextRequest) => {
 
     const skip = Number(searchParams.get("skip")) || 0;
     const limit = Number(searchParams.get("limit")) || 20;
+    const search = searchParams.get("search") || "";
 
     const session = await getServerSession(authOptions);
 
@@ -17,9 +18,23 @@ export const GET = async (req: NextRequest) => {
     let users = await prisma.user.findMany({
       where: {
         isComplete: true,
+        OR: [
+          {
+            username: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          }
+        ],        
         NOT: {
           id: session?.user.id,
-        },
+        }
       },
       select: {
         id: true,
