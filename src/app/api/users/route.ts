@@ -1,9 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
+    const searchParams = req.nextUrl.searchParams;
+
+    const skip = Number(searchParams.get("skip")) || 0;
+    const limit = Number(searchParams.get("limit")) || 20;
+
     const session = await getServerSession(authOptions);
 
     const prisma = new PrismaClient();
@@ -20,7 +26,9 @@ export const GET = async () => {
         name: true,
         username: true,
         image: true,
-      }
+      },
+      skip: skip,
+      take: limit,
     });
 
     if(!users){
