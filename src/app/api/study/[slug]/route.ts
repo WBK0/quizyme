@@ -31,7 +31,6 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
         user: true,
         code: true,
         collection: true,
-        // quizGameStats: true
       }
     }),
     prisma.flashcards.findFirst({
@@ -42,7 +41,6 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
         user: true,
         code: true,
         collection: true,
-        // FlashcardQuizStats: true
       }
     }),
   ]);

@@ -1,13 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
+import { toast } from "react-toastify";
 
-const SelectButton = ({ options, paramsName } : {options : string[], paramsName?: string}) => {
+const SelectButton = ({ options, paramsName, disable = false } : {options : string[], paramsName?: string, disable?: boolean}) => {
   const { changeParam, getParams } = useUrlParams();
   const params = getParams();
   const [type, setType] = useState<string>(params[paramsName || 'type'] || 'quizzes');
 
   const handleClick = (e : React.MouseEvent<HTMLButtonElement>) => {
+    if(disable){
+      toast.error('You cannot change the type of this content.')
+      return;
+    }
+
     const target = e.target as HTMLButtonElement; // Get information about button
     
     changeParam(paramsName || 'type', target.innerText.toLowerCase());

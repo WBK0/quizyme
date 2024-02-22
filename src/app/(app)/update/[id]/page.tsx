@@ -38,6 +38,7 @@ const Update = async ({ params } : { params : { id: string }}) => {
   return (
     <Content
       data={json.data}
+      id={id}
     />
   )
 }

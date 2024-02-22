@@ -31,6 +31,7 @@ type FormProps = {
     tags?: string[];
   };
   setLocalStorage: (value: {}) => void;
+  method: 'create' | 'update';
 }
 
 type Collection = {
@@ -65,7 +66,7 @@ const schema = yup.object().shape({
     .required('Tags is required'),
 });
 
-const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
+const Form = ({ type, localStorage, setLocalStorage, method } : FormProps) => {
   const { register, handleSubmit, setValue, watch, formState: {errors} } = useForm<FormInputs>({ resolver: yupResolver(schema) });
   const [collections, setCollections] = useState<Collection>([]);
 
@@ -83,7 +84,9 @@ const Form = ({ type, localStorage, setLocalStorage } : FormProps) => {
       type: type,
     });
 
-    router.push(`/create/${type}`)
+    if(method === 'create'){
+      router.push(`/create/${type}`)
+    }
   };
 
   useEffect(() => {

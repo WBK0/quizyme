@@ -1,12 +1,11 @@
-"use client";
 import { useRouter } from "next/navigation";
 
-const Buttons = () => {
+const Buttons = ({ setView } : { setView: React.Dispatch<React.SetStateAction<number>> }) => {
   const router = useRouter();
 
   const handleConfirm = () => {
     if(confirm('All players will lost their progress if you update this study. Are you sure?')){
-      console.log('confirmed')
+      setView(1);
     }
   }
 

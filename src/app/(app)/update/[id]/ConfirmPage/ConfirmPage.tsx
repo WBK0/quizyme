@@ -9,9 +9,10 @@ type ConfirmPageProps = {
     topic: string;
     type: 'quiz' | 'flashcards';
   }
+  setView: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ConfirmPage = ({ data } : ConfirmPageProps) => {
+const ConfirmPage = ({ data, setView } : ConfirmPageProps) => {
   return (
     <div className="flex items-center flex-col w-full left-0 py-24">
       <div className="relative">
@@ -24,7 +25,7 @@ const ConfirmPage = ({ data } : ConfirmPageProps) => {
         <h1 className="font-black text-center mt-6 text-xl">{data.topic}{data.topic.includes("!") ? '' : '!'}</h1>
       </div>
       <p className="font-extrabold text-normal text-red py-2.5">All players will lost their progress if you update this study.</p>
-      <Buttons />
+      <Buttons setView={setView} />
     </div>
   )
 }

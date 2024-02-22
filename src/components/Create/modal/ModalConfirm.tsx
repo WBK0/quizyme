@@ -16,18 +16,7 @@ const ModalConfirm = ({ setImage, image, handleCloseModal } : ModalConfirmProps)
   }
 
   const handleDecline = async () => {
-    try {
-      const filename = image.split('/').pop();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CDN_URL}/delete/${filename}`, {
-        method: 'DELETE'
-      })
-
-      if(response.ok){
-        setImage && setImage('');
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    setImage && setImage('');
   }
 
   const handleAccept = async () => {
