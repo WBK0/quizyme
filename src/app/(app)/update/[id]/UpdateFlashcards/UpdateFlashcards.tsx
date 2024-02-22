@@ -1,19 +1,19 @@
 "use client";
-import Form from "./form/Form";
-import Actions from "./actions/Actions";
 import UseFormProvider from "@/providers/create-flashcards/UseFormProvider";
-import Header from "./Header";
 import DataProvider from "@/providers/create-flashcards/DataProvider";
+import Actions from "@/app/(app)/create/flashcards/actions/Actions";
+import Header from "@/app/(app)/create/flashcards/Header";
+import Form from "@/app/(app)/create/flashcards/form/Form";
 
-const CreateFlashcards = () => {
+const UpdateFlashcards = () => {
   return (
     <div>
       <UseFormProvider>
         <DataProvider>
-          <Actions method="create"/>
+          <Actions method="update" />
           <div className="max-w-4xl mx-auto px-3">
             <Header 
-              method="create"
+              method="update"
             />
             <Form />
           </div>
@@ -23,4 +23,4 @@ const CreateFlashcards = () => {
   )
 }
 
-export default CreateFlashcards;
+export default UpdateFlashcards;

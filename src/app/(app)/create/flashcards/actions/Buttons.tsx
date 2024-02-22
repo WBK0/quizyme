@@ -6,19 +6,19 @@ import { toast } from "react-toastify";
 import { FormInputs } from "../types/FormInputs";
 
 type ButtonsProps = {
-  setModal: (action: 'publish' | 'delete' | null) => void;
+  setModal: (action: 'publish' | 'delete' | 'update' | null) => void;
+  method: 'create' | 'update';
 }
 
-const Buttons = ({ setModal } : ButtonsProps) => {
-  const { handleSubmit, errors } = useContext(UseFormContext);
+const Buttons = ({ setModal, method } : ButtonsProps) => {
+  const { handleSubmit } = useContext(UseFormContext);
   const router = useRouter();
 
   const onPublic = () => {
-    setModal('publish');
+    setModal(method === 'create' ? 'publish' : 'update');
   }
  
   const onPublicError: SubmitErrorHandler<FormInputs> = (error) => {
-    console.log(error)
     if (!error.flashcards || typeof error.flashcards !== 'object') {
       return;
     }
@@ -52,7 +52,7 @@ const Buttons = ({ setModal } : ButtonsProps) => {
         className="rounded-full py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-green hover:scale-105 duration-300 w-48"
         onClick={handleSubmit(onPublic, onPublicError)}
       >
-        Public
+        {method === 'create' ? 'Public' : 'Update'}
       </button>
       <button
         type="button"

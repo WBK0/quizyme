@@ -5,13 +5,13 @@ import { DataContext } from "@/providers/create-flashcards/DataProvider";
 import { useContext } from "react";
 
 type ModalProps = {
-  modal: 'publish' | 'delete' | null;
+  modal: 'publish' | 'delete' | 'update' | null;
   handleCloseModal: () => void;
   length: number;
 }
 
 const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
-  const [value, setValue, removeLocalStorage] = useLocalStorage('create-form', {});
+  const [value, removeLocalStorage] = useLocalStorage('create-form', {});
   const { setFormValues } = useContext(DataContext);
   const router = useRouter();
 
@@ -32,8 +32,8 @@ const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
             <button 
               className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-blue hover:scale-105 duration-300 capitalize"
               type="button"
-              onClick={() => modal === 'publish' 
-                ? onSubmit({formValues: value, setFormValues, removeLocalStorage, router })
+              onClick={() => modal === 'publish' || modal === 'update'
+                ? onSubmit({formValues: value, setFormValues, removeLocalStorage, router, method: modal === 'publish' ? 'create' : 'update', id: value.id})
                 : onDelete
               }
             >

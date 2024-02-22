@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ConfirmPage from "./ConfirmPage/ConfirmPage";
 import UpdatePage from "./UpdatePage/UpdatePage";
+import UpdateFlashcards from "./UpdateFlashcards/UpdateFlashcards";
 
 type ContentProps = {
   data: {
@@ -19,28 +20,32 @@ const Content = ({ data, id } : ContentProps) => {
 
   return (
     <>
-    {
-      (() => {
-        switch (view) {
-          case 0:
-            return(
-              <ConfirmPage 
-                data={data}
-                setView={setView}
-              />
-            )
-          case 1:
-            return(
-              <UpdatePage
-                id={id}
-              />
-            )
-          default:
-            break;
-        }
-      })()
-    }
-    
+      {
+        (() => {
+          switch (view) {
+            case 0:
+              return(
+                <ConfirmPage 
+                  data={data}
+                  setView={setView}
+                />
+              )
+            case 1:
+              return(
+                <UpdatePage
+                  id={id}
+                  setView={setView}
+                />
+              )
+            case 2:
+              return(
+                <UpdateFlashcards />
+              )
+            default:
+              break;
+          }
+        })()
+      }
     </>
   )
 }

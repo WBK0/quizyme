@@ -37,10 +37,11 @@ const CreatePage = () => {
   return (
     <div className="px-3 max-w-3xl mx-auto">
       {
-        !value?.type && isClient
+        isClient
         ? <SelectButton
             options={['quiz', 'flashcards']}
             paramsName="type"
+            disable={value.type ? true : false}
           />
         : null
       }

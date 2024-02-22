@@ -5,7 +5,7 @@ import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
 const Form = () => {
-  const { handleSubmit, append, move } = useContext(UseFormContext);
+  const { append, move } = useContext(UseFormContext);
   const { setLastEddited } = useContext(DataContext);
 
   const handleAppend = () => {

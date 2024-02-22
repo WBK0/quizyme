@@ -3,9 +3,9 @@ import Buttons from "./Buttons";
 import Modal from "./Modal";
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
-const Actions = () => {
+const Actions = ({ method } : { method: 'update' | 'create' }) => {
   const [showButtons, setShowButtons] = useState(false);
-  const [modal, setModal] = useState<'publish' | 'delete' | null>(null);
+  const [modal, setModal] = useState<'publish' | 'delete' | 'update' | null>(null);
   const [ length, setLength ] = useState(0);
 
   const { formValues, lastEditted } = useContext(DataContext);
@@ -47,12 +47,12 @@ const Actions = () => {
            <div className="xl:hidden flex gap-3 flex-col">
               {
                 showButtons
-                ? <Buttons setModal={setModal} />
+                ? <Buttons setModal={setModal} method={method} />
                 : null
               } 
             </div>
             <div className="hidden xl:flex xl:flex-col gap-4">
-              <Buttons setModal={setModal} />
+              <Buttons setModal={setModal} method={method} />
             </div>  
         </div>      
       </div>

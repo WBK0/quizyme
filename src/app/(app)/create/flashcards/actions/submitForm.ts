@@ -5,6 +5,8 @@ type OnSubmitProps = {
   removeLocalStorage: Function,
   setFormValues: Function,
   router: any,
+  method: 'create' | 'update',
+  id: string
 }
 
 type FormValues = {
@@ -20,7 +22,7 @@ type FormValues = {
   }>
 }
 
-export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router} : OnSubmitProps) => {
+export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router, method, id} : OnSubmitProps) => {
   if(!formValues.flashcards || formValues.flashcards?.length < 5){
     toast.error('You need to add at least five flashcards');
     return;
@@ -28,7 +30,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
 
   toast.promise(
     async () => {
-      const response = await fetch('/api/create/flashcards', {
+      const response = await fetch(method === 'create' ? '/api/create/flashcards' : `/api/update/${id}/flashcards`, {
         method: 'POST',
         body: JSON.stringify({
           topic: formValues.topic,

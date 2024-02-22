@@ -32,6 +32,7 @@ type FormProps = {
   };
   setLocalStorage: (value: {}) => void;
   method: 'create' | 'update';
+  nextStep?: () => void;
 }
 
 type Collection = {
@@ -66,7 +67,7 @@ const schema = yup.object().shape({
     .required('Tags is required'),
 });
 
-const Form = ({ type, localStorage, setLocalStorage, method } : FormProps) => {
+const Form = ({ type, localStorage, setLocalStorage, method, nextStep } : FormProps) => {
   const { register, handleSubmit, setValue, watch, formState: {errors} } = useForm<FormInputs>({ resolver: yupResolver(schema) });
   const [collections, setCollections] = useState<Collection>([]);
 
@@ -86,6 +87,8 @@ const Form = ({ type, localStorage, setLocalStorage, method } : FormProps) => {
 
     if(method === 'create'){
       router.push(`/create/${type}`)
+    }else{
+      nextStep && nextStep();
     }
   };
 
@@ -162,7 +165,7 @@ const Form = ({ type, localStorage, setLocalStorage, method } : FormProps) => {
       <button
         className="mx-auto rounded-full px-8 py-3 outline-none font-bold text-lg bg-black text-white mt-16 box-shadow shadow-small shadow-blue hover:scale-105 duration-300"
       >
-        ADD {type === 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
+        {method === 'create' ? 'ADD' : 'UPDATE'} {type === 'quiz' ? 'QUESTIONS' : 'FLASHCARDS'}
       </button>
     </form>
   );

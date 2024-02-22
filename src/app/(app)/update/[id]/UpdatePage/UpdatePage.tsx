@@ -7,7 +7,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect, useState } from "react";
 
-const UpdatePage = ({ id } : { id: string }) => {
+const UpdatePage = ({ id, setView } : { id: string, setView: React.Dispatch<React.SetStateAction<number>> }) => {
   const { getParams, changeParam } = useUrlParams();
   const [value, setValue] = useLocalStorage('create-form', {});
   const [loading, setLoading] = useState(true);
@@ -25,6 +25,10 @@ const UpdatePage = ({ id } : { id: string }) => {
     setModal(!modal);
   };
 
+  const nextStep = () => {
+    setView(2)
+  }
+
   const getStudyData = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/update/${id}`)
@@ -33,6 +37,7 @@ const UpdatePage = ({ id } : { id: string }) => {
 
       setValue({
         ...value,
+        id: id,
         type: json.data.type,
         mainImage: json.data.image,
         topic: json.data.topic,
@@ -40,7 +45,8 @@ const UpdatePage = ({ id } : { id: string }) => {
         collection: json.data.collection.name,
         visibility: json.data.visibility,
         points: json.data.points || null,
-        tags: json.data.tags
+        tags: json.data.tags,
+        flashcards: json.data.flashcards
       })
 
       changeParam('type', json.type);
@@ -59,37 +65,38 @@ const UpdatePage = ({ id } : { id: string }) => {
   return (<>
     {
       !loading ? 
-      <div className="px-3 max-w-3xl mx-auto">
-        {
-          !value?.type && isClient
-          ? <SelectButton
-              options={['quiz', 'flashcards']}
-              paramsName="type"
-              disable={true}
-            />
-          : null
-        }
-        <ImageInput
-          isClient={isClient}
-          mainImage={value.mainImage}
-          handleModal={handleModal}
-        />
-        <Form
-          type={getParams().type}
-          localStorage={value}
-          setLocalStorage={setValue}
-          method="update"
-        />
-        {
-          modal && (
-            <ModalPicture 
-              handleCloseModal={handleModal}
-              image={value.mainImage}
-              setImage={setImage}
-            />
-          )
-        }
-      </div>
+        <div className="px-3 max-w-3xl mx-auto">
+          {
+            isClient
+            ? <SelectButton
+                options={['quiz', 'flashcards']}
+                paramsName="type"
+                disable={true}
+              />
+            : null
+          }
+          <ImageInput
+            isClient={isClient}
+            mainImage={value.mainImage}
+            handleModal={handleModal}
+          />
+          <Form
+            type={getParams().type}
+            localStorage={value}
+            setLocalStorage={setValue}
+            method="update"
+            nextStep={nextStep}
+          />
+          {
+            modal && (
+              <ModalPicture 
+                handleCloseModal={handleModal}
+                image={value.mainImage}
+                setImage={setImage}
+              />
+            )
+          }
+        </div>
       : 
         <div className="w-full justify-center flex flex-col items-center absolute top-0 left-0 h-screen">
           <Spinner />
