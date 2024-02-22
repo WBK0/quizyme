@@ -30,7 +30,8 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
       include: {
         user: true,
         code: true,
-        collection: true
+        collection: true,
+        // quizGameStats: true
       }
     }),
     prisma.flashcards.findFirst({
@@ -40,7 +41,8 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
       include: {
         user: true,
         code: true,
-        collection: true
+        collection: true,
+        // FlashcardQuizStats: true
       }
     }),
   ]);
@@ -64,6 +66,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
       image: quizResults?.user?.image,
       username: quizResults?.user?.username,
     },
+    length: quizResults?.stats.questions,
     code: quizResults?.code.code
   }
 
@@ -83,6 +86,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
       image: flashcardResults?.user?.image,
       username: flashcardResults?.user?.username,
     },
+    length: flashcardResults?.stats.flashcards,
     code: flashcardResults?.code.code
   }
   

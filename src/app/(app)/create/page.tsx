@@ -1,7 +1,5 @@
 "use client";
 import SelectButton from "@/components/SelectButton";
-import camera from '@/public/camera.svg';
-import Image from "next/image";
 import Form from "./components/Form";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect, useState } from "react";

@@ -3,14 +3,15 @@ import logo from "@/public/logo.svg";
 import Link from "next/link";
 
 type NotFoundProps = {
+  code?: number;
   message: string;
   redirectTo: string;
   url?: string;
 }
 
-const NotFound = ({ message, redirectTo, url } : NotFoundProps) => {
+const NotFound = ({ code = 404, message, redirectTo, url } : NotFoundProps) => {
   return (
-    <div className="absolute min-h-screen w-full flex flex-col justify-center top-0 gap-12">
+    <div className="absolute min-h-screen w-full flex flex-col justify-center top-0 gap-12 left-0">
       <Image 
         src={logo} 
         width={256} 
@@ -19,7 +20,7 @@ const NotFound = ({ message, redirectTo, url } : NotFoundProps) => {
         className="mx-auto"
       />
       <div className="max-w-lg mx-auto">
-        <h1 className="font-black text-6xl text-center">404</h1>
+        <h1 className="font-black text-6xl text-center">{code}</h1>
         <p className="text-center pt-6 font-semibold text-xl">
           {message}
         </p>  
