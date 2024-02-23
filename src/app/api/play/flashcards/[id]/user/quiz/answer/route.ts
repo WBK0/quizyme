@@ -118,6 +118,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
           status: "Success",
           message: "Time to answer expired",
           questionsLeft: flashcardsQuizGame.questions.length - flashcardsQuizGame.actualQuestion - 1,
+          correctAnswers: flashcardsQuizGame.correctAnswers,
           errorId: 102
         }),
         { status: 200 }
@@ -184,6 +185,7 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
         message: result === true ? "You successfully answered the question" : "Incorrect! Your answer is wrong.",
         isCorrect: result === true,
         correctAnswer: result === true ? answer : result,
+        correctAnswers: flashcardsQuizGame.correctAnswers + (result === true ? 1 : 0),
         questionsLeft: flashcardsQuizGame.questions.length - flashcardsQuizGame.actualQuestion - 1
       }),
       { status: 200 }

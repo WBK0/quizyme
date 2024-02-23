@@ -7,7 +7,7 @@ import GameData from "./GameData.type";
 type AnsweredProps = {
   gameData: GameData;
   id: string;
-  setAnswered: React.Dispatch<React.SetStateAction<{questionsLeft: number} | {pointsGet: number, pointsTotal: number, questionsLeft: number} | null>>;
+  setAnswered: React.Dispatch<React.SetStateAction<{questionsLeft: number, correctAnswers?: number} | null>>;
   setStopTimer: React.Dispatch<React.SetStateAction<boolean>>;
   stopTimer: boolean;
 }
@@ -42,7 +42,7 @@ const Answers = ({ gameData, id, setAnswered, setStopTimer, stopTimer } : Answer
         setCorrectAnswer(dataResponse.correctAnswer)
 
         setTimeout(() => {
-          setAnswered({pointsGet: dataResponse.pointsGet, pointsTotal: dataResponse.pointsTotal, questionsLeft: dataResponse.questionsLeft});
+          setAnswered((prev) => ({questionsLeft: dataResponse.questionsLeft, correctAnswers: dataResponse.correctAnswers || prev?.correctAnswers}));
           setStopTimer(false);
         }, 3200)
 

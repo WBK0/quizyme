@@ -28,6 +28,8 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
       }
     });
 
+    
+
     if(!flashcardsQuizGame) {
       return new Response(
         JSON.stringify({

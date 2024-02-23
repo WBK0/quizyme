@@ -4,8 +4,8 @@ import GameData from "./GameData.type";
 
 type AfterAnswerProps = {
   getQuestion: () => void;
-  answered: {questionsLeft: number};
-  setAnswered: React.Dispatch<React.SetStateAction<{ questionsLeft: number} | null>>;
+  answered: {questionsLeft: number, correctAnswers?: number};
+  setAnswered: React.Dispatch<React.SetStateAction<{ questionsLeft: number, correctAnswers?: number} | null>>;
   gameData: GameData;
 }
 
@@ -76,8 +76,12 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
         {
           step === 0 ?
           <>
-            <h6 className="text-5xl font-black text-white"><p className="text-8xl text-center mb-6">{answered.questionsLeft}</p> {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT </h6>
-            
+            <h6 className="text-5xl font-black text-white"><p className="text-8xl text-center mb-6">{answered.questionsLeft}</p> {answered.questionsLeft === 1 ? 'QUESTION' : 'QUESTIONS'} LEFT </h6>
+            {
+              answered.correctAnswers ?
+                <h6 className="w-full text-center text-2xl text-white font-black">{answered.correctAnswers} CORRECT {answered.correctAnswers === 1 ? 'ANSWER': 'ANSWERS'}</h6>
+              : null
+            }
           </>
           : step === 1 ? (
             <div className="animate-left-to-right gap-12 flex items-center justify-center flex-col">

@@ -68,7 +68,7 @@ export const POST = async (req: NextRequest, {params} : {params : {id: string}})
     
     const getDefinitionForTrueFalse = (element : number) => {
       const isTrue = Number((Math.random() * 1000).toFixed(0)) % 2 === 0;
-      
+
       let randomNumber = 0;
 
       if(!isTrue) {
@@ -87,7 +87,7 @@ export const POST = async (req: NextRequest, {params} : {params : {id: string}})
 
     const questions = questionsOrder.map((element) => {
       // 33.3% chance for true / false type, 66.6% for quiz type 
-      const type = Math.random() > 0.333 ? "Quiz" : "True / False";
+      const type = Number((Math.random() * 1000).toFixed(0)) % 3 > 0 ? "Quiz" : "True / False";
 
       const trueFalseDefinition = getDefinitionForTrueFalse(element);
 

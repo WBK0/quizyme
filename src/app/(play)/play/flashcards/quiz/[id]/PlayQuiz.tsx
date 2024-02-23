@@ -12,11 +12,12 @@ import Finished from "./Finished";
 
 const PlayQuiz = ({ id } : { id: string }) => {
   const [gameData, setGameData] = useState<GameData>();
-  const [answered, setAnswered] = useState<{ questionsLeft: number } | null>(null);
+  const [answered, setAnswered] = useState<{ questionsLeft: number, correctAnswers?: number} | null>(null);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [stopTimer, setStopTimer] = useState(false);
   const [welcomeScreen, setWelcomeScreen] = useState(false);
   const [displayQuestion, setDisplayQuestion] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
   const nextQuestion = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/next`, {
@@ -31,6 +32,7 @@ const PlayQuiz = ({ id } : { id: string }) => {
 
   const getQuestion = async () => {
     try {
+      setFetching(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz`, {
         method: 'GET',
         cache: 'no-cache',
@@ -57,6 +59,7 @@ const PlayQuiz = ({ id } : { id: string }) => {
   
       setIsFinished(data?.isFinished)
       setGameData(data.data);
+      setFetching(false);
     } catch (error) {
       return(
         <NotFound
@@ -87,23 +90,32 @@ const PlayQuiz = ({ id } : { id: string }) => {
         displayQuestion && gameData?.question
           ? 
             <div className="md:pt-14 pt-24 flex flex-col gap-16 min-h-screen justify-center pb-10">
-              <Heading 
-                gameData={gameData}
-                stopTimer={stopTimer}
-                answered={answered}
-                setAnswered={setAnswered}
-                getQuestion={getQuestion}
-              />
-              <Question 
-                gameData={gameData}
-              />
-              <Answers 
-                gameData={gameData}
-                id={id}
-                setAnswered={setAnswered}
-                setStopTimer={setStopTimer}
-                stopTimer={stopTimer}
-              />
+              {
+                !fetching
+                ?
+                <>
+                  <Heading 
+                    gameData={gameData}
+                    stopTimer={stopTimer}
+                    answered={answered}
+                    setAnswered={setAnswered}
+                    getQuestion={getQuestion}
+                  />
+                  <Question 
+                    gameData={gameData}
+                  />
+                  <Answers 
+                    gameData={gameData}
+                    id={id}
+                    setAnswered={setAnswered}
+                    setStopTimer={setStopTimer}
+                    stopTimer={stopTimer}
+                  />
+                </>
+                : <div className="flex w-full justify-center z-0">
+                    <Spinner />
+                  </div>
+              } 
               {
                 answered
                 ? 
