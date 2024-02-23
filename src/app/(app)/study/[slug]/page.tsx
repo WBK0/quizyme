@@ -46,7 +46,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
             description={data.description}
             type={data.type}
             hashtags={data.tags}
-            createdAt={data.createdAt}
+            updatedAt={data.updatedAt}
           />
           <QuizCode
             code={data.code}

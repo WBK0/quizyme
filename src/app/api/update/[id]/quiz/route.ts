@@ -1,15 +1,13 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { schema } from "@/app/api/create/flashcards/schema";
+import { schema } from "@/app/api/create/quiz/schema";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { NextRequest } from "next/server"
+import { NextRequest } from "next/server";
 
 export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}) => {
   try {
-    const { topic, visibility, tags, image, description, collectionName, flashcards, userId } = await req.json();
-
     const session = await getServerSession(authOptions);
-    
+
     if(!session){
       return new Response(
         JSON.stringify({
@@ -20,16 +18,22 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
       );
     }
 
+    const { topic, visibility, tags, pointsMethod, image, description, collectionName, questions } = await req.json();
+
+    await schema.validate({
+      topic, visibility, tags, pointsMethod, image, description, collectionName, questions, userId: session.user.id
+    }, { abortEarly: false });
+
     const prisma = new PrismaClient();
 
-    const flashcardsSet = await prisma.flashcards.findFirst({
+    const quiz = await prisma.quiz.findFirst({
       where: {
         id: params.id,
         userId: session.user.id
       }
     })
 
-    if(!flashcardsSet){
+    if(!quiz){
       return new Response(
         JSON.stringify({
           status: "Error",
@@ -39,12 +43,8 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
       );
     }
 
-    await schema.validate({
-      topic, visibility, tags, image, description, collectionName, flashcards, userId: session.user.id
-    }, { abortEarly: false });
-
-    const updateFlashcards = await prisma.$transaction([
-      prisma.flashcards.update({
+    const updateQuiz = await prisma.$transaction([
+      prisma.quiz.update({
         where: {
           id: params.id
         },
@@ -52,44 +52,50 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
           topic: topic,
           visibility: visibility,
           tags: tags,
+          pointsMethod: pointsMethod,
           image: image,
           description: description,
           collectionName: collectionName,
           stats: {
-            flashcards: flashcards.length,
+            questions: questions.length,
           },
-          flashcards:
-            flashcards.map((flashcard: any) => {
+          questions:
+            questions.map((question: any) => {
               return {
-                concept: flashcard.concept,
-                definition: flashcard.definition,
+                question: question.question,
+                points: question.points,
+                time: question.time,
+                type: question.type,
+                image: question.image,
+                answers:
+                  question.answers.map((answer: any) => {
+                    return {
+                      answer: answer.answer,
+                      isCorrect: answer.isCorrect,
+                    }
+                  })
               }
             })
-          }
-      }),
-      prisma.flashcardQuizStats.deleteMany({
-        where: {
-          flashcardsId: params.id
         }
       }),
-      prisma.flashcardQuiz.deleteMany({
+      prisma.quizGameStats.deleteMany({
         where: {
-          flashcardsId: params.id
+          quizId: params.id
         }
       }),
-      prisma.flashcardsGame.deleteMany({
+      prisma.quizGame.deleteMany({
         where: {
-          flashcardsId: params.id
+          quizId: params.id
         }
       }),
       prisma.invitation.deleteMany({
         where: {
-          flashcardsId: params.id
+          quizId: params.id
         }
-      }),
+      })
     ]);
 
-    if(!updateFlashcards){
+    if(!updateQuiz){
       return new Response(
         JSON.stringify({
           status: "Error",
@@ -102,8 +108,8 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
     return new Response(
       JSON.stringify({
         status: "Success",
-        message: "Updated flashcards successfully",
-        id: flashcardsSet.id
+        message: "Updated study successfully",
+        id: quiz.id
       }),
       { status: 200 }
     );
@@ -117,4 +123,4 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
       { status: 500 }
     );
   }
-}
+};

@@ -77,8 +77,6 @@ export const POST = async (req: Request) => {
     );
 
   } catch (error: unknown) {
-    console.error(error);
-
     if (error instanceof yup.ValidationError) {
       const validationErrors = error.errors.map(err => err.toString());
       return new Response(

@@ -36,7 +36,7 @@ const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmMo
               'Are you sure you want to delete this quiz?'}</h2>
             <p className="text-center mt-4 font-semibold text-lg">Your quiz contains {questions} questions</p>
             {warning ? (
-              <div className='flex flex-col items-center mt-8 mb-8'>
+              <div className='flex flex-col items-center mt-4'>
                 <Image src={caution} width={32} height={32} alt='Caution image' />
                 <p className="text-center text-red font-bold">
                   {warning}
@@ -44,6 +44,11 @@ const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmMo
               </div>
             )
             : null
+            }
+            {
+              type === 'update' ?
+              <p className="text-center mt-2 font-black mb-4 text-red">All players will lost their progress if you update this study.</p>
+              : null
             }
           </div>
           <div className="flex mb-5 flex-wrap gap-4">

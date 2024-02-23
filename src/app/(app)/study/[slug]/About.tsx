@@ -2,12 +2,12 @@ type DescriptionProps = {
   description: string;
   type: string;
   hashtags: string[];
-  createdAt: string;
+  updatedAt: string;
 }
 
-const About = ({ description, type, hashtags, createdAt } : DescriptionProps) => {
+const About = ({ description, type, hashtags, updatedAt } : DescriptionProps) => {
   const currentDate = new Date();
-  const timeDifference = currentDate.getTime() - new Date(createdAt).getTime();
+  const timeDifference = currentDate.getTime() - new Date(updatedAt).getTime();
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
   return (
