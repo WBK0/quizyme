@@ -31,7 +31,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
   toast.promise(
     async () => {
       const response = await fetch(method === 'create' ? '/api/create/flashcards' : `/api/update/${id}/flashcards`, {
-        method: 'POST',
+        method: method === 'create' ? 'POST' : 'PATCH',
         body: JSON.stringify({
           topic: formValues.topic,
           visibility: formValues.visibility,
@@ -64,9 +64,9 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
       router.push(`/study/${formValues.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${data.id}`);
     },
     {
-      pending: 'Creating flashcards...',
-      success: 'Flashcards created!',
-      error: 'Error creating flashcards'
+      pending: `${method === 'create' ? 'Creating' : 'Updating'} flashcards...`,
+      success: `Flashcards ${method === 'create' ? 'Created' : 'Updated'}!`,
+      error: `Error ${method === 'create' ? 'creating' : 'updating'} flashcards`
     }
   )
 }

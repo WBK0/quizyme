@@ -27,6 +27,11 @@ const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
           <div>
             <h2 className="font-bold text-2xl text-center mt-8">Are you sure you want to {modal} this flashcards set?</h2>
             <h6 className="text-center font-semibold text-lg mt-5">Your set of flashcards contains {length} concepts</h6>
+            {
+              modal === 'update' ?
+              <h6 className="text-red font-semibold mt-2 text-center">All players will lost their progress if you update this study.</h6>
+              : null
+            }
           </div>
           <div className="flex py-5 gap-4">
             <button 

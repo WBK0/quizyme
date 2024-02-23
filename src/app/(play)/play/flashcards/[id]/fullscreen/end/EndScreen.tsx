@@ -6,9 +6,13 @@ import arrowLeft from './arrowLeft.svg';
 import { useContext } from "react";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const EndScreen = () => {
   const { flashcards, setActualCard, setIsEnded, id } = useContext(GameContext)
+
+  const router = useRouter();
 
   const handlePreviousCard = () => {
     updateGameData({id, isEnded: false})
@@ -19,6 +23,30 @@ const EndScreen = () => {
     updateGameData({id, isEnded: false, actualFlashcard: 0})
     setIsEnded(false)
     setActualCard(0)
+  }
+
+  const handleStartQuiz = () => {
+    toast.promise(
+      async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/create`, {
+          method: 'POST',
+          cache: 'no-cache',
+        });
+
+        const data = await response.json();
+
+        if(!response.ok){
+          throw new Error(data.error)
+        }
+
+        router.push(`/play/flashcards/quiz/${data.quizId}`)
+      },
+      {
+        pending: 'Creating quiz from flashcards...',
+        success: 'Quiz created! You will be soon redirected!',
+        error: { render: ({ data }: { data?: { message: string } }) => data?.message || 'An error occurred while creating quiz from flashcards' },
+      }
+    )
   }
 
   return (
@@ -50,6 +78,7 @@ const EndScreen = () => {
           <button
             type="button"
             className="bg-black rounded-full py-6 text-white font-bold w-full text-lg lg:text-2xl duration-300 hover:scale-105"
+            onClick={handleStartQuiz}
           >
             <span className="flex justify-center gap-4 items-center"><Image src={test} height={32} alt="test" className="h-6 md:h-8" /> TEST MY KNOWLEDGE</span>
           </button>

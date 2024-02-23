@@ -25,8 +25,6 @@ export const POST = async (req: Request) => {
   const { topic, visibility, tags, image, description, collectionName, flashcards } = await req.json();
 
   try {
-    connectToDB();
-
     await schema.validate({
       topic, visibility, tags, image, description, collectionName, flashcards, userId
     }, { abortEarly: false });
@@ -66,8 +64,6 @@ export const POST = async (req: Request) => {
     );
 
   } catch (error: unknown) {
-    console.error(error);
-
     if (error instanceof yup.ValidationError) {
       const validationErrors = error.errors.map(err => err.toString());
       return new Response(

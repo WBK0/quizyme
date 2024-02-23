@@ -86,7 +86,6 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
     }
 
     let result; 
-    let points = 0;
 
     if(flashcardsQuizGame?.timeToRespond < new Date()){
       const updateQuiz = await prisma.flashcardQuiz.update({

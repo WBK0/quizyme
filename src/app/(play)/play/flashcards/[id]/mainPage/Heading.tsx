@@ -1,13 +1,22 @@
 "use client";
+import EasySpinner from "@/components/Loading/EasySpinner";
+import useUrlParams from "@/hooks/useUrlParams";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
 const Heading = ({ topic } : { topic: string }) => {
   const { setFilter, filter, filterFlashcards, id } = useContext(GameContext);
+  const { changeParam } = useUrlParams()
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  const handleChangeParam = () => {
+    setLoading(true);
+    changeParam('fullscreen', 'true');
+  }
 
   const handleFilter = (filter: 'liked' | 'unliked' | 'all') => {
     toast.info(`Set learing mode to ${filter} concepts`, {
@@ -35,7 +44,6 @@ const Heading = ({ topic } : { topic: string }) => {
         }
 
         router.push(`/play/flashcards/quiz/${data.quizId}`)
-      
       },
       {
         pending: 'Creating quiz from flashcards...',
@@ -51,8 +59,9 @@ const Heading = ({ topic } : { topic: string }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mt-8 gap-4 xl:gap-6">
         <button
           className="bg-black text-white shadow-small shadow-green rounded-2xl w-full py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"
+          onClick={handleChangeParam}
         >
-          Flashcards
+          {loading ? <EasySpinner /> : 'Flashcards'}
         </button>
         <button
           className="bg-black text-white shadow-small shadow-green w-full rounded-2xl py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"

@@ -10,7 +10,9 @@ import Fullscreen from "./fullscreen/Fullscreen";
 const Flashcards = async ({ params, searchParams } : { params : { id: string }, searchParams: {fullscreen?: string}}) => {
   const { id } = params;
 
-  const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`);
+  const flashcards = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}`, {
+    cache: "no-cache",
+  });
   const flashcardsSet = await flashcards.json();
 
   if(!flashcards.ok){
@@ -27,11 +29,11 @@ const Flashcards = async ({ params, searchParams } : { params : { id: string }, 
 
   if(session) {
     const flashcardsGame = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user`, {
-      headers: headers()
+      headers: headers(),
+      cache: "no-cache",
     })
 
     flashcardsGameData = await flashcardsGame.json();
-  
   }
 
   return (
