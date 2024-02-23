@@ -10,7 +10,7 @@ type ConfirmModalProps = {
   handleCloseModal: () => void;
   questions: number;
   warning?: string;
-  type: 'publish' | 'delete' | null;
+  type: 'publish' | 'delete' | 'update' | null;
 }
 
 const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmModalProps) => {
@@ -30,7 +30,10 @@ const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmMo
       <div className="flex items-center h-full justify-center">
         <div className="bg-white w-full max-w-lg h-fit min-h-[300px] relative rounded-2xl pb-2 sm:px-6 px-3 flex justify-between flex-col">
           <div className="">
-            <h2 className="text-center mt-8 font-bold text-2xl">{type === 'publish' ? 'Are you sure you want to publish this quiz?' : 'Are you sure you want to delete this quiz?'}</h2>
+            <h2 className="text-center mt-8 font-bold text-2xl">
+              {type === 'publish' ? 'Are you sure you want to publish this quiz?' : 
+              type === 'update' ? 'Are you sure you want to update this quiz?' :
+              'Are you sure you want to delete this quiz?'}</h2>
             <p className="text-center mt-4 font-semibold text-lg">Your quiz contains {questions} questions</p>
             {warning ? (
               <div className='flex flex-col items-center mt-8 mb-8'>
@@ -45,18 +48,18 @@ const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmMo
           </div>
           <div className="flex mb-5 flex-wrap gap-4">
             <button 
-              className={`mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-${type === 'publish' ? 'blue' : 'red'} hover:scale-105 duration-300`}
+              className={`mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-${type === 'publish' || type === 'update' ? 'blue' : 'red'} hover:scale-105 duration-300`}
               type='button'
               onClick={() => {
-                type === 'publish' ?
-                  onSubmit({formValues: value, removeLocalStorage, setFormValues, router })
+                type === 'publish' || type === 'update' ?
+                  onSubmit({formValues: value, removeLocalStorage, setFormValues, router, method: type === 'publish' ? 'create' : 'update', id: value.id})
                 : deleteQuiz();
               }}
             >
-              {type === 'publish' ? 'Publish' : 'Delete'}
+              {type === 'publish' ? 'Publish' : type === 'update' ? 'Update' : 'Delete'}
             </button>
             <button 
-              className={`mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-${type === 'publish' ? 'red' : 'blue'} hover:scale-105 duration-300`}
+              className={`mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-${type === 'publish' || type === 'update' ? 'red' : 'blue'} hover:scale-105 duration-300`}
               onClick={handleCloseModal}
             >
               Decline

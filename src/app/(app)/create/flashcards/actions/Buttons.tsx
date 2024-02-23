@@ -8,9 +8,10 @@ import { FormInputs } from "../types/FormInputs";
 type ButtonsProps = {
   setModal: (action: 'publish' | 'delete' | 'update' | null) => void;
   method: 'create' | 'update';
+  setView?: React.Dispatch<React.SetStateAction<number>>
 }
 
-const Buttons = ({ setModal, method } : ButtonsProps) => {
+const Buttons = ({ setModal, method, setView } : ButtonsProps) => {
   const { handleSubmit } = useContext(UseFormContext);
   const router = useRouter();
 
@@ -42,7 +43,11 @@ const Buttons = ({ setModal, method } : ButtonsProps) => {
   }
 
   const onUpdate = () => {
-    router.replace("/create?type=flashcards");
+    if(method === 'create'){
+      router.replace("/create?type=flashcards");
+    }else{
+      setView && setView(1);
+    }
   }
 
   return (

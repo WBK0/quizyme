@@ -4,17 +4,23 @@ import ConfirmModal from "./ConfirmModal";
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
 import Buttons from "./Buttons";
 
-const QuizActions = () => {
+type QuizActionsProps = {
+  method: 'create' | 'update';
+  setView?: React.Dispatch<React.SetStateAction<number>>;
+  id?: string;
+}
+
+const QuizActions = ({ method, setView, id } : QuizActionsProps) => {
   const [showButtons, setShowButtons] = useState(false);
   const { formValues } = useContext(DataContext);
   const { watch } = useContext(UseFormContext);
-  const [ modal, setModal ] = useState<'publish' | 'delete' | null>(null);
+  const [ modal, setModal ] = useState<'publish' | 'delete' | 'update' | null>(null);
 
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
   }
 
-  const handleModal = (action : 'publish' | 'delete' | null) => { 
+  const handleModal = (action : 'publish' | 'delete' | 'update' | null) => { 
     setModal(action);
   }
 
@@ -40,12 +46,12 @@ const QuizActions = () => {
         <div className="xl:hidden flex gap-3 flex-col">
           {
             showButtons
-            ? <Buttons handleModal={handleModal} />
+            ? <Buttons handleModal={handleModal} setView={setView} method={method} />
             : null
           } 
         </div>
         <div className="hidden xl:flex xl:flex-col gap-4">
-          <Buttons handleModal={handleModal}/>
+          <Buttons handleModal={handleModal} setView={setView} method={method}/>
         </div>
         
       </div>

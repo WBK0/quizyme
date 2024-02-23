@@ -7,6 +7,20 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUrlParams from "@/hooks/useUrlParams";
 import { useEffect, useState } from "react";
 
+type Question = {
+  question: string;
+  time: number;
+  points: number;
+  type: string;
+  image: string;
+  answers: {
+    answer: string;
+    isCorrect: boolean;
+    color: string;
+  }[]
+
+}
+
 const UpdatePage = ({ id, setView } : { id: string, setView: React.Dispatch<React.SetStateAction<number>> }) => {
   const { getParams, changeParam } = useUrlParams();
   const [value, setValue] = useLocalStorage('create-form', {});
@@ -26,7 +40,11 @@ const UpdatePage = ({ id, setView } : { id: string, setView: React.Dispatch<Reac
   };
 
   const nextStep = () => {
-    setView(2)
+    if(getParams().type === 'quiz'){
+      setView(3);
+    }else if(getParams().type === 'flashcards'){
+      setView(2);
+    }
   }
 
   const getStudyData = async () => {
@@ -34,6 +52,8 @@ const UpdatePage = ({ id, setView } : { id: string, setView: React.Dispatch<Reac
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/update/${id}`)
       
       const json = await response.json();
+
+      const colors = ['blue', 'red', 'green', 'yellow']
 
       setValue({
         ...value,
@@ -44,8 +64,24 @@ const UpdatePage = ({ id, setView } : { id: string, setView: React.Dispatch<Reac
         description: json.data.description,
         collection: json.data.collection.name,
         visibility: json.data.visibility,
-        points: json.data.points || null,
+        points: json.data.pointsMethod || null,
         tags: json.data.tags,
+        questions: json.data.questions && json.data.questions.map((question : Question) => {
+          return {
+            question: question.question,
+            answerTime: question.time,
+            answerPoints: question.points,
+            responseType: question.type,
+            image: question.image,
+            answers: question.answers.map((answer, index) => {
+              return {
+                answer: answer.answer,
+                ...(answer.isCorrect !== null && { isCorrect: answer.isCorrect}),
+                color: colors[index % 4]
+              } 
+            })
+          }
+        }),
         flashcards: json.data.flashcards
       })
 

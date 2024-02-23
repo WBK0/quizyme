@@ -1,18 +1,21 @@
 "use client";
-import Form from "./form/Form";
+import Modal from "@/app/(app)/create/quiz/Modal";
+import Form from "@/app/(app)/create/quiz/form/Form";
+import QuizActions from "@/app/(app)/create/quiz/quizActions/QuizActions";
 import DataProvider from "@/providers/create-quiz/DataProvider";
 import UseFormProvider from "@/providers/create-quiz/UseFormProvider";
-import Modal from "./Modal";
-import QuizActions from "./quizActions/QuizActions";
 
-const CreateQuiz = () => {
+type UpdateQuizProps = {
+  setView: React.Dispatch<React.SetStateAction<number>>;
+}
 
+const UpdateQuiz = ({ setView } : UpdateQuizProps) => {
   return (
     <div className="relative pb-24 xl:pb-0">
       <DataProvider>
         <UseFormProvider>
           <div className="max-w-3xl mx-auto px-3">
-            <QuizActions method="create" />
+            <QuizActions setView={setView} method="update" />
             <Modal />
             <Form />
           </div>
@@ -22,4 +25,4 @@ const CreateQuiz = () => {
   )
 }
 
-export default CreateQuiz;
+export default UpdateQuiz;

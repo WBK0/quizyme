@@ -5,6 +5,8 @@ type OnSubmitProps = {
   removeLocalStorage: Function,
   setFormValues: Function,
   router: any,
+  method: 'create' | 'update',
+  id?: string
 }
 
 type FormValues = {
@@ -28,7 +30,7 @@ type FormValues = {
   }>
 }
 
-export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router} : OnSubmitProps) => {
+export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, router, method, id} : OnSubmitProps) => {
   if(!formValues.questions || formValues.questions?.length === 0){
     toast.error('You need to add at least one question');
     return;
@@ -36,8 +38,8 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
 
   toast.promise(
     async () => {
-      const response = await fetch('/api/create/quiz', {
-        method: 'POST',
+      const response = await fetch(method === 'create' ? '/api/create/quiz' : `/api/update/${id}/quiz`, {
+        method: method === 'create' ? 'POST' : 'PATCH',
         body: JSON.stringify({
           topic: formValues.topic,
           visibility: formValues.visibility,
@@ -51,7 +53,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
               return {
                 question: question.question,
                 points: Number(question.answerPoints),
-                time: Number(question.answerTime.split(' ')[0]),
+                time: Number(question.answerTime.toString().split(' ')[0]),
                 type: question.responseType,
                 image: question.image,
                 answers:
@@ -70,7 +72,7 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
       });
 
       if(!response.ok){
-        throw new Error('Error creating quiz');
+        throw new Error(`Error ${method === 'create' ? 'creating' : 'updating'} quiz`);
       }
 
       const data = await response.json();
@@ -81,9 +83,9 @@ export const onSubmit = async ({formValues, removeLocalStorage, setFormValues, r
       router.push(`/study/${formValues.topic.replaceAll(' ', '-')}-${data.id}`);
     },
     {
-      pending: 'Creating quiz...',
-      success: 'Quiz created!',
-      error: 'Error while creating quiz. Try again later!'
+      pending: `${method === 'create' ? 'Creating' : 'Updating'} quiz...`,
+      success: `Quiz ${method === 'create' ? 'created' : 'updated'}!`,
+      error: `Error while ${method === 'create' ? 'creating' : 'updating'} quiz. Try again later!`
     }
   )
 }

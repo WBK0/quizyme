@@ -3,7 +3,7 @@ import Buttons from "./Buttons";
 import Modal from "./Modal";
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
-const Actions = ({ method } : { method: 'update' | 'create' }) => {
+const Actions = ({ method, setView } : { method: 'update' | 'create', setView?: React.Dispatch<React.SetStateAction<number>> }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [modal, setModal] = useState<'publish' | 'delete' | 'update' | null>(null);
   const [ length, setLength ] = useState(0);
@@ -47,12 +47,12 @@ const Actions = ({ method } : { method: 'update' | 'create' }) => {
            <div className="xl:hidden flex gap-3 flex-col">
               {
                 showButtons
-                ? <Buttons setModal={setModal} method={method} />
+                ? <Buttons setModal={setModal} method={method} setView={setView} />
                 : null
               } 
             </div>
             <div className="hidden xl:flex xl:flex-col gap-4">
-              <Buttons setModal={setModal} method={method} />
+              <Buttons setModal={setModal} method={method} setView={setView} />
             </div>  
         </div>      
       </div>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import ConfirmPage from "./ConfirmPage/ConfirmPage";
 import UpdatePage from "./UpdatePage/UpdatePage";
 import UpdateFlashcards from "./UpdateFlashcards/UpdateFlashcards";
+import UpdateQuiz from "./UpdateQuiz/UpdateQuiz";
 
 type ContentProps = {
   data: {
@@ -39,7 +40,15 @@ const Content = ({ data, id } : ContentProps) => {
               )
             case 2:
               return(
-                <UpdateFlashcards />
+                <UpdateFlashcards
+                  setView={setView}
+                />
+              )
+            case 3: 
+              return(
+                <UpdateQuiz
+                  setView={setView}
+                />
               )
             default:
               break;
