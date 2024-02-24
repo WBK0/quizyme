@@ -1,68 +1,73 @@
 import CardExtended from "@/components/CardExtended";
+import Spinner from "@/components/Loading/Spinner";
+import { useEffect, useState } from "react";
 
-const data = {
-  quizzes: [
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "quiz",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "quiz",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "quiz",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "quiz",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    }
-  ]
-}
+type Quizzes = {
+  id: string;
+  image: string;
+  type: string;
+  topic: string;
+  user: {
+    name: string;
+    image: string;
+  };
+  stats: {
+    questions: number;
+  }
+}[] | null;
 
 const Quizzes = () => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
+  const [quizzes, setQuizzes] = useState<Quizzes>(null)
+
+  const getQuizzes = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes`);
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message)
+      }
+
+      setQuizzes(data.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getQuizzes();
+  }, [])
 
   return (
     <div>
-      <h2 className="font-black text-3xl">6 Quizzes</h2>
       {
-        data.quizzes.map((card, index) => (
-          <CardExtended 
-            key={index}
-            image={card.image}
-            to={card.to}
-            color={colors[index % 4]}
-            type={card.type}
-            topic={card.topic}
-            authorName="Bartłomiej Ostojski"
-            authorImage="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
-            quantity={card.quantity}
-            editable={true}
-          />
-        ))
-      }  
+        quizzes ?
+        <>
+          <h2 className="font-black text-3xl">{quizzes.length} Quizzes</h2>
+          {
+            quizzes && quizzes.map((card, index) => (
+              <CardExtended 
+                key={card.id}
+                image={card.image}
+                to={`/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}`}
+                color={colors[index % 4]}
+                type='quiz'
+                topic={card.topic}
+                authorName={card.user.name}
+                authorImage={card.user.image}
+                quantity={card.stats.questions}
+                editable={true}
+              />
+            ))
+          }  
+        </>
+        : 
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
+      }
     </div>
   )
 }
