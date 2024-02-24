@@ -38,54 +38,17 @@ const data = {
       invitedBy: "Adam Kowalski",
       quantity: 18
     }
-  ],
-  flashcards: [
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "flashcards",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "flashcards",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "flashcards",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    },
-    {
-      image: "https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg",
-      to: "/",
-      type: "flashcards",
-      topic: "Cosmos",
-      authorId: "1",
-      invitedBy: "Adam Kowalski",
-      quantity: 18
-    }
   ]
 }
 
-const Wishlist = ({ type } : {type : 'quizzes' | 'flashcards'}) => {
+const Quizzes = () => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
+      <h2 className="font-black text-3xl">6 Quizzes</h2>
       {
-        data[type].map((card, index) => (
+        data.quizzes.map((card, index) => (
           <CardExtended 
             key={index}
             image={card.image}
@@ -96,10 +59,12 @@ const Wishlist = ({ type } : {type : 'quizzes' | 'flashcards'}) => {
             authorName="Bartłomiej Ostojski"
             authorImage="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
             quantity={card.quantity}
+            editable={true}
           />
         ))
-      }   
+      }  
     </div>
   )
 }
-export default Wishlist;
+
+export default Quizzes;

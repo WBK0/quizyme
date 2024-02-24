@@ -15,9 +15,10 @@ type CardExtendedProps = {
   passed?: number;
   quantity: number;
   status?: string;
+  editable?: boolean;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable } : CardExtendedProps) => {
   return (
     <div className='flex flex-col sm:flex-row gap-8 mt-12 items-center'>
       <Card
@@ -80,17 +81,35 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
             }
             
           </div>
-          <div className='flex mt-4 gap-2'>
-            <div className='flex-1'>
-              <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-xs'>
-                REMOVE FROM WISHLIST
-              </button>
-            </div>
-            <div className='flex-1'>
-              <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-md'>
-                GO {type === 'quiz' ? 'QUIZ' : 'LEARN'}
-              </button>
-            </div>
+          <div className={`flex mt-4 ${editable ? 'gap-4' : 'gap-2'}`}>
+            {
+              !editable ?
+                <>
+                  <div className='flex-1'>
+                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-xs'>
+                      REMOVE FROM WISHLIST
+                    </button>
+                  </div>
+                  <div className='flex-1'>
+                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-md'>
+                      GO {type === 'quiz' ? 'QUIZ' : 'LEARN'}
+                    </button>
+                  </div>
+                </>
+              :
+                <>
+                  <div className='flex-1'>
+                    <button className='border-2 border-transparent bg-black text-white duration-300 hover:scale-105 hover:shadow-transparent h-12 w-full rounded-full font-bold text-normal shadow-small shadow-blue'>
+                      EDIT
+                    </button>
+                  </div>
+                  <div className='flex-1'>
+                    <button className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-red'>
+                      DELETE
+                    </button>
+                  </div>
+                </>
+            }
           </div>
         </div>
       </div>

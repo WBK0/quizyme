@@ -15,8 +15,9 @@ const UserSpace = () => {
   return (
     <div className="px-3">
       <UserProfileCard
-        fullname="Bartłomiej Ostojski"
+        name="Bartłomiej Ostojski"
         username="OstojskiB"
+        image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
       />
       <SelectVariants />
       <div className="mt-20 max-w-2xl mx-auto">

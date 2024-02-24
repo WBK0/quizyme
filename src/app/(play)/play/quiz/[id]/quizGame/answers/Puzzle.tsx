@@ -14,6 +14,10 @@ const Puzzle = ({ quizAnswers, handleSubmit, correctAnswer }: PuzzleProps) => {
   const [answers, setAnswers] = useState<GameData['question']['answers']>(quizAnswers);
 
   useEffect(() => {
+    setAnswers(quizAnswers);
+  }, [quizAnswers])
+
+  useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
     }

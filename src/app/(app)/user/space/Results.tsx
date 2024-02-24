@@ -105,7 +105,8 @@ const Results = ({ type } : { type: 'quizzes' | 'flashcards'}) => {
             color={colors[index % 4]}
             type={card.type}
             topic={card.topic}
-            authorId={card.authorId}
+            authorName="Bartłomiej Ostojski"
+            authorImage="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
             quantity={card.quantity}
             passed={(card as any).passed}
             scored={(card as any).scored}
