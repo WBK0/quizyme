@@ -12,9 +12,6 @@ const Studies = () => {
         image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
       />
       <SelectVariant />
-      <div className="mt-12 max-w-2xl mx-auto">
-        <Searchbar /> 
-      </div>
       <Content />
     </div>
   )

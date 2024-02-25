@@ -1,6 +1,6 @@
 import CardExtended from "@/components/CardExtended";
 import Spinner from "@/components/Loading/Spinner";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Quizzes = {
   id: string;
@@ -16,13 +16,42 @@ type Quizzes = {
   }
 }[] | null;
 
-const Quizzes = () => {
+const Quizzes = ({ search } : { search: string }) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
   const [quizzes, setQuizzes] = useState<Quizzes>(null)
+  const [loadMore, setLoadMore] = useState(false);
+  const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const container = useRef<HTMLDivElement>(null);
+
+  const limit = 10;
+
+  const getMoreQuizzes = async () => {
+    try {
+      if(isScrollEnd || !quizzes) return;
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes?search=${search}&skip=${quizzes?.length}&limit=${limit}`);
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message)
+      }
+
+      setQuizzes((prev) => prev && [...prev, ...data.data])
+
+      if(data.data.length < limit){
+        setIsScrollEnd(true);
+      }
+
+      setLoadMore(false);
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const getQuizzes = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes?search=${search}&limit=${limit}`);
 
       const data = await response.json();
 
@@ -31,6 +60,10 @@ const Quizzes = () => {
       }
 
       setQuizzes(data.data)
+
+      if(data.data.length < limit){
+        setIsScrollEnd(true);
+      }
     } catch (error) {
       console.error(error)
     }
@@ -40,8 +73,46 @@ const Quizzes = () => {
     getQuizzes();
   }, [])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsScrollEnd(false);
+      setLoadMore(false);
+      setQuizzes(null);
+      getQuizzes();
+    }, 700)
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [search])
+
+  useEffect(() => {
+    if(loadMore)
+      getMoreQuizzes();
+  }, [loadMore])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const element = container.current;
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const percentage = (windowHeight - rect.top) / rect.height;
+        if(percentage > 1){
+          setLoadMore(true);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div>
+    <div ref={container}>
       {
         quizzes ?
         <>
@@ -62,6 +133,18 @@ const Quizzes = () => {
               />
             ))
           }  
+          {
+            isScrollEnd ?
+              <div className="flex justify-center pt-12">
+                <p className="text-black font-black text-lg">WE COULDN'T FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
+              </div>
+            :
+              loadMore ?
+                <div className="flex justify-center pt-12">
+                  <Spinner />
+                </div>
+              : null
+          }
         </>
         : 
         <div className="flex justify-center">

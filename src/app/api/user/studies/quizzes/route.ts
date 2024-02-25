@@ -1,8 +1,9 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
     const session = await getServerSession(authOptions);
     
@@ -16,15 +17,36 @@ export const GET = async () => {
       );
     }
 
+    const searchParams = req.nextUrl.searchParams;
+
+    const skip = Number(searchParams.get("skip")) || 0;
+    const limit = Number(searchParams.get("limit")) || 20;
+    const search = searchParams.get("search") || "";
+
     const prisma = new PrismaClient();
 
     const quizzes = await prisma.quiz.findMany({
       where: {
-        userId: session.user.id
+        userId: session.user.id,
+        OR: [
+          {
+            topic: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            tags: {
+              has: search,
+            },
+          }
+        ]
       },
       include: {
         user: true
-      }
+      },
+      skip: skip,
+      take: limit,
     });
 
     const data = quizzes.map((quiz) => {
