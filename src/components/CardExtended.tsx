@@ -16,9 +16,15 @@ type CardExtendedProps = {
   quantity: number;
   status?: string;
   editable?: boolean;
+  updatedAt?: string;
+  plays?: number;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays } : CardExtendedProps) => {
+  const currentDate = new Date();
+  const timeDifference = currentDate.getTime() - new Date(updatedAt || Date.now()).getTime();
+  const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  
   return (
     <div className='flex flex-col sm:flex-row gap-8 mt-12 items-center'>
       <Card
@@ -74,8 +80,10 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
               :
               (
                 <>
-                  <span className='text-gray-300 font-semibold'>2 Days ago</span> 
-                  <div className='px-6 py-1 rounded-full text-white font-semibold ml-5' style={{backgroundColor: `var(--${color})`}}>1.6K plays</div>
+                  <span className='text-gray-300 font-semibold'>
+                    {daysAgo === 0 ? 'Today' : daysAgo < 30 ? `${daysAgo} days ago` : daysAgo < 365 ? `${Math.floor(daysAgo / 30)} ${Math.floor(daysAgo / 30) === 1 ? 'month' : 'months'} ago` : `${Math.floor(daysAgo / 365)} years ago`}
+                  </span> 
+                  <div className='px-6 py-1 rounded-full text-white font-semibold ml-5' style={{backgroundColor: `var(--${color})`}}>{plays || 0} plays</div>
                 </>
               )
             }

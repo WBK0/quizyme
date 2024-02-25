@@ -1,7 +1,7 @@
 "use client";
 import useUrlParams from "@/hooks/useUrlParams";
-import Flashcards from "./Flashcards";
-import Quizzes from "./Quizzes";
+import FlashcardsContent from "./Flashcards";
+import QuizzesContent from "./Quizzes";
 import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import { useState } from "react";
@@ -27,9 +27,9 @@ const Content = () => {
           (() => {
             switch (getParams().type) {
               case 'quizzes':
-                return <Quizzes search={search} />
+                return <QuizzesContent search={search} />
               case 'flashcards':
-                return <Flashcards />
+                return <FlashcardsContent search={search} />
               default:
                 return (
                   <div className="flex justify-center">

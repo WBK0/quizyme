@@ -13,10 +13,12 @@ type Quizzes = {
   };
   stats: {
     questions: number;
-  }
+    played: number;
+  },
+  updatedAt: string;
 }[] | null;
 
-const Quizzes = ({ search } : { search: string }) => {
+const QuizzesContent = ({ search } : { search: string }) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
   const [quizzes, setQuizzes] = useState<Quizzes>(null)
   const [loadMore, setLoadMore] = useState(false);
@@ -27,7 +29,11 @@ const Quizzes = ({ search } : { search: string }) => {
 
   const getMoreQuizzes = async () => {
     try {
-      if(isScrollEnd || !quizzes) return;
+      if(isScrollEnd) return;
+      if(quizzes && quizzes.length < 1){
+        setLoadMore(false);
+        return;
+      }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes?search=${search}&skip=${quizzes?.length}&limit=${limit}`);
 
@@ -130,6 +136,8 @@ const Quizzes = ({ search } : { search: string }) => {
                 authorImage={card.user.image}
                 quantity={card.stats.questions}
                 editable={true}
+                updatedAt={card.updatedAt}
+                plays={card.stats.played}
               />
             ))
           }  
@@ -155,4 +163,4 @@ const Quizzes = ({ search } : { search: string }) => {
   )
 }
 
-export default Quizzes;
+export default QuizzesContent;
