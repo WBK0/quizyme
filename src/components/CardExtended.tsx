@@ -1,5 +1,6 @@
 import React from 'react'
 import Card from './Card';
+import { useRouter } from 'next/navigation';
 
 type CardExtendedProps = {
   to: string;
@@ -17,14 +18,20 @@ type CardExtendedProps = {
   status?: string;
   editable?: boolean;
   updatedAt?: string;
+  editPath?: string;
+  handleDelete?: string;
   plays?: number;
+  tags: string[];
+  results?: string;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays, tags, editPath, handleDelete, results } : CardExtendedProps) => {
   const currentDate = new Date();
   const timeDifference = currentDate.getTime() - new Date(updatedAt || Date.now()).getTime();
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   
+  const router = useRouter();
+
   return (
     <div className='flex flex-col sm:flex-row gap-8 mt-12 items-center'>
       <Card
@@ -53,7 +60,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
             )
           }
           <h2 className='font-bold text-lg pr-6'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black '>{topic}</span></h2>
-          <h6 className='text-gray-300 mt-1 text-sm'>#cosmos #moon #universe #earth</h6>
+          <h6 className='text-gray-300 mt-1 text-sm'>{tags && tags.map((tag) => <span>#{tag} </span>)}</h6>
         </div>
         <div>
           <div className='flex items-center mt-6 sm:mt-3 flex-wrap'>
@@ -89,7 +96,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
             }
             
           </div>
-          <div className={`flex mt-4 ${editable ? 'gap-4' : 'gap-2'}`}>
+          <div className={`flex mt-4 flex-wrap ${editable ? 'gap-4' : 'gap-2'}`}>
             {
               !editable ?
                 <>
@@ -107,15 +114,35 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
               :
                 <>
                   <div className='flex-1'>
-                    <button className='border-2 border-transparent bg-black text-white duration-300 hover:scale-105 hover:shadow-transparent h-12 w-full rounded-full font-bold text-normal shadow-small shadow-blue'>
+                    <button 
+                      className='border-2 border-transparent bg-black text-white duration-300 hover:scale-105 hover:shadow-transparent h-12 w-full rounded-full font-bold text-normal shadow-small shadow-blue'
+                      onClick={() => editPath && router.push(editPath)}
+                    >
                       EDIT
                     </button>
                   </div>
                   <div className='flex-1'>
-                    <button className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-red'>
+                    <button 
+                      className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-red'
+                      onClick={() => handleDelete}
+                    >
                       DELETE
                     </button>
                   </div>
+                  {
+                    results ? (
+                      <div className='w-full'>
+                        <button 
+                          className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-green'
+                          onClick={() => handleDelete}
+                        >
+                          RESULTS
+                        </button>
+                      </div>
+                    )
+                    : null
+                  }
+                  
                 </>
             }
           </div>

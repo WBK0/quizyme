@@ -4,7 +4,7 @@ import FlashcardsContent from "./Flashcards";
 import QuizzesContent from "./Quizzes";
 import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Content = () => {
   const { getParams } = useUrlParams();
@@ -13,6 +13,10 @@ const Content = () => {
   const handleSearch = (value: string) => {
     setSerach(value);
   }
+
+  useEffect(() => {
+    setSerach('');
+  }, [getParams().type])
 
   return (
     <>

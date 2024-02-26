@@ -16,6 +16,7 @@ type Flashcards = {
     learned: number;
   };
   updatedAt: string;
+  tags: string[];
 }[] | null;
 
 const FlashcardsContent = ({ search } : { search: string }) => {
@@ -138,6 +139,9 @@ const FlashcardsContent = ({ search } : { search: string }) => {
                 editable={true}
                 updatedAt={card.updatedAt}
                 plays={card.stats.learned}
+                tags={card.tags}
+                editPath={`/update/${card.id}`}
+                results={`/`}
               />
             ))
           }  

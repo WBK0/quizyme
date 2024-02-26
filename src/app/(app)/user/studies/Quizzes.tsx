@@ -16,6 +16,7 @@ type Quizzes = {
     played: number;
   },
   updatedAt: string;
+  tags: string[];
 }[] | null;
 
 const QuizzesContent = ({ search } : { search: string }) => {
@@ -138,6 +139,9 @@ const QuizzesContent = ({ search } : { search: string }) => {
                 editable={true}
                 updatedAt={card.updatedAt}
                 plays={card.stats.played}
+                tags={card.tags}
+                editPath={`/update/${card.id}`}
+                results={`/`}
               />
             ))
           }  
