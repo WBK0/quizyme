@@ -1,6 +1,7 @@
 import EasySpinner from "@/components/Loading/EasySpinner";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 type DeleteModalProps = {
   handleClose: () => void;
@@ -12,18 +13,34 @@ type DeleteModalProps = {
     type: string;
     length: number;
     color: string;
-  }
+  },
+  filterData: (id: string) => void;
 }
 
-const DeleteModal = ({ handleClose, type, data } : DeleteModalProps) => {
+const DeleteModal = ({ handleClose, type, data, filterData } : DeleteModalProps) => {
   const [loading, setLoading] = useState(true);
 
-  const handleDelete = () => {
-    try {
-      
-    } catch (error) {
-      
-    }
+  const handleDelete = async () => {
+    toast.promise(
+      async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/${type}/delete/${data.id}`, {
+          method: 'DELETE'
+        })
+
+        const json = await response.json();
+  
+        if(!response.ok){
+          throw new Error(json.message)
+        }
+
+        filterData(data.id);
+        handleClose();
+      }, {
+        pending: 'Deleting...',
+        success: `Successfully deleted ${type}`,
+        error: { render: ({ data }: { data?: { message: string } }) => data?.message || `An error occurred while deleting ${type}` },
+      }
+    )
   }
 
   return (
@@ -43,8 +60,7 @@ const DeleteModal = ({ handleClose, type, data } : DeleteModalProps) => {
             {
               loading &&
                 <div className="absolute top-0 left-0 w-full h-full max-w-[496px] max-h-[279px] flex justify-center items-center">
-                  <EasySpinner 
-                  />
+                  <EasySpinner />
                 </div>
             }
             <Image 
@@ -71,6 +87,7 @@ const DeleteModal = ({ handleClose, type, data } : DeleteModalProps) => {
             <button
               type="button"
               className="bg-black w-48 shadow-small shadow-red rounded-full text-white py-2.5 font-bold hover:scale-105 duration-300"
+              onClick={handleDelete}
             >
               Delete
             </button>

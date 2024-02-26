@@ -20,9 +20,9 @@ type Quizzes = {
   tags: string[];
 }[] | null;
 
-const QuizzesContent = ({ search, deleteModal } : { search: string, deleteModal: (data: DeleteData) => void }) => {
+const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search: string, deleteModal: (data: DeleteData) => void }) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  const [quizzes, setQuizzes] = useState<Quizzes>(null)
+  // const [quizzes, setQuizzes] = useState<Quizzes>(null)
   const [loadMore, setLoadMore] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
   const container = useRef<HTMLDivElement>(null);

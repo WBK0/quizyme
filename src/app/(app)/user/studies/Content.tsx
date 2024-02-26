@@ -20,13 +20,14 @@ const Content = () => {
   const { getParams } = useUrlParams();
   const [search, setSerach] = useState('');
   const [deleteData, setDeleteData] = useState<DeleteData>(null);
-
+  const [data, setData] = useState(null);
 
   const handleSearch = (value: string) => {
     setSerach(value);
   }
 
   useEffect(() => {
+    setData(null);
     setSerach('');
   }, [getParams().type])
 
@@ -47,6 +48,10 @@ const Content = () => {
     setDeleteData(null);
   }
 
+  const filterData = (id: string) => {
+    setData((prev: any) => prev.filter((item: any) => item.id !== id));
+  }
+
   return (
     <>
       <div className="mt-12 max-w-2xl mx-auto">
@@ -60,9 +65,23 @@ const Content = () => {
           (() => {
             switch (getParams().type) {
               case 'quizzes':
-                return <QuizzesContent search={search} deleteModal={deleteModal}/>
+                return (
+                  <QuizzesContent 
+                    search={search} 
+                    deleteModal={deleteModal}
+                    quizzes={data}
+                    setQuizzes={setData}
+                  />
+                )
               case 'flashcards':
-                return <FlashcardsContent search={search} deleteModal={deleteModal} />
+                return (
+                  <FlashcardsContent 
+                    search={search} 
+                    deleteModal={deleteModal} 
+                    flashcards={data}
+                    setFlashcards={setData}
+                  />
+                )
               default:
                 return (
                   <div className="flex justify-center">
@@ -79,6 +98,7 @@ const Content = () => {
             handleClose={handleClose}
             type={getParams().type === 'quizzes' ? 'quiz' : 'flashcards'}
             data={deleteData}
+            filterData={filterData}
           />
         : null
       }

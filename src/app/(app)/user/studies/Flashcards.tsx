@@ -20,9 +20,9 @@ type Flashcards = {
   tags: string[];
 }[] | null;
 
-const FlashcardsContent = ({ search, deleteModal } : { search: string, deleteModal: (data: DeleteData) => void}) => {
+const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : { search: string, deleteModal: (data: DeleteData) => void}) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  const [flashcards, setFlashcards] = useState<Flashcards>(null)
+  // const [flashcards, setFlashcards] = useState<Flashcards>(null)
   const [loadMore, setLoadMore] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
   const container = useRef<HTMLDivElement>(null);
