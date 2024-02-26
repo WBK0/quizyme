@@ -23,7 +23,7 @@ const DeleteModal = ({ handleClose, type, data, filterData } : DeleteModalProps)
   const handleDelete = async () => {
     toast.promise(
       async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/${type}/delete/${data.id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/${type === 'quiz' ? 'quizzes' : 'flashcards'}/delete/${data.id}`, {
           method: 'DELETE'
         })
 

@@ -12,7 +12,7 @@ export const DELETE = async (req: NextRequest, { params } : { params: { id: stri
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "You need to provide a valid id to delete a flashcards",
+          message: "You need to provide a valid id to delete a quiz",
         }),
         { status: 400 }
       );
@@ -24,7 +24,7 @@ export const DELETE = async (req: NextRequest, { params } : { params: { id: stri
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "You need to be logged in to delete a flashcards",
+          message: "You need to be logged in to delete a quiz",
         }),
         { status: 401 }
       );
@@ -32,62 +32,57 @@ export const DELETE = async (req: NextRequest, { params } : { params: { id: stri
 
     const prisma = new PrismaClient();
 
-    const flashcards = await prisma.flashcards.findUnique({
+    const quiz = await prisma.quiz.findUnique({
       where: {
         id: id,
         userId: session.user.id
       }
     })
 
-    if(!flashcards){
+    if(!quiz){
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "Flashcards not found",
+          message: "Quiz not found",
         }),
         { status: 404 }
       );
     }
 
-    const flashcardsDeleted = await prisma.$transaction([
-      prisma.flashcardsGame.deleteMany({
+    const deleteQuiz = await prisma.$transaction([
+      prisma.quizGameStats.deleteMany({
         where: {
-          flashcardsId: id
+          quizId: id
         }
       }),
-      prisma.flashcardQuiz.deleteMany({
+      prisma.quizGame.deleteMany({
         where: {
-          flashcardsId: id
-        }
-      }),
-      prisma.flashcardQuizStats.deleteMany({
-        where: {
-          flashcardsId: id
+          quizId: id
         }
       }),
       prisma.invitation.deleteMany({
         where: {
-          flashcardsId: id
+          quizId: id
         }
       }),
-      prisma.code.delete({
-        where: {
-          id: flashcards.codeId
-        }
-      }),
-      prisma.flashcards.delete({
+      prisma.quiz.delete({
         where: {
           id: id,
           userId: session.user.id
         }
+      }),
+      prisma.code.delete({
+        where: {
+          id: quiz?.codeId
+        }
       })
     ])
 
-    if(!flashcardsDeleted){
+    if(!deleteQuiz){
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "An error occurred while deleting the flashcards",
+          message: "An error occurred while deleting the quiz",
         }),
         { status: 404 }
       );
