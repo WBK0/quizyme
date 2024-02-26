@@ -1,6 +1,7 @@
 import CardExtended from "@/components/CardExtended";
 import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
+import { DeleteData } from "./Content";
 
 type Quizzes = {
   id: string;
@@ -19,7 +20,7 @@ type Quizzes = {
   tags: string[];
 }[] | null;
 
-const QuizzesContent = ({ search } : { search: string }) => {
+const QuizzesContent = ({ search, deleteModal } : { search: string, deleteModal: (data: DeleteData) => void }) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
   const [quizzes, setQuizzes] = useState<Quizzes>(null)
   const [loadMore, setLoadMore] = useState(false);
@@ -141,6 +142,8 @@ const QuizzesContent = ({ search } : { search: string }) => {
                 plays={card.stats.played}
                 tags={card.tags}
                 editPath={`/update/${card.id}`}
+                handleDelete={deleteModal}
+                id={card.id}
                 results={`/`}
               />
             ))

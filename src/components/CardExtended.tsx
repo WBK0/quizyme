@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from './Card';
 import { useRouter } from 'next/navigation';
+import { DeleteData } from '@/app/(app)/user/studies/Content';
 
 type CardExtendedProps = {
   to: string;
@@ -19,13 +20,14 @@ type CardExtendedProps = {
   editable?: boolean;
   updatedAt?: string;
   editPath?: string;
-  handleDelete?: string;
+  handleDelete?: (data: DeleteData) => void;
   plays?: number;
   tags: string[];
   results?: string;
+  id?: string;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays, tags, editPath, handleDelete, results } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays, tags, editPath, handleDelete, results, id } : CardExtendedProps) => {
   const currentDate = new Date();
   const timeDifference = currentDate.getTime() - new Date(updatedAt || Date.now()).getTime();
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
@@ -122,19 +124,31 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                     </button>
                   </div>
                   <div className='flex-1'>
-                    <button 
-                      className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-red'
-                      onClick={() => handleDelete}
-                    >
-                      DELETE
-                    </button>
+                    {
+                      handleDelete && id ? (
+                        <button 
+                          className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-red'
+                          onClick={() => handleDelete({
+                            id: id,
+                            type: type,
+                            topic: topic,
+                            image: image,
+                            length: quantity,
+                            color: color
+                          })}
+                        >
+                          DELETE
+                        </button>
+                      )
+                      : null
+                    }
+                    
                   </div>
                   {
                     results ? (
                       <div className='w-full'>
                         <button 
                           className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-green'
-                          onClick={() => handleDelete}
                         >
                           RESULTS
                         </button>
@@ -142,7 +156,6 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                     )
                     : null
                   }
-                  
                 </>
             }
           </div>

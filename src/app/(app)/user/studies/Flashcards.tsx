@@ -1,6 +1,7 @@
 import CardExtended from "@/components/CardExtended";
 import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
+import { DeleteData } from "./Content";
 
 type Flashcards = {
   id: string;
@@ -19,7 +20,7 @@ type Flashcards = {
   tags: string[];
 }[] | null;
 
-const FlashcardsContent = ({ search } : { search: string }) => {
+const FlashcardsContent = ({ search, deleteModal } : { search: string, deleteModal: (data: DeleteData) => void}) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
   const [flashcards, setFlashcards] = useState<Flashcards>(null)
   const [loadMore, setLoadMore] = useState(false);
@@ -141,7 +142,9 @@ const FlashcardsContent = ({ search } : { search: string }) => {
                 plays={card.stats.learned}
                 tags={card.tags}
                 editPath={`/update/${card.id}`}
+                handleDelete={deleteModal}
                 results={`/`}
+                id={card.id}
               />
             ))
           }  
