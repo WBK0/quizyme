@@ -1,7 +1,7 @@
 "use client";
 import useUrlParams from "@/hooks/useUrlParams";
-import FlashcardsContent from "./Flashcards";
-import QuizzesContent from "./Quizzes";
+import FlashcardsContent, { Flashcards } from "./Flashcards";
+import QuizzesContent, { Quizzes } from "./Quizzes";
 import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ const Content = () => {
   const { getParams } = useUrlParams();
   const [search, setSerach] = useState('');
   const [deleteData, setDeleteData] = useState<DeleteData>(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<Quizzes | Flashcards>(null);
 
   const handleSearch = (value: string) => {
     setSerach(value);
@@ -69,8 +69,8 @@ const Content = () => {
                   <QuizzesContent 
                     search={search} 
                     deleteModal={deleteModal}
-                    quizzes={data}
-                    setQuizzes={setData}
+                    quizzes={data as Quizzes}
+                    setQuizzes={setData as React.Dispatch<React.SetStateAction<Quizzes>>}
                   />
                 )
               case 'flashcards':
@@ -78,8 +78,8 @@ const Content = () => {
                   <FlashcardsContent 
                     search={search} 
                     deleteModal={deleteModal} 
-                    flashcards={data}
-                    setFlashcards={setData}
+                    flashcards={data as Flashcards}
+                    setFlashcards={setData as React.Dispatch<React.SetStateAction<Flashcards>>}
                   />
                 )
               default:

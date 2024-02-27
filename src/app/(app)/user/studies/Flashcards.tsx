@@ -3,7 +3,14 @@ import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { DeleteData } from "./Content";
 
-type Flashcards = {
+type FlashcardsContentProps = {
+  search: string;
+  deleteModal: (data: DeleteData) => void;
+  flashcards: Flashcards;
+  setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
+}
+
+export type Flashcards = {
   id: string;
   image: string;
   type: string;
@@ -20,11 +27,11 @@ type Flashcards = {
   tags: string[];
 }[] | null;
 
-const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : { search: string, deleteModal: (data: DeleteData) => void}) => {
+const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : FlashcardsContentProps ) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  // const [flashcards, setFlashcards] = useState<Flashcards>(null)
   const [loadMore, setLoadMore] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const [display, setDisplay] = useState(false);
   const container = useRef<HTMLDivElement>(null);
 
   const limit = 10;
@@ -57,9 +64,9 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
     }
   }
 
-  const getFlashcards = async () => {
+  const getFlashcards = async (skipSearch?: boolean) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards?search=${search}&limit=${limit}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards?search=${skipSearch ? '' : search}&limit=${limit}`);
 
       const data = await response.json();
 
@@ -72,17 +79,20 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
       if(data.data.length < limit){
         setIsScrollEnd(true);
       }
+
+      setDisplay(true);
     } catch (error) {
       console.error(error)
     }
   }
 
   useEffect(() => {
-    getFlashcards();
+    getFlashcards(true);
   }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      if(!display) return;
       setIsScrollEnd(false);
       setLoadMore(false);
       setFlashcards(null);
@@ -124,9 +134,12 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
       {
         flashcards ?
         <>
-          <h2 className="font-black text-3xl">{flashcards.length} Quizzes</h2>
           {
-            flashcards && flashcards.map((card, index) => (
+            display ? <h2 className="font-black text-3xl">{flashcards.length} Flashcards</h2>
+            : null
+          }
+          {
+            display && flashcards && flashcards.map((card, index) => (
               <CardExtended 
                 key={card.id}
                 image={card.image}
@@ -154,7 +167,7 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
                 <p className="text-black font-black text-lg">WE COULDN'T FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
               </div>
             :
-              loadMore ?
+              loadMore || !display ?
                 <div className="flex justify-center pt-12">
                   <Spinner />
                 </div>

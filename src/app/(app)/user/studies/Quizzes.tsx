@@ -3,7 +3,14 @@ import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { DeleteData } from "./Content";
 
-type Quizzes = {
+type QuizzesContentProps = {
+  search: string;
+  deleteModal: (data: DeleteData) => void;
+  quizzes: Quizzes;
+  setQuizzes: React.Dispatch<React.SetStateAction<Quizzes>>;
+}
+
+export type Quizzes = {
   id: string;
   image: string;
   type: string;
@@ -20,11 +27,11 @@ type Quizzes = {
   tags: string[];
 }[] | null;
 
-const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search: string, deleteModal: (data: DeleteData) => void }) => {
+const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : QuizzesContentProps) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  // const [quizzes, setQuizzes] = useState<Quizzes>(null)
   const [loadMore, setLoadMore] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const [display, setDisplay] = useState(false);
   const container = useRef<HTMLDivElement>(null);
 
   const limit = 10;
@@ -57,9 +64,9 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search:
     }
   }
 
-  const getQuizzes = async () => {
+  const getQuizzes = async (skipSearch?: boolean) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes?search=${search}&limit=${limit}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes?search=${skipSearch ? '' : search}&limit=${limit}`);
 
       const data = await response.json();
 
@@ -72,20 +79,23 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search:
       if(data.data.length < limit){
         setIsScrollEnd(true);
       }
+
+      setDisplay(true);
     } catch (error) {
       console.error(error)
     }
   }
 
   useEffect(() => {
-    getQuizzes();
+    getQuizzes(true);
   }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      if(!display) return;
+      setQuizzes(null);
       setIsScrollEnd(false);
       setLoadMore(false);
-      setQuizzes(null);
       getQuizzes();
     }, 700)
 
@@ -124,9 +134,12 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search:
       {
         quizzes ?
         <>
-          <h2 className="font-black text-3xl">{quizzes.length} Quizzes</h2>
           {
-            quizzes && quizzes.map((card, index) => (
+            display ? <h2 className="font-black text-3xl">{quizzes.length} Quizzes</h2>
+            : null
+          }
+          {
+            display && quizzes && quizzes.map((card, index) => (
               <CardExtended 
                 key={card.id}
                 image={card.image}
@@ -154,7 +167,7 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : { search:
                 <p className="text-black font-black text-lg">WE COULDN'T FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
               </div>
             :
-              loadMore ?
+              !display && loadMore ?
                 <div className="flex justify-center pt-12">
                   <Spinner />
                 </div>
