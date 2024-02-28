@@ -6,7 +6,9 @@ import Ranking from "./Ranking";
 const Results = async ({ params }: { params: { slug: string }}) => {
   const { slug } = params;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${slug}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${slug}`, {
+    cache: "no-cache",
+  });
 
   const study = await response.json();
   
@@ -22,7 +24,21 @@ const Results = async ({ params }: { params: { slug: string }}) => {
           Ranking of <span className="font-black">{study.data.topic}</span> {study.data.type}!
         </h1>
       </div>
-      <Ranking />
+      <Ranking slug={slug} type={study.data.type} />
+      <div className="flex justify-center gap-4 mt-12 flex-wrap">
+        <button
+          type="button"
+          className="bg-black py-2.5 w-48 rounded-full text-white font-bold shadow-small shadow-blue duration-300 hover:scale-105"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          className="bg-black py-2.5 w-48 rounded-full text-white font-bold shadow-small shadow-blue duration-300 hover:scale-105"
+        >
+          Study page
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,8 +1,6 @@
-import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 
 export const GET = async (req: Request, {params} : {params : {slug: string}}) => {
-  connectToDB();
   const prisma = new PrismaClient();
   const { slug } = params;
 
@@ -16,7 +14,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
     );
   }
 
-  function countOccurrences(str : string, char : string) {
+  const countOccurrences = (str : string, char : string) => {
     return str.split(char).length - 1;
   }
 
