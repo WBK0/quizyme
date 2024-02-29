@@ -17,10 +17,11 @@ type Data = {
 
 type RankingProps = {
   slug: string;
-  type: string;
+  type: 'quiz' | 'flashcards';
+  questionLength: number;
 }
 
-const Ranking = ({ slug, type } : RankingProps) => {
+const Ranking = ({ slug, type, questionLength } : RankingProps) => {
   const [data, setData] = useState<Data>(null);
   const [loading, setLoading] = useState(false);
   const [isAll, setIsAll] = useState(false);
@@ -28,7 +29,7 @@ const Ranking = ({ slug, type } : RankingProps) => {
   const [search, setSearch] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const step = 10;
+  const step = 20;
 
   const getRanking = async () => {
     try {
@@ -140,8 +141,18 @@ const Ranking = ({ slug, type } : RankingProps) => {
                 {
                   <>
                     <div className="flex gap-2 sm:gap-4">
-                      <p className='text-right font-bold'>{user.points || 0} Points</p>
-                      <p className='text-right font-bold hidden sm:block'>{user.correctAnswers || 0} / 10 Correct</p>
+                      {
+                        type === 'quiz' ? (
+                          <p className='text-right font-bold'>{user.points || 0} Points</p>
+                        ) : null
+                      }
+                      {
+                        type === 'quiz' ? (
+                          <p className='text-right font-bold hidden sm:block'>{user.correctAnswers || 0} / {questionLength} Correct</p>
+                        ) : (
+                          <p className='text-right font-bold'>{user.correctAnswers || 0} / {questionLength} Correct</p>
+                        )
+                      }
                     </div>
                   </>
                 }
@@ -150,7 +161,7 @@ const Ranking = ({ slug, type } : RankingProps) => {
               {
                 loading && !isAll ? (
                   <div className="flex justify-center">
-                    <EasySpinner size={6}/>
+                    <EasySpinner size={6} color="white"/>
                   </div>
                 ) : null
               }
@@ -165,7 +176,7 @@ const Ranking = ({ slug, type } : RankingProps) => {
             </div> 
           : (
             <div className="flex justify-center h-[375px] pt-2">
-              <EasySpinner size={6}/>
+              <EasySpinner size={6} color="white"/>
             </div>
           )
         }

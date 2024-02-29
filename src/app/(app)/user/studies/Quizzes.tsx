@@ -157,7 +157,7 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : QuizzesCo
                 editPath={`/update/${card.id}`}
                 handleDelete={deleteModal}
                 id={card.id}
-                results={`/`}
+                results={`/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}/results`}
               />
             ))
           }  

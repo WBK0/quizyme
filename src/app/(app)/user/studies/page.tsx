@@ -1,6 +1,5 @@
 import UserProfileCard from "@/components/UserProfileCard";
 import SelectVariant from "./SelectVariant";
-import Searchbar from "@/components/Searchbar";
 import Content from "./Content";
 
 const Studies = () => {

@@ -156,7 +156,7 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
                 tags={card.tags}
                 editPath={`/update/${card.id}`}
                 handleDelete={deleteModal}
-                results={`/`}
+                results={`/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}/results`}
                 id={card.id}
               />
             ))

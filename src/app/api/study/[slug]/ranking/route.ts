@@ -31,10 +31,8 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
 
     let ranking;
 
-    const type = 'quiz';
-
-    if(type === 'quiz') {
-      ranking = await prisma.quizGameStats.findMany({
+    const result = await prisma.$transaction([
+      prisma.quizGameStats.findMany({
         where: {
           quizId: id,
         },
@@ -46,9 +44,8 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
         orderBy: {
           points: 'desc',
         }
-      });
-    }else if(type === 'flashcards') {
-      ranking = await prisma.flashcardQuizStats.findMany({
+      }),
+      prisma.flashcardQuizStats.findMany({
         where: {
           flashcardsId: id,
         },
@@ -60,10 +57,23 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
         orderBy: {
           correctAnswers: 'desc',
         }
-      });
+      })
+    ]);
+
+    const type = result[0].length > 0 ? 'quiz' : result[1].length > 0 ? 'flashcards' : null
+
+    if(!type){
+      return new Response(
+        JSON.stringify({
+          status: "Success",
+          message: "No ranking found",
+          data: []
+        }),
+        { status: 200 }
+      );
     }
 
-    ranking = ranking && ranking.map((rank : any) => {
+    ranking = result && result[type === 'quiz' ? 0 : 1].map((rank : any) => {
       return {
         user: {
           id: rank.user.id,
@@ -73,7 +83,7 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
         },
         points: rank.points || null,
         correctAnswers: rank.correctAnswers || null,
-      }
+      } 
     });
 
     if(search !== ''){

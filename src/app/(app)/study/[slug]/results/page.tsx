@@ -18,13 +18,17 @@ const Results = async ({ params }: { params: { slug: string }}) => {
         <Image src={study.data.image} alt='Study Image' width={672} height={378} className="w-full rounded-2xl shadow-medium shadow-lightblue aspect-video" />
         <Stats 
           stats={study.data.stats}
-          type="quiz"
+          type={study.data.type}
         />
         <h1 className="text-center font-bold text-xl mt-8">
           Ranking of <span className="font-black">{study.data.topic}</span> {study.data.type}!
         </h1>
       </div>
-      <Ranking slug={slug} type={study.data.type} />
+      <Ranking 
+        slug={slug} 
+        type={study.data.type} 
+        questionLength={study.data.stats.questions || study.data.stats.flashcards}
+      />
       <div className="flex justify-center gap-4 mt-12 flex-wrap">
         <button
           type="button"

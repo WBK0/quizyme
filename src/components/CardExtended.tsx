@@ -149,6 +149,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                       <div className='w-full'>
                         <button 
                           className='border-2 border-transparent bg-black text-white hover:scale-105 hover:shadow-transparent duration-300 h-12 w-full rounded-full font-bold text-normal shadow-small shadow-green'
+                          onClick={() => results && router.push(results)}
                         >
                           RESULTS
                         </button>
