@@ -2,6 +2,7 @@ import Searchbar from "@/components/Searchbar";
 import Image from "next/image";
 import Stats from "../Stats";
 import Ranking from "./Ranking";
+import Buttons from "./Buttons";
 
 const Results = async ({ params }: { params: { slug: string }}) => {
   const { slug } = params;
@@ -29,20 +30,9 @@ const Results = async ({ params }: { params: { slug: string }}) => {
         type={study.data.type} 
         questionLength={study.data.stats.questions || study.data.stats.flashcards}
       />
-      <div className="flex justify-center gap-4 mt-12 flex-wrap">
-        <button
-          type="button"
-          className="bg-black py-2.5 w-48 rounded-full text-white font-bold shadow-small shadow-blue duration-300 hover:scale-105"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="bg-black py-2.5 w-48 rounded-full text-white font-bold shadow-small shadow-blue duration-300 hover:scale-105"
-        >
-          Study page
-        </button>
-      </div>
+      <Buttons 
+        slug={slug}
+      />
     </div>
   )
 }

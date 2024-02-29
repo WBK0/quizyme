@@ -1,4 +1,4 @@
-const EasySpinner = ({ size = 4, color = 'black' }) => {
+const EasySpinner = ({ size = 4, color = 'current' }) => {
   return (
     <div
       className={`inline-block h-${size} w-${size} animate-spin rounded-full border-4 border-solid border-${color} border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`}
