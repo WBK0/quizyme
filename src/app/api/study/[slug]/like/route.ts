@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
-export const POST = async (req: NextRequest, { params } : { params: { slug: string }}) => {
+export const PATCH = async (req: NextRequest, { params } : { params: { slug: string }}) => {
   try {
     const { slug } = params;
 
@@ -61,7 +61,17 @@ export const POST = async (req: NextRequest, { params } : { params: { slug: stri
       );
     }
 
-    const type = study[0] ? "quiz" : "flashcards";
+    const type = study[0] ? "quiz" : study[1] ? "flashcards" : null;
+
+    if(!type){
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "Study set not found.",
+        }),
+        { status: 404 }
+      );
+    }
 
     const isLiked = await prisma.likedStudy.findFirst({
       where: {
@@ -86,6 +96,38 @@ export const POST = async (req: NextRequest, { params } : { params: { slug: stri
           id: isLiked.id,
         }
       });
+
+      if(type === 'flashcards'){
+        await prisma.flashcards.update({
+          where: {
+            id: study[1]?.id,
+          },
+          data: {
+            stats: {
+              update: {
+                favorited: {
+                  decrement: 1
+                }
+              }
+            }
+          }
+        });
+      } else if(type === 'quiz'){
+        await prisma.quiz.update({
+          where: {
+            id: study[0]?.id,
+          },
+          data: {
+            stats: {
+              update: {
+                favorited: {
+                  decrement: 1
+                }
+              }
+            }
+          }
+        });
+      }
     }else{
       like = await prisma.likedStudy.create({
         data: {
@@ -95,6 +137,37 @@ export const POST = async (req: NextRequest, { params } : { params: { slug: stri
           flashcardsId: study[1]?.id,
         }
       });
+      if(type === 'flashcards'){
+        await prisma.flashcards.update({
+          where: {
+            id: study[1]?.id,
+          },
+          data: {
+            stats: {
+              update: {
+                favorited: {
+                  increment: 1
+                }
+              }
+            }
+          }
+        });
+      } else if(type === 'quiz'){
+        await prisma.quiz.update({
+          where: {
+            id: study[0]?.id,
+          },
+          data: {
+            stats: {
+              update: {
+                favorited: {
+                  increment: 1
+                }
+              }
+            }
+          }
+        });
+      }
     }
 
     if(!like && !unlike){
