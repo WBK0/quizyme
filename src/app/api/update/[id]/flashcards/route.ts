@@ -64,8 +64,9 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
                 concept: flashcard.concept,
                 definition: flashcard.definition,
               }
-            })
-          }
+            }),
+          createdAt: new Date(),
+          },
       }),
       prisma.flashcardQuizStats.deleteMany({
         where: {

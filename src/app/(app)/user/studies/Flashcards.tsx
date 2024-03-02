@@ -23,7 +23,7 @@ export type Flashcards = {
     flashcards: number;
     learned: number;
   };
-  updatedAt: string;
+  createdAt: string;
   tags: string[];
 }[] | null;
 
@@ -151,7 +151,7 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
                 authorImage={card.user.image}
                 quantity={card.stats.flashcards}
                 editable={true}
-                updatedAt={card.updatedAt}
+                createdAt={card.createdAt}
                 plays={card.stats.learned}
                 tags={card.tags}
                 editPath={`/update/${card.id}`}

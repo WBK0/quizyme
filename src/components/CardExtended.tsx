@@ -18,7 +18,7 @@ type CardExtendedProps = {
   quantity: number;
   status?: string;
   editable?: boolean;
-  updatedAt?: string;
+  createdAt?: string;
   editPath?: string;
   handleDelete?: (data: DeleteData) => void;
   plays?: number;
@@ -27,9 +27,9 @@ type CardExtendedProps = {
   id?: string;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, updatedAt, plays, tags, editPath, handleDelete, results, id } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, createdAt, plays, tags, editPath, handleDelete, results, id } : CardExtendedProps) => {
   const currentDate = new Date();
-  const timeDifference = currentDate.getTime() - new Date(updatedAt || Date.now()).getTime();
+  const timeDifference = currentDate.getTime() - new Date(createdAt || Date.now()).getTime();
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   
   const router = useRouter();

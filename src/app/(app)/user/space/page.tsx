@@ -4,13 +4,13 @@ import SelectVariants from "./SelectVariants";
 import useUrlParams from "@/hooks/useUrlParams";
 import Invitations from "./Invitations";
 import Searchbar from "@/components/Searchbar";
-import Wishlist from "./Wishlist";
+import Favorites from "./Favorites";
 import Results from "./Results";
 
 const UserSpace = () => {
   const { getParams } = useUrlParams();
 
-  const params = getParams() as { option: 'invitations' | 'wishlist' | 'my results'; type: 'quizzes' | 'flashcards' };
+  const params = getParams() as { option: 'invitations' | 'favorites' | 'my results'; type: 'quizzes' | 'flashcards' };
 
   return (
     <div className="px-3">
@@ -30,9 +30,9 @@ const UserSpace = () => {
               return(
                 <Invitations type={params.type} />
               )
-            case 'wishlist':
+            case 'favorites':
               return(
-                <Wishlist type={params.type} />
+                <Favorites type={params.type} />
               )
             case 'my results':
               return(

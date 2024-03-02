@@ -23,7 +23,7 @@ export type Quizzes = {
     questions: number;
     played: number;
   },
-  updatedAt: string;
+  createdAt: string;
   tags: string[];
 }[] | null;
 
@@ -151,7 +151,7 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : QuizzesCo
                 authorImage={card.user.image}
                 quantity={card.stats.questions}
                 editable={true}
-                updatedAt={card.updatedAt}
+                createdAt={card.createdAt}
                 plays={card.stats.played}
                 tags={card.tags}
                 editPath={`/update/${card.id}`}

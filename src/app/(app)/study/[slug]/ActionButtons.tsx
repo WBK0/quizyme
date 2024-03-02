@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import updatePage from "./updatePage";
 
 type ActionButtonsProps = {
   type: string;
@@ -90,6 +91,7 @@ const ActionButtons = ({ type, id } : ActionButtonsProps) => {
       }
 
       setIsFavorite(!isFavorite);
+      updatePage();
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message)      

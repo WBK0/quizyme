@@ -75,7 +75,8 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
                     }
                   })
               }
-            })
+            }),
+          createdAt: new Date(),
         }
       }),
       prisma.quizGameStats.deleteMany({

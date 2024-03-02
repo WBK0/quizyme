@@ -21,7 +21,7 @@ const SelectVariants = () => {
       <div className="mt-8">
         <SelectButton 
           options={[
-            'invitations', 'wishlist', 'my results'
+            'invitations', 'favorites', 'my results'
           ]}
           paramsName="option"
         />
