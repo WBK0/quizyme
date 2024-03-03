@@ -1,34 +1,26 @@
-"use client";
 import CardExtended from "@/components/CardExtended";
 import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Data } from "./Data.types";
 
-type Data = {
-  id: string;
-  image: string;
-  type: string;
-  topic: string;
-  user: {
-    id: string;
-    username: string;
-    name: string;
-    image: string;
-  };
-  stats: {
-    flashcards: number;
-  } | {
-    questions: number;
-  },
-  createdAt: string;
-  tags: string[];
-}[] | null;
+type FavoritesProps = {
+  type: 'quizzes' | 'flashcards';
+  setData: React.Dispatch<React.SetStateAction<Data>>;
+  data: Data;
+  search: string;
+}
 
-const Favorites = async ({ type } : {type : 'quizzes' | 'flashcards'}) => {
+const Favorites = ({ type, setData, data, search } : FavoritesProps) => {
+  const [loading, setLoading] = useState(false);
+  const [isAll, setIsAll] = useState(false);
+  const [display, setDisplay] = useState(false);
+
+  const step = 10;
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  const [data, setData] = useState<Data>(null);
 
-  const getData = async () => {
+  const getData = async (skip: number) => {
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/favorites/flashcards`, {
         method: 'GET',
@@ -44,21 +36,47 @@ const Favorites = async ({ type } : {type : 'quizzes' | 'flashcards'}) => {
         throw new Error(json.message);
       }
 
-      setData(json.data);
+      if(skip === 0){
+        setData(json.data);
+      }else{
+        setData((prev) => prev && [...prev, ...json.data]);
+      }
+
+      setDisplay(true);
+
+      if(json.data.length < step){
+        setIsAll(true);
+      }
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message)
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    getData();
-  }, [])
+    if(!display) return;
+    const timeout = setTimeout(() => {
+      setData(null);
+      setLoading(false);
+      setDisplay(false);
+      setIsAll(false);
+      getData(0);
+    }, 700)
+
+    return () => clearTimeout(timeout);
+  }, [search])
+
+  useEffect(() => {
+    getData(0);
+  }, [type])
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto h-full">
+      <div className="max-h-[85vh] h-full overflow-y-auto mt-12 scroll-sm pr-2">
       {
-        data ? data.map((card, index) => (
+        display && data ? data.map((card, index) => (
           <CardExtended 
             key={card.id}
             image={card.image}
@@ -79,6 +97,8 @@ const Favorites = async ({ type } : {type : 'quizzes' | 'flashcards'}) => {
           </div>
         )
       }   
+              
+      </div>
     </div>
   )
 }

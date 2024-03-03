@@ -4,12 +4,15 @@ import SelectVariants from "./SelectVariants";
 import useUrlParams from "@/hooks/useUrlParams";
 import Invitations from "./Invitations";
 import Searchbar from "@/components/Searchbar";
-import Favorites from "./Favorites";
 import Results from "./Results";
+import { useState } from "react";
+import Favorites from "./Favorites";
+import { Data } from "./Data.types";
 
 const UserSpace = () => {
   const { getParams } = useUrlParams();
-
+  const [data, setData] = useState<Data>(null);
+  const [search, setSearch] = useState('');
   const params = getParams() as { option: 'invitations' | 'favorites' | 'my results'; type: 'quizzes' | 'flashcards' };
 
   return (
@@ -20,8 +23,11 @@ const UserSpace = () => {
         image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
       />
       <SelectVariants />
-      <div className="mt-20 max-w-2xl mx-auto">
-        <Searchbar /> 
+      <div className="pt-20 max-w-2xl mx-auto">
+        <Searchbar 
+          value={search}
+          onChange={(value) => setSearch(value)}
+        /> 
       </div>
       {
         (() => {
@@ -32,7 +38,7 @@ const UserSpace = () => {
               )
             case 'favorites':
               return(
-                <Favorites type={params.type} />
+                <Favorites type={params.type} data={data} setData={setData} search={search}/>
               )
             case 'my results':
               return(
@@ -46,4 +52,5 @@ const UserSpace = () => {
     </div>
   )
 }
+
 export default UserSpace;
