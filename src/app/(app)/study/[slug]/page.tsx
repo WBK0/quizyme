@@ -17,6 +17,10 @@ const Study = async ({ params } : { params : { slug: string }}) => {
   const json = await response.json();
   const data = json.data;
 
+  if(!response.ok){
+    return <NotFound />
+  }
+
   const url = data.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + data.id;
 
   if(url !== decodeURIComponent(slug)) {

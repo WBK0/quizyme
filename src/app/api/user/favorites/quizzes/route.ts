@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "You need to be logged in to check favorited flashcards.",
+          message: "You need to be logged in to check favorited quizzes.",
         }),
         { status: 401 }
       );
@@ -25,18 +25,33 @@ export const GET = async (req: NextRequest) => {
 
     const prisma = new PrismaClient();
 
-    let result = await prisma.likedStudy.findMany({
+    const result = await prisma.likedStudy.findMany({
       where: {
         userId: session.user.id,
-        flashcardsId: {
+        quizId: {
           not: null
         },
+        quiz: {
+          OR: [
+            {
+              topic: {
+                contains: search,
+                mode: "insensitive",
+              }
+            },
+            {
+              tags: {
+                has: search,
+              }
+            }
+          ]
+        }
       },
       include: {
-        flashcards: {
+        quiz: {
           include: {
             user: true
-          }
+          },
         }
       },
       skip: skip,
@@ -47,43 +62,35 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "No favorited flashcards found."
+          message: "No favorited quizzes found."
         }),
         { status: 404 }
       );
     }
 
-    result = result.filter((item) => {
-      const flashcards = item.flashcards;
-      const topic = flashcards?.topic?.toLowerCase();
-      const tags = flashcards?.tags?.map(tag => tag.toLowerCase());
-      
-      return (flashcards && (topic?.includes(search.toLowerCase()) || tags?.includes(search.toLowerCase()))) || search === '';
-    });
-
     const data = result.map((item) => {
       return {
         id: item.id,
-        studyId: item.flashcardsId,
-        topic: item.flashcards?.topic,
-        image: item.flashcards?.image,
-        tags: item.flashcards?.tags,
-        stats: item.flashcards?.stats,
+        studyId: item.quizId,
+        topic: item.quiz?.topic,
+        image: item.quiz?.image,
+        tags: item.quiz?.tags,
+        stats: item.quiz?.stats,
         user: {
-          id: item.flashcards?.user.id,
-          name: item.flashcards?.user.name,
-          image: item.flashcards?.user.image,
-          username: item.flashcards?.user.username,
+          id: item.quiz?.user.id,
+          name: item.quiz?.user.name,
+          image: item.quiz?.user.image,
+          username: item.quiz?.user.username,
         },
-        updateAt: item.flashcards?.updatedAt,
-        createdAt: item.flashcards?.createdAt,
+        updateAt: item.quiz?.updatedAt,
+        createdAt: item.quiz?.createdAt,
       }
     });
 
     return new Response(
       JSON.stringify({
         status: "Success",
-        message: "Favorited flashcards found.",
+        message: "Favorited quizzes found.",
         data: data
       }),
       { status: 200 }
@@ -92,7 +99,7 @@ export const GET = async (req: NextRequest) => {
     return new Response(
       JSON.stringify({
         status: "Error",
-        message: "An error occurred while trying to check favorited flashcards.",
+        message: "An error occurred while trying to check favorited quizzes.",
       }),
       { status: 500 }
     );

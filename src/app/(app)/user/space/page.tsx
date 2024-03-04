@@ -7,7 +7,7 @@ import Searchbar from "@/components/Searchbar";
 import Results from "./Results";
 import { useState } from "react";
 import Favorites from "./Favorites";
-import { Data } from "./Data.types";
+import { Data } from "./Data.type";
 
 const UserSpace = () => {
   const { getParams } = useUrlParams();
@@ -16,18 +16,20 @@ const UserSpace = () => {
   const params = getParams() as { option: 'invitations' | 'favorites' | 'my results'; type: 'quizzes' | 'flashcards' };
 
   return (
-    <div className="px-3">
-      <UserProfileCard
-        name="Bartłomiej Ostojski"
-        username="OstojskiB"
-        image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
-      />
-      <SelectVariants />
-      <div className="pt-20 max-w-2xl mx-auto">
-        <Searchbar 
-          value={search}
-          onChange={(value) => setSearch(value)}
-        /> 
+    <div>
+      <div className="px-3">
+        <UserProfileCard
+          name="Bartłomiej Ostojski"
+          username="OstojskiB"
+          image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
+        />
+        <SelectVariants />
+        <div className="pt-20 max-w-2xl mx-auto">
+          <Searchbar 
+            value={search}
+            onChange={(value) => setSearch(value)}
+          /> 
+        </div>
       </div>
       {
         (() => {

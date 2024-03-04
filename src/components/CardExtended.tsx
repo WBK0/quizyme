@@ -35,7 +35,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
   const router = useRouter();
 
   return (
-    <div className='flex flex-col sm:flex-row gap-8 mt-12 items-center'>
+    <div className='flex flex-col sm:flex-row gap-8 items-center'>
       <Card
         image={image}
         to={to}

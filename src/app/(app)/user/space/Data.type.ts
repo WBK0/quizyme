@@ -1,5 +1,6 @@
 export type Data = {
   id: string;
+  studyId: string;
   image: string;
   type: 'quiz' | 'flashcards';
   topic: string;
