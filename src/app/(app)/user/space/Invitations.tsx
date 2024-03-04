@@ -83,6 +83,9 @@ const Invitations = ({ type, setData, data, search } : InvitationsProps) => {
     if(!display) return;
 
     const timeout = setTimeout(() => {
+      setIsAll(false);
+      setLoading(false);
+      setDisplay(false);
       setData(null);
       getData(0);
     }, 700)
@@ -91,6 +94,10 @@ const Invitations = ({ type, setData, data, search } : InvitationsProps) => {
   }, [search])
 
   useEffect(() => {
+    setIsAll(false);
+    setLoading(false);
+    setDisplay(false);
+    setLoadMore(0);
     if(display){
       setData(null);
     }

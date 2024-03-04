@@ -46,7 +46,7 @@ const UserSpace = () => {
               )
             case 'my results':
               return(
-                <Results type={params.type} />
+                <Results type={params.type} data={data} setData={setData} search={search} />
               )
             default:
               return null;

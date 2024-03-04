@@ -41,10 +41,7 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
       );
     }
 
-
     const data = user.FlashcardsGame.map((game) => {
-      console.log(game?.flashcardsQuizStats)
-
       return {
         id: game.flashcards.id,
         topic: game.flashcards.topic,

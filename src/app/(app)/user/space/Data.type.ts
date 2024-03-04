@@ -19,4 +19,6 @@ export type Data = {
   }
   tags: string[];
   createdAt: string;
+  correctAnswers?: number;
+  points?: number;
 }[] | null;

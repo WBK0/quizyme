@@ -67,19 +67,15 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
         <div>
           <div className='flex items-center mt-6 sm:mt-3 flex-wrap'>
             {
-              scored && passed ? (
+              Number(scored) >= 0 && Number(passed) >= 0 && type !== 'flashcards' ? (
                 <>
                   <h6 className='font-semibold w-full'>Scored: <span className='font-black' style={{color: `var(--${color})`}}>{scored} Points</span></h6>
                   <h6 className='font-semibold w-full'>Passed: <span className='font-black' style={{color: `var(--${color})`}}>{passed} / {quantity}</span></h6>
                 </>
               )
               :
-              type === 'flashcards' && status ? (
+              type === 'flashcards' ? (
                 <>
-                  <h6 className='font-semibold w-full'>
-                    Status:  
-                    <span className='font-black' style={{color: `var(--${color})`}}> {status}</span>
-                  </h6>
                   <h6 className='font-semibold w-full'>
                     Passed:  
                     <span className='font-black' style={{color: `var(--${color})`}}> {passed} / {quantity}</span>
