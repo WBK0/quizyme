@@ -24,7 +24,9 @@ const UserSpace = () => {
           image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
         />
         <SelectVariants />
-        <div className="pt-20 max-w-2xl mx-auto">
+      </div>
+      <div className="sticky top-0 pt-20 pb-12 z-10 bg-white">
+        <div className="max-w-2xl mx-auto">
           <Searchbar 
             value={search}
             onChange={(value) => setSearch(value)}

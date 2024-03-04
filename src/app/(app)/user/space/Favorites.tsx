@@ -3,6 +3,7 @@ import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Data } from "./Data.type";
+import LoaderTable from "./LoaderTable";
 
 type FavoritesProps = {
   type: 'quizzes' | 'flashcards';
@@ -15,6 +16,7 @@ const Favorites = ({ type, setData, data, search } : FavoritesProps) => {
   const [loading, setLoading] = useState(false);
   const [isAll, setIsAll] = useState(false);
   const [display, setDisplay] = useState(false);
+  const [loadMore, setLoadMore] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const step = 10;
   const colors = ['purple', 'yellow', 'green', 'lightblue']
@@ -57,27 +59,31 @@ const Favorites = ({ type, setData, data, search } : FavoritesProps) => {
 
   useEffect(() => {
     if(!containerRef.current) return;
-    const container = containerRef.current;
 
     const handleScroll = () => {
-      if(Number(Math.ceil(container.scrollTop + container.clientHeight)) >= container.scrollHeight){
-        if(loading || isAll) return;
-        getData(data?.length || 0);
+      const element = containerRef.current;
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const percentage = (windowHeight - rect.top) / rect.height;
+        if(percentage >= 1 && !loading){
+          setLoadMore(data?.length || 0);
+        }
       }
-    }
+    };
 
-    container.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
-    return () => container.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [containerRef.current, data, loading, isAll])
 
   useEffect(() => {
     if(!display) return;
+
     const timeout = setTimeout(() => {
       setData(null);
-      setLoading(false);
-      setDisplay(false);
-      setIsAll(false);
       getData(0);
     }, 700)
 
@@ -91,9 +97,14 @@ const Favorites = ({ type, setData, data, search } : FavoritesProps) => {
     getData(0);
   }, [type])
 
+  useEffect(() => {
+    if(loadMore && !isAll)
+      getData(loadMore);
+  }, [loadMore])
+
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="max-h-[80vh] h-full overflow-y-auto scroll-sm px-3 sm:pr-2 mt-8 pt-4 pb-12 pr-3 flex gap-12 flex-col" ref={containerRef}>
+      <div className="px-3 pt-4 flex gap-12 flex-col" ref={containerRef}>
         {
           display && data ? 
           <>
@@ -114,18 +125,11 @@ const Favorites = ({ type, setData, data, search } : FavoritesProps) => {
                 />
               ))
             }
-            {
-              !isAll && loading ?
-                <div className="flex justify-center">
-                  <Spinner />
-                </div>
-              : isAll ? (
-                  <h6 className="font-bold text-black text-lg text-center py-3">
-                    We couldn't find any more {type} matching your search.
-                  </h6>
-                ) 
-                : null
-            }
+            <LoaderTable 
+              loading={loading} 
+              isAll={isAll} 
+              type={type}
+            />
           </>
           :
           (
