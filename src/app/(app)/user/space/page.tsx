@@ -38,7 +38,7 @@ const UserSpace = () => {
           switch (params.option) {
             case 'invitations':
               return(
-                <Invitations type={params.type} />
+                <Invitations type={params.type} data={data} setData={setData} search={search} />
               )
             case 'favorites':
               return(

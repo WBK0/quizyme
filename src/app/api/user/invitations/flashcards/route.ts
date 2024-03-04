@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "You need to be logged in to check favorited flashcards.",
+          message: "You need to be logged in to check your flashcards invitations.",
         }),
         { status: 401 }
       );
@@ -25,9 +25,9 @@ export const GET = async (req: NextRequest) => {
 
     const prisma = new PrismaClient();
 
-    let result = await prisma.likedStudy.findMany({
+    let result = await prisma.invitation.findMany({
       where: {
-        userId: session.user.id,
+        inviteeId: session.user.id,
         flashcardsId: {
           not: null
         },
@@ -52,7 +52,8 @@ export const GET = async (req: NextRequest) => {
           include: {
             user: true
           }
-        }
+        },
+        inviter: true
       },
       skip: skip,
       take: limit,
@@ -62,7 +63,7 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "No favorited flashcards found."
+          message: "No flashcards invitations found."
         }),
         { status: 404 }
       );
@@ -76,6 +77,12 @@ export const GET = async (req: NextRequest) => {
         image: item.flashcards?.image,
         tags: item.flashcards?.tags,
         stats: item.flashcards?.stats,
+        inviter: {
+          id: item.inviter.id,
+          image: item.inviter.image,
+          username: item.inviter.username,
+          name: item.inviter.name
+        },
         user: {
           id: item.flashcards?.user.id,
           name: item.flashcards?.user.name,
@@ -90,7 +97,7 @@ export const GET = async (req: NextRequest) => {
     return new Response(
       JSON.stringify({
         status: "Success",
-        message: "Favorited flashcards found.",
+        message: "Flashcards invitations found.",
         data: data
       }),
       { status: 200 }
@@ -99,7 +106,7 @@ export const GET = async (req: NextRequest) => {
     return new Response(
       JSON.stringify({
         status: "Error",
-        message: "An error occurred while trying to check favorited flashcards.",
+        message: "An error occurred while trying to check flashcards invitations.",
       }),
       { status: 500 }
     );

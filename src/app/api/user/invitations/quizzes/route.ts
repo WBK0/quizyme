@@ -11,7 +11,7 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "You need to be logged in to check favorited flashcards.",
+          message: "You need to be logged in to check your quizzes invitations.",
         }),
         { status: 401 }
       );
@@ -25,13 +25,13 @@ export const GET = async (req: NextRequest) => {
 
     const prisma = new PrismaClient();
 
-    let result = await prisma.likedStudy.findMany({
+    let result = await prisma.invitation.findMany({
       where: {
-        userId: session.user.id,
-        flashcardsId: {
+        inviteeId: session.user.id,
+        quizId: {
           not: null
         },
-        flashcards: {
+        quiz: {
           OR: [
             {
               topic: {
@@ -48,11 +48,12 @@ export const GET = async (req: NextRequest) => {
         }
       },
       include: {
-        flashcards: {
+        quiz: {
           include: {
             user: true
           }
-        }
+        },
+        inviter: true
       },
       skip: skip,
       take: limit,
@@ -62,7 +63,7 @@ export const GET = async (req: NextRequest) => {
       return new Response(
         JSON.stringify({
           status: "Error",
-          message: "No favorited flashcards found."
+          message: "No quizzes invitations found."
         }),
         { status: 404 }
       );
@@ -71,26 +72,32 @@ export const GET = async (req: NextRequest) => {
     const data = result.map((item) => {
       return {
         id: item.id,
-        studyId: item.flashcardsId,
-        topic: item.flashcards?.topic,
-        image: item.flashcards?.image,
-        tags: item.flashcards?.tags,
-        stats: item.flashcards?.stats,
-        user: {
-          id: item.flashcards?.user.id,
-          name: item.flashcards?.user.name,
-          image: item.flashcards?.user.image,
-          username: item.flashcards?.user.username,
+        studyId: item.quizId,
+        topic: item.quiz?.topic,
+        image: item.quiz?.image,
+        tags: item.quiz?.tags,
+        stats: item.quiz?.stats,
+        inviter: {
+          id: item.inviter.id,
+          image: item.inviter.image,
+          username: item.inviter.username,
+          name: item.inviter.name
         },
-        updateAt: item.flashcards?.updatedAt,
-        createdAt: item.flashcards?.createdAt,
+        user: {
+          id: item.quiz?.user.id,
+          name: item.quiz?.user.name,
+          image: item.quiz?.user.image,
+          username: item.quiz?.user.username,
+        },
+        updateAt: item.quiz?.updatedAt,
+        createdAt: item.quiz?.createdAt,
       }
     });
 
     return new Response(
       JSON.stringify({
         status: "Success",
-        message: "Favorited flashcards found.",
+        message: "Quizzes invitations found.",
         data: data
       }),
       { status: 200 }
@@ -99,7 +106,7 @@ export const GET = async (req: NextRequest) => {
     return new Response(
       JSON.stringify({
         status: "Error",
-        message: "An error occurred while trying to check favorited flashcards.",
+        message: "An error occurred while trying to check quizzes invitations.",
       }),
       { status: 500 }
     );

@@ -13,6 +13,10 @@ export type Data = {
   } | {
     flashcards: number;
   };
+  inviter?: {
+    name: string;
+    image: string;
+  }
   tags: string[];
   createdAt: string;
 }[] | null;
