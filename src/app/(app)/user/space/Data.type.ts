@@ -21,4 +21,5 @@ export type Data = {
   createdAt: string;
   correctAnswers?: number;
   points?: number;
+  isFavorite: boolean | null;
 }[] | null;

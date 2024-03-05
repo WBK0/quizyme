@@ -2,6 +2,7 @@ import React from 'react'
 import Card from './Card';
 import { useRouter } from 'next/navigation';
 import { DeleteData } from '@/app/(app)/user/studies/Content';
+import EasySpinner from './Loading/EasySpinner';
 
 type CardExtendedProps = {
   to: string;
@@ -16,7 +17,6 @@ type CardExtendedProps = {
   scored?: number;
   passed?: number;
   quantity: number;
-  status?: string;
   editable?: boolean;
   createdAt?: string;
   editPath?: string;
@@ -25,9 +25,11 @@ type CardExtendedProps = {
   tags: string[];
   results?: string;
   id?: string;
+  isFavorite?: boolean | null;
+  handleFavorite?: () => void;
 }
 
-const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, status, editable, createdAt, plays, tags, editPath, handleDelete, results, id } : CardExtendedProps) => {
+const CardExtended = ({ to, image, color, type, topic, quantity, authorName, authorImage, invitedBy, showDelete, scored, passed, editable, createdAt, plays, tags, editPath, handleDelete, results, id, isFavorite, handleFavorite } : CardExtendedProps) => {
   const currentDate = new Date();
   const timeDifference = currentDate.getTime() - new Date(createdAt || Date.now()).getTime();
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
@@ -99,12 +101,19 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
               !editable ?
                 <>
                   <div className='flex-1'>
-                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-xs'>
-                      REMOVE FROM WISHLIST
+                    <button 
+                      className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-normal'
+                      onClick={handleFavorite}
+                    >
+                      {
+                        isFavorite === null ?
+                          <EasySpinner />
+                          : isFavorite ? 'UNFAVORITE' : 'FAVORITE'
+                      }
                     </button>
                   </div>
                   <div className='flex-1'>
-                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-md'>
+                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-normal'>
                       GO {type === 'quiz' ? 'QUIZ' : 'LEARN'}
                     </button>
                   </div>

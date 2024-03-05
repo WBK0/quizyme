@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Data } from "./Data.type";
 import LoaderTable from "./LoaderTable";
+import handleFavorite from "./handleFavorite";
 
 type InvitationsProps = {
   type: 'quizzes' | 'flashcards';
@@ -131,6 +132,8 @@ const Invitations = ({ type, setData, data, search } : InvitationsProps) => {
                   quantity={('questions' in card.stats) ? card.stats.questions : card.stats.flashcards || 0}
                   tags={card.tags}
                   createdAt={card.createdAt}
+                  isFavorite={card.isFavorite}
+                  handleFavorite={() => handleFavorite({id: card.studyId, topic: card.topic, setData, data})}
                 /> 
               ))
             }

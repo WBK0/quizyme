@@ -50,7 +50,8 @@ export const GET = async (req: NextRequest) => {
       include: {
         quiz: {
           include: {
-            user: true
+            user: true,
+            LikedStudy: true
           }
         },
         inviter: true
@@ -91,6 +92,7 @@ export const GET = async (req: NextRequest) => {
         },
         updateAt: item.quiz?.updatedAt,
         createdAt: item.quiz?.createdAt,
+        isFavorite: item.quiz?.LikedStudy?.some((like) => like.userId === session.user.id)
       }
     });
 

@@ -25,7 +25,7 @@ const UserSpace = () => {
         />
         <SelectVariants />
       </div>
-      <div className="sticky top-0 pt-20 pb-12 z-10 bg-white">
+      <div className="sticky top-0 pt-20 pb-5 z-10 bg-white">
         <div className="max-w-2xl mx-auto">
           <Searchbar 
             value={search}

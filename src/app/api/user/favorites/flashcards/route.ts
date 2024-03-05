@@ -84,6 +84,7 @@ export const GET = async (req: NextRequest) => {
         },
         updateAt: item.flashcards?.updatedAt,
         createdAt: item.flashcards?.createdAt,
+        isFavorite: true
       }
     });
 

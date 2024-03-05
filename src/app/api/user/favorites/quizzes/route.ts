@@ -84,6 +84,7 @@ export const GET = async (req: NextRequest) => {
         },
         updateAt: item.quiz?.updatedAt,
         createdAt: item.quiz?.createdAt,
+        isFavorite: true
       }
     });
 
