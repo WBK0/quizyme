@@ -12,7 +12,7 @@ type CardExtendedProps = {
   topic: string;
   authorName: string;
   authorImage: string;
-  showDelete?: boolean;
+  showDelete?: () => void;
   invitedBy?: string;
   scored?: number;
   passed?: number;
@@ -52,7 +52,10 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
       <div className='flex-1 flex justify-between flex-col md:py-3 relative'>
         {
           showDelete && (
-            <button className='absolute right-0 font-black text-lg top-0'>
+            <button 
+              className='absolute right-0 font-black text-lg top-0'
+              onClick={showDelete}
+            >
               X
             </button>
           )

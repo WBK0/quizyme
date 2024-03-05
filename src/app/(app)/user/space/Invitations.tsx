@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Data } from "./Data.type";
 import LoaderTable from "./LoaderTable";
 import handleFavorite from "./handleFavorite";
+import handleDeleteInvitation from "./handleDeleteInvitation";
 
 type InvitationsProps = {
   type: 'quizzes' | 'flashcards';
@@ -127,7 +128,7 @@ const Invitations = ({ type, setData, data, search } : InvitationsProps) => {
                   topic={card.topic}
                   authorName={card.user.name}
                   authorImage={card.user.image}
-                  showDelete={true}
+                  showDelete={() => handleDeleteInvitation({id: card.id, setData, data})}
                   invitedBy={card?.inviter?.name}
                   quantity={('questions' in card.stats) ? card.stats.questions : card.stats.flashcards || 0}
                   tags={card.tags}
