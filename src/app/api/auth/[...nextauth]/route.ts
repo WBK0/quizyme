@@ -92,6 +92,7 @@ export const authOptions : AuthOptions = {
         user: {
           ...session.user,
           id: token.id,
+          username: token.username,
           isComplete: token.isComplete
         },
       };
@@ -115,6 +116,7 @@ export const authOptions : AuthOptions = {
         return {
           ...token,
           id: user.id,
+          username: user.username,
           isComplete: user.isComplete
         };
       }

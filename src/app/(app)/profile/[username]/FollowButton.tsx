@@ -2,10 +2,13 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import updateFollowers from "./updateFollowers";
+import { useRouter } from "next/navigation";
 
 const FollowButton = ({ userId } : { userId: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(true);
+
+  const router = useRouter();
 
   const session = useSession();
 
@@ -54,19 +57,32 @@ const FollowButton = ({ userId } : { userId: string }) => {
   }, [userId])
 
   return (
-    session.data?.user.id === userId ? null 
-    : <div className="w-full flex mt-6">
+    <>
+      {
+      session.data?.user.id === userId ? 
+      <div className="w-full flex mt-6">
         <button
           type="button"
-          className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer`}
-          onClick={handleFollow}
-          disabled={!session.data?.user}
+          className="bg-black text-white hover:text-black hover:bg-white rounded-full mx-auto w-44 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer"
+          onClick={() => router.push(`/user/profile/edit`)}
         >
-          {
-            isFollowing ? 'UNFOLLOW' : 'FOLLOW'
-          }
+          EDIT PROFILE
         </button>
-      </div>
+      </div> : 
+      <div className="w-full flex mt-6">
+          <button
+            type="button"
+            className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer`}
+            onClick={handleFollow}
+            disabled={!session.data?.user}
+          >
+            {
+              isFollowing ? 'UNFOLLOW' : 'FOLLOW'
+            }
+          </button>
+        </div>
+      }
+    </>
   )
 }
 

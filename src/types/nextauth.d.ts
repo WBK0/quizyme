@@ -11,5 +11,6 @@ declare module "next-auth" {
 
   interface User {
     isComplete?: boolean,
+    username?: string
   }
 }
