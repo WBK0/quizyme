@@ -9,7 +9,7 @@ const Collections = ({ selected, deleteParams } : {selected: string | null, dele
 
   return (
     <>
-      <Link className="flex mt-5 bg-black w-fit text-white px-6 py-3 rounded-full items-center gap-3 ml-auto" href='/collections'>
+      <Link className="flex bg-black w-fit text-white px-6 py-3 rounded-full items-center gap-3 ml-auto" href='/collections'>
         <span className="font-bold uppercase">{selected || 'SELECT COLLECTION'}</span>
         <span>
           <svg width="27" height="15" viewBox="0 0 27 15" fill="none" xmlns="http://www.w3.org/2000/svg">

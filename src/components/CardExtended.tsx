@@ -79,7 +79,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                 </>
               )
               :
-              type === 'flashcards' ? (
+              type === 'flashcards' && Number(passed) >= 0 ? (
                 <>
                   <h6 className='font-semibold w-full'>
                     Passed:  

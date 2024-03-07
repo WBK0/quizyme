@@ -1,48 +1,156 @@
 import CardExtended from '@/components/CardExtended';
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import LoaderTable from '../user/space/LoaderTable';
+import Spinner from '@/components/Loading/Spinner';
+import { toast } from 'react-toastify';
+import { Data } from './data.type';
 
-const SearchResults = () => {
+type SearchResultsProps = {
+  type: string;
+  search: string;
+  category: string;
+}
+
+const SearchResults = ({ type, search, category } : SearchResultsProps) => {
+  const [data, setData] = useState<Data>(null);
+  const [display, setDisplay] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isAll, setIsAll] = useState(false);
+  const [loadMore, setLoadMore] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  console.log(category)
+
+  const step = 10;
+
+  const colors = ['purple', 'yellow', 'green', 'lightblue'];
+
+  const getData = async (skip: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/search/${type}?search=${search}&skip=${skip}&limit=${step}&category=${category || ''}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache',
+      });
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+
+      if(skip === 0){
+        setData(json.data);
+      }else{
+        setData((prev) => prev && [...prev, ...json.data]);
+      }
+
+      setDisplay(true);
+
+      if(json.data.length < step){
+        setIsAll(true);
+      }
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if(!containerRef.current) return;
+
+    const handleScroll = () => {
+      const element = containerRef.current;
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const percentage = (windowHeight - rect.top) / rect.height;
+        if(percentage >= 1 && !loading){
+          setLoadMore(data?.length || 0);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [containerRef.current, data, loading, isAll])
+
+  useEffect(() => {
+    if(!display) return;
+
+    const timeout = setTimeout(() => {
+      setIsAll(false);
+      setLoading(false);
+      setDisplay(false);
+      setData(null);
+      getData(0);
+    }, 700)
+
+    return () => clearTimeout(timeout);
+  }, [search])
+
+  useEffect(() => {
+    setIsAll(false);
+    setLoading(false);
+    setDisplay(false);
+    setLoadMore(0);
+    if(display){
+      setData(null);
+    }
+    getData(0);
+  }, [type])
+
+  useEffect(() => {
+    if(loadMore && !isAll)
+      getData(loadMore);
+  }, [loadMore])
+
   return (
-    <div className='mt-24'>
-      <CardExtended
-        image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-        to="/"
-        color="purple"
-        type="quiz"
-        topic="Cosmos"
-        authorId="1"
-        quantity={18}
-      />
-      <CardExtended
-        image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-        to="/"
-        color="yellow"
-        type="quiz"
-        topic="Cosmos"
-        authorId="1"
-        quantity={18}
-      />
-      <CardExtended
-        image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-        to="/"
-        color="green"
-        type="quiz"
-        topic="Cosmos"
-        authorId="1"
-        quantity={18}
-      />
-      <CardExtended
-        image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-        to="/"
-        color="lightblue"
-        type="quiz"
-        topic="Cosmos"
-        authorId="1"
-        quantity={18}
-      />
-      <h3 className='font-black text-xl text-center mt-24'>
-        Sorry, we couldn't find any more quizzes matching your search results 
-      </h3>
+    <div className="max-w-4xl mx-auto">
+      <div className="px-3 pt-4 flex gap-12 flex-col" ref={containerRef}>
+        {
+          display && data ? 
+          <>
+            {
+              data.map((card, index) => (  
+                <CardExtended 
+                  key={index}
+                  image={card.image}
+                  to={`/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}`}
+                  color={colors[index % 4]}
+                  type={type}
+                  topic={card.topic}
+                  authorName={card.user.name}
+                  authorImage={card.user.image}
+                  quantity={('questions' in card.stats) ? card.stats.questions : card.stats.flashcards || 0}
+                  tags={card.tags}
+                  createdAt={card.createdAt}
+                  isFavorite={card.isFavorite}
+                /> 
+              ))
+            }
+            <LoaderTable 
+              loading={loading} 
+              isAll={isAll} 
+              type={type}
+            />
+          </>
+          :
+          (
+            <div className="flex justify-center mt-12">
+              <Spinner />
+            </div>
+          )
+        }           
+      </div>
     </div>
   )
 }
