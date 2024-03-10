@@ -3,6 +3,10 @@ import Unauthorized from "@/components/401/401";
 import { getServerSession } from "next-auth";
 import ProfilePicture from "./ProfilePicture";
 import DataProvider from "@/providers/edit-profile/DataProvider";
+import ProfileNames from "./ProfileNames";
+import ProfileBio from "./ProfileBio";
+import ProfileInterests from "./ProfileInterests";
+import Buttons from "./Buttons";
 
 const ProfileEdit = async() => {
   const session = await getServerSession(authOptions);
@@ -16,11 +20,14 @@ const ProfileEdit = async() => {
   const json = await response.json();
 
   return (
-    <div>
+    <div className="max-w-lg mx-auto flex flex-col gap-12 px-3">
       <DataProvider userData={json.data}>
         <ProfilePicture /> 
+        <ProfileNames />
+        <ProfileBio />
+        <ProfileInterests />
+        <Buttons />
       </DataProvider>
-           
     </div>
   )
 }

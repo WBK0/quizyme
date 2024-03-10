@@ -35,8 +35,6 @@ export const GET = async (req: Request, { params } : {params: {username: string}
     );
   });
 
-  await connectToDB();
-
   const prisma = new PrismaClient();
   
   const existingUser = await prisma.user.findFirst({
