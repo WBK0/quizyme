@@ -23,7 +23,7 @@ const ProfileEdit = async() => {
     <div className="max-w-lg mx-auto flex flex-col gap-12 px-3">
       <DataProvider userData={json.data}>
         <ProfilePicture /> 
-        <ProfileNames />
+        <ProfileNames sessionUsername={session.user.username}/>
         <ProfileBio />
         <ProfileInterests />
         <Buttons />

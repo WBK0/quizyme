@@ -7,6 +7,7 @@ interface UserData {
   name: string;
   bio: string;
   interests: string[];
+  error: Error;
 }
 
 interface ProfileEditProviderProps {
@@ -18,12 +19,20 @@ interface Context extends UserData {
   dispatch: React.Dispatch<Action>;
 }
 
+type Error = {
+  username?: string | null;
+  firstname?: string | null;
+  lastname?: string | null;
+  bio?: string | null;
+}
+
 type Action =
   | { type: "UPDATE_IMAGE"; payload: string }
   | { type: "UPDATE_USERNAME"; payload: string }
   | { type: "UPDATE_NAME"; payload: string }
   | { type: "UPDATE_BIO"; payload: string }
-  | { type: "UPDATE_INTERESTS"; payload: string[] };
+  | { type: "UPDATE_INTERESTS"; payload: string[] }
+  | { type: "UPDATE_ERROR"; payload: Error };
 
 export const DataContext = createContext<Context>({
   image: "",
@@ -31,6 +40,7 @@ export const DataContext = createContext<Context>({
   name: "",
   bio: "",
   interests: [],
+  error: {},
   dispatch: () => {},
 });
 
@@ -61,6 +71,14 @@ const reducer = (state: UserData, action: Action) => {
         ...state,
         interests: action.payload,
       };
+    case "UPDATE_ERROR":
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          ...action.payload,
+        },
+      };
     default:
       return state;
   }
@@ -76,6 +94,7 @@ const DataProvider = ({
     name: userData.name,
     bio: userData.bio,
     interests: userData.interests,
+    error: userData.error,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -88,6 +107,7 @@ const DataProvider = ({
         name: state.name,
         bio: state.bio,
         interests: state.interests,
+        error: state.error,
         dispatch,
       }}
     >
