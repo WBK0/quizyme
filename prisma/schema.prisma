@@ -62,6 +62,7 @@ model User {
   Inviter            Invitation[]         @relation("Inviter")
   Invitee            Invitation[]         @relation("Invitee")
   LikedStudy         LikedStudy[]
+  Notifications      Notification[]
 }
 
 model Follower {
@@ -145,6 +146,7 @@ model Quiz {
   quizGameStats  QuizGameStats[]
   Invitation     Invitation[]
   LikedStudy     LikedStudy[]
+  Notifications  Notification[]
 }
 
 type Flashcard {
@@ -181,6 +183,7 @@ model Flashcards {
   FlashcardQuizStats FlashcardQuizStats[]
   Invitation         Invitation[]
   LikedStudy         LikedStudy[]
+  Notifications      Notification[]
 }
 
 model QuizGame {
@@ -293,6 +296,22 @@ model LikedStudy {
   quiz         Quiz?       @relation(fields: [quizId], references: [id])
   flashcards   Flashcards? @relation(fields: [flashcardsId], references: [id])
   user         User        @relation(fields: [userId], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Notification {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  type         String
+  userId       String      @db.ObjectId
+  message      String
+  senderId     String?     @db.ObjectId
+  sender       User?       @relation(fields: [senderId], references: [id])
+  quizId       String?     @db.ObjectId
+  quiz         Quiz?       @relation(fields: [quizId], references: [id])
+  flashcardsId String?     @db.ObjectId
+  flashcards   Flashcards? @relation(fields: [flashcardsId], references: [id])
+  isRead       Boolean     @default(false)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }

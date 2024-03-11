@@ -1,10 +1,10 @@
 import Image from "next/image";
-import bell from '../../public/bell.svg';
 import person from '../../public/person.svg';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Link from "next/link";
 import { headers } from "next/headers";
+import NotificationButton from "./NotificationButton";
 
 const Actions = async () => {
   const session = await getServerSession(authOptions);
@@ -12,13 +12,15 @@ const Actions = async () => {
   const headersList = headers();
   const pathname = headersList.get("next-url") || "";
 
+
+
   return (
     <div className="flex gap-3 flex-1 justify-end hidden md:flex">
       {
         session
         ? 
         <>
-          <Image src={bell} height={20} alt="Notifications center" className="cursor-pointer" />
+          <NotificationButton />
           <Image src={person} height={20} alt="User profile" className="cursor-pointer" />
         </>
         : 

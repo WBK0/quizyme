@@ -60,8 +60,11 @@ const ProfilePicture = () => {
           id="inputFile"
           className='hidden'
           accept='image/*'
-        />      
+        />     
       </form>
+      <p className="text-center text-sm text-gray-500 mt-3 font-semibold">
+        Click on the image to change it.
+      </p>
     </div>
   )
 }
