@@ -19,6 +19,8 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
 
     const session = await getServerSession(authOptions);
 
+    console.log(session)
+
     if(!session?.user?.id) {
       return new Response(
         JSON.stringify({
@@ -58,6 +60,14 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
         }
       });
       message = "Unfollowed";
+
+      await prisma.notification.deleteMany({
+        where: {
+          userId: userId,
+          type: "follow",
+          senderId: session?.user?.id
+        }
+      })
     }else{
       result = await prisma.follower.create({
         data: {
@@ -66,6 +76,15 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
         }
       });
       message = "Followed";
+
+      await prisma.notification.create({
+        data: {
+          userId: userId,
+          type: "follow",
+          message: `@${session?.user?.username} started following you. 🎉👋`,
+          senderId: session?.user?.id
+        }
+      })
     }
 
     if(!result) {

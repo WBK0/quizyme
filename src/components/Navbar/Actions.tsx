@@ -11,12 +11,16 @@ import NotificationsList from "./NotificationsList/NotificationsList";
 
 const Actions = ({ session } : { session: Session | null }) => {
   const [showResponsive, setShowResponsive] = useState(false);
-  const [showList, setShowList] = useState(true)
+  const [showList, setShowList] = useState(false);
 
   const handleShowMenu = (value: boolean) => {
     setShowResponsive(value)
   }
   
+  const handleClose = () => {
+    setShowList(false)
+  }
+
   const pathname = usePathname();
 
   return (
@@ -57,7 +61,9 @@ const Actions = ({ session } : { session: Session | null }) => {
       }
       {
         showList ?
-          <NotificationsList />
+          <NotificationsList
+            handleClose={handleClose}
+          />
         : null
       }
     </>

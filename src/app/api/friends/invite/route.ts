@@ -132,6 +132,17 @@ export const POST = async (req: NextRequest) => {
       }
     });
 
+    await prisma.notification.create({
+      data: {
+        userId: inviteeId,
+        type: "invitation",
+        message: `@${session.user.username} invited you to study ${type === 'flashcards' ? 'flashcards' : 'quiz'}. 🎓🔍`,
+        senderId: session.user.id,
+        quizId: type === 'quiz' ? studyId : null,
+        flashcardsId: type === 'flashcards' ? studyId : null,
+      }
+    })
+
     return new Response(
       JSON.stringify({
         status: "Success",

@@ -46,6 +46,9 @@ export const authOptions : AuthOptions = {
           email: user.email,
           id: user.id,
           isComplete: user.isComplete,
+          username: user?.username || undefined,
+          image: user?.image || undefined,
+          name: user?.name || undefined
         };
       },
     }),

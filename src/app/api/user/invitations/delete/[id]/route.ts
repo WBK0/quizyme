@@ -39,6 +39,22 @@ export const DELETE = async (req: NextRequest, { params } : { params: { id: stri
       }
     })
 
+    await prisma.notification.deleteMany({
+      where: {
+        userId: session.user.id,
+        type: 'invitation',
+        senderId: invitation.inviterId,
+        OR: [
+          {
+            flashcardsId: invitation.flashcardsId
+          },
+          {
+            quizId: invitation.quizId
+          }
+        ]
+      }
+    })
+
     await prisma.$disconnect();
 
     return new Response(
