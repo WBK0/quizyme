@@ -135,6 +135,15 @@ export const POST = async (req: Request) => {
     }
   });
 
+  await prisma.notification.create({
+    data: {
+      userId: user.id,
+      type: "welcome",
+      message: `We are glad to have you on board, @${username}! 😊🙌`,
+      senderId: user.id
+    }
+  })
+
   return new Response(
     JSON.stringify({
       status: "success",

@@ -1,6 +1,5 @@
 "use client";
-import Image from "next/image";
-import person from '../../public/person.svg';
+
 import Link from "next/link";
 import NotificationButton from "./NotificationButton";
 import { usePathname } from "next/navigation";
@@ -8,17 +7,18 @@ import { Session } from "next-auth";
 import MobileMenu from "./MobileMenu";
 import { useState } from "react";
 import NotificationsList from "./NotificationsList/NotificationsList";
+import UserList from "./UserList/UserList";
 
 const Actions = ({ session } : { session: Session | null }) => {
   const [showResponsive, setShowResponsive] = useState(false);
-  const [showList, setShowList] = useState(false);
+  const [showNotificationsList, setShowNotificationsList] = useState(false);
 
   const handleShowMenu = (value: boolean) => {
     setShowResponsive(value)
   }
   
   const handleClose = () => {
-    setShowList(false)
+    setShowNotificationsList(false)
   }
 
   const pathname = usePathname();
@@ -30,8 +30,8 @@ const Actions = ({ session } : { session: Session | null }) => {
           session
           ? 
           <>
-            <NotificationButton setShowList={setShowList} />
-            <Image src={person} height={20} alt="User profile" className="cursor-pointer" />
+            <NotificationButton setShowList={setShowNotificationsList} />
+            <UserList openNotifications={showNotificationsList}/>
           </>
           : 
           <Link
@@ -44,7 +44,7 @@ const Actions = ({ session } : { session: Session | null }) => {
       </div>
       
       <div className="md:hidden flex items-center gap-1">
-        <NotificationButton setShowList={setShowList} />
+        <NotificationButton setShowList={setShowNotificationsList} />
         <div className="md:hidden cursor-pointer" onClick={() => handleShowMenu(true)}>
           <svg className="block h-4 w-4 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <title>Mobile menu</title>
@@ -60,7 +60,7 @@ const Actions = ({ session } : { session: Session | null }) => {
           null
       }
       {
-        showList ?
+        showNotificationsList ?
           <NotificationsList
             handleClose={handleClose}
           />

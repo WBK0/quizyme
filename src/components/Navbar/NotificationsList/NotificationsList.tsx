@@ -24,6 +24,21 @@ const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
   const [error, setError] = useState<string | null>(null);
   const [isAll, setIsAll] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if(elementRef.current && !elementRef.current.contains(event.target as Node)){
+        handleClose();
+      }
+    }
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    }
+  }, [elementRef.current])
 
   const router = useRouter();
 
@@ -111,7 +126,7 @@ const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
   
   return (
     <div className="absolute w-full mt-16 right-0 md:right-3 max-w-lg z-40">
-      <div className="absolute w-full bg-white h-80 rounded-2xl rounded-br-none shadow-2xl">
+      <div className="absolute w-full bg-white h-80 rounded-2xl rounded-br-none shadow-2xl" ref={elementRef}>
         <div className="h-full flex flex-col">
           <div className="w-full py-1.5 border-b-3 border-green flex justify-between">
             <h2 className="font-bold text-xl pl-3">

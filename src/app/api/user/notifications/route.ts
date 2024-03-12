@@ -55,6 +55,7 @@ export const GET = async (req: NextRequest) => {
       const url = 
       notification?.quiz ? `/study/${notification.quiz.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + notification.quiz.id}` : 
       notification?.flashcards ? `/study/${notification.flashcards.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-') + '-' + notification.flashcards.id}` :
+      notification.type === 'welcome' ? '/search' :
       `/profile/${notification?.sender?.username}`
       return {
         id: notification.id,
