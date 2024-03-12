@@ -76,10 +76,10 @@ body{
   border-radius: 4px;
 }
 
-.scroll-sm-green{
+/* .scroll-sm-green{
   scrollbar-width: thin;
   scrollbar-color: #42A759;
-}
+} */
 
 .scroll-sm-green::-webkit-scrollbar {
   width: 4px;
@@ -91,6 +91,22 @@ body{
 }
 
 .scroll-sm-green::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}
+
+
+
+.scroll-sm-lightgreen::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-sm-lightgreen::-webkit-scrollbar-thumb {
+  background-color: #94D39C;
+  border-radius: 4px;
+}
+
+.scroll-sm-lightgreen::-webkit-scrollbar-track {
   background-color: #f1f1f1;
   border-radius: 4px;
 }
