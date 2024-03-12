@@ -14,6 +14,7 @@ type Notifications = {
   isRead: boolean;
   url: string;
   type: 'follow' | 'invitation' | 'welcome';
+  deleting?: boolean;
 }[] | null;
 
 const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
@@ -28,8 +29,33 @@ const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
 
   const step = 10;
 
+  const handleDelete = async (id: string) => {
+    try {
+      setNotifications((prev) => prev && prev.map((item) => item.id === id ? { ...item, deleting: true } : item));
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/notifications/delete/${id}`, {
+        method: 'DELETE'
+      });
+  
+      if(!response.ok){
+        throw new Error("Error while deleting notification. Please try again later.");
+      }
+
+      setNotifications((prev) => prev && prev?.filter((item) => item.id !== id));
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        setError(error.message);
+    }
+  }
+
   const handleNotification = (id: string, url: string) => {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/notifications/read/${id}`, {
+      method: 'PATCH'
+    });
+
     router.push(url);
+
+    handleClose();
   }
 
   const getNotifications = async (skip: number) => {
@@ -142,8 +168,13 @@ const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
                         <button
                           type="button"
                           className="font-black pl-2"
+                          onClick={() => handleDelete(item.id)}
                         >
-                          X
+                          {
+                            item.deleting ?
+                              <EasySpinner color="black" size={4} />
+                            : "X"
+                          }
                         </button>
                       </div>
                     </div>
