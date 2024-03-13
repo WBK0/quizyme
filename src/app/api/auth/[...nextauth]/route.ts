@@ -111,7 +111,10 @@ export const authOptions : AuthOptions = {
 
         return{
           ...token,
-          isComplete: dbUser?.isComplete
+          isComplete: dbUser?.isComplete,
+          username: dbUser?.username,
+          image: dbUser?.image,
+          name: dbUser?.name
         }
       }
 

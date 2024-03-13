@@ -140,6 +140,13 @@ const ProfileNames = ({ sessionUsername } : { sessionUsername : string }) => {
             : null
           }
         </div>
+        <p
+          className="text-sm text-zinc-500 font-semibold text-center"
+        >
+          You will be known as <span className="font-extrabold text-zinc-600">
+            @{username.trim().replace(/ /g, '_')}
+          </span>
+        </p>
         <div className="relative">
           <input 
             type="text" 

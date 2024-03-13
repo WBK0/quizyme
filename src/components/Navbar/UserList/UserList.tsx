@@ -2,11 +2,16 @@ import Image from "next/image";
 import person from '@/public/person.svg';
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react"
+import { useSession } from "next-auth/react";
 
 const UserList = ({ openNotifications } : { openNotifications: boolean }) => {
-  const [showUserList, setShowUserList] = useState(true);
+  const [showUserList, setShowUserList] = useState(false);
   const elementRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const { data: session } = useSession();
+
 
   useEffect(() => {
     if(openNotifications){
@@ -58,31 +63,31 @@ const UserList = ({ openNotifications } : { openNotifications: boolean }) => {
         </button>
         {
           showUserList ?
-            <div className="absolute transform -translate-x-1/2 top-8 shadow-2xl rounded-xl py-2 w-52 text-center  flex flex-col gap-1 z-50 bg-green" ref={elementRef}>
+            <div className="absolute transform -translate-x-1/2 top-8 shadow-2xl rounded-xl py-2 w-52 text-center  flex flex-col gap-1 z-50 bg-white" ref={elementRef}>
               <Link 
-                href="/profile"
-                className="w-full hover:bg-white py-1 font-bold text-lg"
+                href={`/profile/${session?.user.username}`}
+                className="w-full hover:bg-zinc-50 py-1 font-bold text-lg"
               >
                 Profile
               </Link>
               <Link 
-                href="/profile"
-                className="w-full hover:bg-white py-1 font-bold text-lg"
+                href="/user/space"
+                className="w-full hover:bg-zinc-50 py-1 font-bold text-lg"
               >
                 My space
               </Link>
               <Link 
-                href="/profile"
-                className="w-full hover:bg-white py-1 font-bold text-lg"
+                href="/user/studies"
+                className="w-full hover:bg-zinc-50 py-1 font-bold text-lg"
               >
                 My studies
               </Link>
-              <Link 
-                href="/profile"
-                className="w-full hover:bg-white py-1 font-bold text-lg"
+              <button 
+                className="w-full hover:bg-zinc-50 py-1 font-bold text-lg"
+                onClick={() => signOut()}
               >
                 Logout
-              </Link>
+              </button>
             </div> 
           : null
         }

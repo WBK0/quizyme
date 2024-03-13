@@ -80,7 +80,7 @@ export const POST = async (req: Request) => {
 
   const firstname = data.get('firstname');
   const lastname = data.get('lastname');
-  const username = data.get('username');
+  const username = data.get('username')?.toString().replace(/ /g, '_');
   let image = data.get('image');
   const bio = data.get('bio');
   const interests = (data.getAll('interests') as string[]).filter(Boolean);

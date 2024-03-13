@@ -31,7 +31,7 @@ const Actions = ({ session } : { session: Session | null }) => {
           ? 
           <>
             <NotificationButton setShowList={setShowNotificationsList} />
-            <UserList openNotifications={showNotificationsList}/>
+            <UserList openNotifications={showNotificationsList} />
           </>
           : 
           <Link

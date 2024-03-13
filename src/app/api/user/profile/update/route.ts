@@ -20,7 +20,7 @@ export const PATCH = async (req: NextRequest) => {
 
     let { username, firstname, lastname, bio, image, interests } = await req.json();
 
-    username = username.trim();
+    username = username.trim().replace(/ /g, '_');
 
     const isError = await schema.validate({
       username,

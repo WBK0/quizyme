@@ -1,11 +1,14 @@
 "use client";
 
 import { DataContext } from "@/providers/edit-profile/DataProvider";
+import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 
 const Buttons = () => {
   const { error, name, username, bio, image, interests } = useContext(DataContext);
+
+  const { update } = useSession();
 
   const handleUpdate = async () => {
     if(error?.bio || error?.username || error?.firstname || error?.lastname){
@@ -20,7 +23,7 @@ const Buttons = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username,
+          username: username.trim().replace(/ /g, '_'),
           firstname: name.split(' ')[0],
           lastname: name.split(' ')[1],
           bio,
@@ -30,6 +33,10 @@ const Buttons = () => {
       });
   
       const data = await response.json();
+
+      setTimeout(async () => {
+        await update();
+      }, 0)
 
       if(!response.ok){
         throw new Error(data.message);
