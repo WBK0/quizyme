@@ -1,9 +1,15 @@
 import { useRef, useState } from "react";
 import Button from "./Button";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import EasySpinner from "./Loading/EasySpinner";
 
 const CodeForm = () => {
   const [code, setCode] = useState(Array(6).fill(''));
   const inputRefs = useRef<HTMLInputElement[] | null[]>(Array(6).fill(null));
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index : number) => {
     if(e.target.value.length > 1){
@@ -61,10 +67,29 @@ const CodeForm = () => {
     const target = e.target as HTMLInputElement;
     target.selectionStart = 1;
   }
+
+  const handleJoin = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/code/${code.join('')}`);
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message);
+      }
+
+      router.push(`${process.env.NEXT_PUBLIC_URL}/${data.path}`)
+    } catch (error) {
+      toast.error('Invalid code');
+    } finally {
+      setLoading(false);
+    }
+  }
   
   return (
     <>
-      <div className='grid grid-cols-6 gap-2 px-3 mt-6 max-w-[500px] mx-auto'>
+      <div className='grid grid-cols-6 gap-1 sm:gap-2 px-3 mt-6 max-w-[500px] mx-auto'>
       {
         code.map((value, index) => (
           <input 
@@ -80,8 +105,17 @@ const CodeForm = () => {
         ))
       }
     </div>
-    <div className="mt-10 flex justify-center">
-      <Button>JOIN</Button>
+    <div className="mt-10 flex justify-center w-64 mx-auto">
+      <Button
+        onClick={handleJoin}
+        disablePadding={true}
+      >
+        {
+          loading ? 
+            <EasySpinner />
+          : "JOIN"
+        }
+      </Button>
     </div>
   </>
     
