@@ -1,11 +1,17 @@
 import SelectInput from "@/components/Create/SelectInput";
 import TextareaInput from "@/components/Create/TextareaInput";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { UseFormContext } from "@/providers/create-quiz/UseFormProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Inputs = () => {
-
   const { register, errors, watch, setValue } = useContext(UseFormContext);
+  const [ value ] = useLocalStorage("create-form", {});
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <>
@@ -24,16 +30,20 @@ const Inputs = () => {
         watch={watch}
         error={errors.answerTime?.message}
       />
-      <SelectInput
-        title="Points for answer"
-        options={["100", "150", "250", "400", "500", "750", "1000", "1250", "1500"]}
-        register={register}
-        name="answerPoints"
-        defaultValue="500"
-        setValue={setValue}
-        watch={watch}
-        error={errors.answerPoints?.message}
-      />
+      {
+        isClient && value?.points === 'Disabled' ? null : (
+          <SelectInput
+            title="Points for answer"
+            options={["100", "150", "250", "400", "500", "750", "1000", "1250", "1500"]}
+            register={register}
+            name="answerPoints"
+            defaultValue="500"
+            setValue={setValue}
+            watch={watch}
+            error={errors.answerPoints?.message}
+          />
+        )
+      }
       <SelectInput
         title="Type of response"
         options={["Quiz", "Puzzle", "True / False", "Multiple choice"]}

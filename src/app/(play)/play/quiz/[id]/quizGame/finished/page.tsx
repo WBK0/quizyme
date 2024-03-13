@@ -52,10 +52,12 @@ const Finished = ({ id } : { id: string }) => {
               <UserResult data={data} type='quiz' />
               <h6 className='text-2xl font-bold mt-6'>You finished on <span className='text-orange-500 font-black'>#{data.userPlace}</span> place</h6>
               <div className='flex flex-wrap px-3 w-full justify-center gap-8 lg:gap-16 h-full mt-2'>
-                <Ranking data={data.data} type='global' isQuiz={true} />
-                <Ranking data={data.data} type='friends' isQuiz={true} />
+                <Ranking data={data.data} type='global' isQuiz={true} isPointsEnabled={data.isPointsEnabled} answersLength={data.answersLength} />
+                <Ranking data={data.data} type='friends' isQuiz={true} isPointsEnabled={data.isPointsEnabled} answersLength={data.answersLength}/>
               </div>
-              <Buttons />
+              <Buttons 
+                studyId={data.studyId}
+              />
             </div>
           : <div className='h-screen w-full flex items-center justify-center'>
               <Spinner />

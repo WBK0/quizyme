@@ -13,10 +13,13 @@ type RankingProps = {
   type: 'friends' | 'global';
   isQuiz: boolean;
   answersLength?: number;
+  isPointsEnabled?: boolean;
 }
 
-const Ranking = ({ data, type, isQuiz, answersLength } : RankingProps) => {
+const Ranking = ({ data, type, isQuiz, answersLength, isPointsEnabled = true } : RankingProps) => {
   data.filter(user => user.isFriend);
+
+  console.log(data)
 
   return (
     <div className={`bg-${type === 'global' ? 'lightblue' : 'green'} w-full max-w-lg h-96 rounded-2xl flex flex-col px-4`}>
@@ -33,7 +36,7 @@ const Ranking = ({ data, type, isQuiz, answersLength } : RankingProps) => {
                 <p className='font-semibold'>{user.user.name}</p>
               </div>
               {
-                isQuiz 
+                isQuiz && isPointsEnabled
                 ?
                   <div>
                     <p className='text-right'>{user.points} Points</p>

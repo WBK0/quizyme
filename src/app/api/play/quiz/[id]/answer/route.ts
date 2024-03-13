@@ -157,14 +157,22 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
     }
 
     // Calculate points
-    if(result === true){
-      points = question.points * (timeFromStart * 100 / (question.time + 5) / 100)
-      if(points < 0) points = 0
-      if(points > question.points) points = question.points
-    }else{
+    if(quizGame.quiz.pointsMethod === 'Constant'){
+      if(result === true){
+        points = question.points
+      }
+    } else if(quizGame.quiz.pointsMethod === 'Disabled'){
       points = 0
+    }else{
+      if(result === true){
+        points = question.points * (timeFromStart * 100 / (question.time + 5) / 100)
+        if(points < 0) points = 0
+        if(points > question.points) points = question.points
+      }else{
+        points = 0
+      }
     }
-
+    
     const updateQuiz = await prisma.quizGame.update({
       where: {
         id: id,

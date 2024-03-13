@@ -43,8 +43,6 @@ export default function UseFormProvider({ children }: CreateQuizProvider) {
     });
   const { fields, append, remove, move, update } = useFieldArray({ control, name: "answers", rules: { required: true, minLength: 2, maxLength: 4 }})
   
-  console.log(errors, isSubmitted)
-
   return (
     <UseFormContext.Provider
       value={{

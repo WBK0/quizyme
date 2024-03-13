@@ -91,6 +91,8 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         userPoints: userData.points,
         userCorrectAnswers: userData.correctAnswers,
         userPlace: data.findIndex((data) => data.points === userData.points && data.user.id === session.user.id) + 1,
+        isPointsEnabled: userData.quiz.pointsMethod !== 'Disabled',
+        studyId: userData.quiz.id,
       }),
       { status: 200 }
     );

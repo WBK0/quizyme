@@ -16,6 +16,7 @@ type GameData = {
       isCorrect?: boolean;
     }[]
   }
+  isPointsEnabled: boolean;
 }
 
 export default GameData;

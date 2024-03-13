@@ -35,6 +35,21 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
   }, [countDown])
 
   useEffect(() => {
+    if(gameData.isPointsEnabled) return;
+
+    const timeout = setTimeout(() => {
+      if(answered.questionsLeft !== 0){
+        setStep(1)
+      }
+      handleCountDown();
+    }, 4000)
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [])
+
+  useEffect(() => {
     if (countDown === 0) {
       if (animatedContainerRef.current) {
         animatedContainerRef.current.classList.add("animate-up-after-6s");
@@ -65,10 +80,19 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
         {
           step === 0 ?
           <>
-            <h2 className="text-6xl font-black text-center text-white"> 
-              <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(gameData.actualQuestion === gameData.numberOfQuestions - 1 ? 0 : 1), handleCountDown()}, 1000)} /> POINTS 
-            </h2>
-            <h6 className="text-xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
+            {
+              gameData.isPointsEnabled ?
+              (
+                <>
+                  <h2 className="text-6xl font-black text-center text-white"> 
+                    <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(gameData.actualQuestion === gameData.numberOfQuestions - 1 ? 0 : 1), handleCountDown()}, 1000)} /> POINTS 
+                  </h2>
+                  <h6 className="text-xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
+                </>
+              )
+              : <h6 className="text-6xl font-black text-white text-center"><span className="text-8xl block mb-4">{answered.questionsLeft}</span> <span className="block">{answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</span></h6>
+            }
+            
           </>
           : step === 1 ? (
             <div className="animate-left-to-right gap-12 flex items-center justify-center flex-col">

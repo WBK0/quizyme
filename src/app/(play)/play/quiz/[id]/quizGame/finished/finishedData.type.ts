@@ -14,6 +14,8 @@ type FinishedData = {
   userCorrectAnswers: number;
   answersLength: number;
   userPlace: number;
+  isPointsEnabled: boolean;
+  studyId: string;
 } | null;
 
 export default FinishedData;

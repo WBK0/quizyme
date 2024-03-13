@@ -10,15 +10,14 @@ const UserResult = ({ data, type } : { data: FinishedData, type: 'quiz' | 'flash
         <p className='text-lightblue text-center mt-1 font-black text-xl'>{data.userCorrectAnswers}/{data.answersLength}</p>
       </div>
       {
-        type === 'quiz' 
+        type === 'quiz' && data.isPointsEnabled
         ?
           <div className='flex-grow'>
             <h3 className='font-black text-xl text-center'>POINTS EARNED</h3>
             <p className='text-green text-center mt-1 font-black text-xl'>{data.userPoints} POINTS</p>
           </div>
         : null
-      }
-      
+      }   
     </div>
   )
 }

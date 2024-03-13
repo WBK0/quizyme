@@ -37,7 +37,8 @@ const QuizGame = ({ id } : { id: string }) => {
       });
       
       const data = await response.json();
-  
+      console.log(data)
+
       if(data.errorId === 102){
         return nextQuestion();
       }
