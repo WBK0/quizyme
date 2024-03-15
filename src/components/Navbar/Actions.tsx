@@ -55,7 +55,7 @@ const Actions = ({ session } : { session: Session | null }) => {
       {
         showResponsive
         ?
-          <MobileMenu handleShowMenu={handleShowMenu} />
+          <MobileMenu handleShowMenu={handleShowMenu} session={session}/>
         :
           null
       }

@@ -2,8 +2,18 @@ import React from 'react'
 import Image from 'next/image';
 import logo from '@/public/logo.svg'
 import Link from 'next/link';
+import { Session } from 'next-auth';
+import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
-const MobileMenu = ({ handleShowMenu } : { handleShowMenu: (value: boolean) => void; }) => {
+const MobileMenu = ({ handleShowMenu, session } : { handleShowMenu: (value: boolean) => void, session: Session | null }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleCloseMenu = () => {
+    handleShowMenu(false);
+  }
+
   return (
     <div className="absolute w-full h-screen left-0 top-0 bg-black/25 md:hidden">
       <div className="bg-white h-screen max-w-sm drop-shadow-xl mr-16 flex flex-wrap flex-col">
@@ -18,23 +28,78 @@ const MobileMenu = ({ handleShowMenu } : { handleShowMenu: (value: boolean) => v
         </div>            
       </div>
       <div className="flex flex-wrap pt-8 px-4">
-        <Link className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" href={"#"}>
+        <Link 
+          className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+          href={"/"}
+          onClick={() => handleCloseMenu()}
+        >
           Home
         </Link>
-        <Link className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" href={"#"}>
+        <Link 
+          className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+          href={"/create"} 
+          onClick={() => handleCloseMenu()}
+        >
           Create
         </Link>
-        <Link className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" href={"#"}>
+        <Link 
+          className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+          href={"/search?type=quizzes"} 
+          onClick={() => handleCloseMenu()}
+        >
           Play
         </Link>
-        <Link className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" href={"#"}>
+        <Link 
+          className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+          href={"/search?type=flashcards"} 
+          onClick={() => handleCloseMenu()}
+        >
           Learn
         </Link>
+        {
+          session?.user ?
+            <>
+              <Link 
+                className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+                href={`/profile/${session?.user?.username}`} 
+                onClick={() => handleCloseMenu()}
+              >
+                Profile
+              </Link>
+              <Link 
+                className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+                href={"/user/space"} 
+                onClick={() => handleCloseMenu()}
+              >
+                My space
+              </Link>
+              <Link 
+                className="hover:bg-blue-50 w-full px-4 py-4 rounded-md font-semibold text-gray-400 hover:text-blue-600" 
+                href={"/user/studies"}
+                onClick={() => handleCloseMenu()}
+              >
+                My studies
+              </Link>
+            </>
+          : null
+        }
       </div>
       <div className="mt-auto px-4 mb-9 font-bold">
-        <button className="bg-black text-white rounded-full py-4 w-full">
-          SIGN IN
-        </button>
+        {
+          !session?.user ?
+            <button 
+              className="bg-black text-white rounded-full py-4 w-full"
+              onClick={() => router.push(`/auth/login?callbackUrl=${pathname}`)}
+            >
+              SIGN IN
+            </button>
+          : <button 
+              className="bg-black text-white rounded-full py-4 w-full"
+              onClick={() => signOut()}
+            >
+              SIGN OUT
+            </button>
+        }
       </div>
     </div>
   </div>

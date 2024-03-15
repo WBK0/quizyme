@@ -7,13 +7,13 @@ const Content = () => {
         <Link href="/" className="hover:text-gray-600">
           HOME
         </Link>
-        <Link href="/" className="hover:text-gray-600">
+        <Link href="/create" className="hover:text-gray-600">
           CREATE
         </Link>
-        <Link href="/" className="hover:text-gray-600">
+        <Link href="/search?type=quizzes" className="hover:text-gray-600">
           PLAY
         </Link>
-        <Link href="/" className="hover:text-gray-600">
+        <Link href="/search?type=flashcards" className="hover:text-gray-600">
           LEARN
         </Link>
       </div>

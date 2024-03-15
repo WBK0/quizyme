@@ -1,11 +1,12 @@
 import Image from "next/image";
 import logo from '../../public/logo.svg'
+import Link from "next/link";
 
 const Logo = () => {
   return (
-    <div className="flex-1">
+    <Link className="flex-1" href="/">
       <Image src={logo} height={48} width={48} alt="Website logo" />
-    </div>
+    </Link>
   )
 }
 export default Logo;
