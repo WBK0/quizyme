@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
     const session = await getServerSession(authOptions);
 
@@ -15,6 +16,12 @@ export const GET = async () => {
         { status: 401 }
       );
     }
+    
+    const searchParams = req.nextUrl.searchParams;
+
+    const skip = Number(searchParams.get("skip")) || 0;
+    const limit = Number(searchParams.get("limit")) || 20;
+    const search = searchParams.get("search") || "";
 
     const prisma = new PrismaClient();
 
@@ -26,6 +33,24 @@ export const GET = async () => {
         Followers: {
           include: {
             follower: true
+          },
+          where: {
+            follower: {
+              OR: [
+                {
+                  name: {
+                    contains: search,
+                    mode: "insensitive",
+                  }
+                },
+                {
+                  username: {
+                    contains: search,
+                    mode: "insensitive",
+                  }
+                }
+              ]
+            }
           }
         },
         Following: {
@@ -46,7 +71,7 @@ export const GET = async () => {
       );
     }
 
-    const friends = user.Followers.map((follower) => {
+    let friends = user.Followers.map((follower) => {
       if(user.Followers.some((item) => (item.followerId === follower.followerId))){
         return {
           id: follower.followerId,
@@ -60,7 +85,7 @@ export const GET = async () => {
     return new Response(
       JSON.stringify({
         status: "Success",
-        data: friends
+        data: friends.slice(skip, skip + limit)
       }),
       { status: 200 }
     );

@@ -1,58 +1,34 @@
-"use client";
 import UserProfileCard from "@/components/UserProfileCard";
-import SelectVariants from "./SelectVariants";
-import useUrlParams from "@/hooks/useUrlParams";
-import Invitations from "./Invitations";
-import Searchbar from "@/components/Searchbar";
-import Results from "./Results";
-import { useState } from "react";
-import Favorites from "./Favorites";
-import { Data } from "./Data.type";
+import Content from "./Content";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Unauthorized from "@/components/401/401";
 
-const UserSpace = () => {
-  const { getParams } = useUrlParams();
-  const [data, setData] = useState<Data>(null);
-  const [search, setSearch] = useState('');
-  const params = getParams() as { option: 'invitations' | 'favorites' | 'my results'; type: 'quizzes' | 'flashcards' };
+const UserSpace = async () => {
+  const session = await getServerSession(authOptions);
+
+  if(!session){
+    return <Unauthorized />;
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/${session.user.username}`, {
+    next: {
+      revalidate: 15
+    }
+  });
+
+  const json = await response.json();
 
   return (
     <div>
       <div className="px-3">
         <UserProfileCard
-          name="Bartłomiej Ostojski"
-          username="OstojskiB"
-          image="https://lh3.googleusercontent.com/a/ACg8ocJO5Ft4wo3ToMc771NaE9m8Pay8VIDMZ5JNo_j145uo=s96-c"
+          name={json.data.name}
+          username={json.data.username}
+          image={json.data.image}
         />
-        <SelectVariants />
       </div>
-      <div className="sticky top-0 pt-20 pb-5 z-10 bg-white">
-        <div className="max-w-2xl mx-auto">
-          <Searchbar 
-            value={search}
-            onChange={(value) => setSearch(value)}
-          /> 
-        </div>
-      </div>
-      {
-        (() => {
-          switch (params.option) {
-            case 'invitations':
-              return(
-                <Invitations type={params.type} data={data} setData={setData} search={search} />
-              )
-            case 'favorites':
-              return(
-                <Favorites type={params.type} data={data} setData={setData} search={search}/>
-              )
-            case 'my results':
-              return(
-                <Results type={params.type} data={data} setData={setData} search={search} />
-              )
-            default:
-              return null;
-          }
-        })()
-      }
+      <Content />
     </div>
   )
 }

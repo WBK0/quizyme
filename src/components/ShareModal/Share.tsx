@@ -19,6 +19,11 @@ type Friends = {
 const Share = ({ handleClose, type, studyId } : ShareProps) => {
   const [invited, setInvited] = useState<string[] | null>(null);
   const [friends, setFriends] = useState<Friends>(null);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isAll, setIsAll] = useState(false);
+
+  const step = 10;
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
@@ -53,9 +58,10 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
     }
   }
 
-  const getFriends = async () => {
+  const getFriends = async (skip: number) => {
+    setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends?skip=${skip}&limit=${step}&search=${search}`);
 
       const json = await response.json();
 
@@ -63,17 +69,41 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
         throw new Error(json.message);
       }
 
-      setFriends(json.data);
+      if(skip === 0){
+        setFriends(json.data);
+      }else{
+        setFriends((prev) => prev && [...prev, ...json.data])
+      }
+
+      if(json.data.length < step){
+        setIsAll(true);
+      }
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message || 'An error occurred while trying to get the data.');
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    getFriends();
+    getFriends(0);
     getInvited();
   }, [])
+
+  useEffect(() => {
+    if(!friends) return;
+
+    const timeout = setTimeout(() => {
+      setFriends(null);
+      setIsAll(false);
+      getFriends(0)
+    }, 700)
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [search])
 
   return (
     <div className="fixed w-full h-screen bg-black/50 top-0 left-0 z-50 flex justify-center items-center">
@@ -84,6 +114,11 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
         handleClose={handleClose}
         friends={friends}
         invited={invited}
+        search={search}
+        setSearch={setSearch}
+        getFriends={getFriends}
+        loading={loading}
+        isAll={isAll}
       />
     </div>
   )

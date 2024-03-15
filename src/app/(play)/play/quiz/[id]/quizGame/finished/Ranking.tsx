@@ -19,8 +19,6 @@ type RankingProps = {
 const Ranking = ({ data, type, isQuiz, answersLength, isPointsEnabled = true } : RankingProps) => {
   data.filter(user => user.isFriend);
 
-  console.log(data)
-
   return (
     <div className={`bg-${type === 'global' ? 'lightblue' : 'green'} w-full max-w-lg h-96 rounded-2xl flex flex-col px-4`}>
       <div className='border-b-2 border-white py-3'>

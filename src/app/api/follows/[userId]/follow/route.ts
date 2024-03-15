@@ -19,8 +19,6 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
 
     const session = await getServerSession(authOptions);
 
-    console.log(session)
-
     if(!session?.user?.id) {
       return new Response(
         JSON.stringify({

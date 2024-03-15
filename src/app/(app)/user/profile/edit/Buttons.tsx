@@ -2,11 +2,13 @@
 
 import { DataContext } from "@/providers/edit-profile/DataProvider";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 
 const Buttons = () => {
   const { error, name, username, bio, image, interests } = useContext(DataContext);
+  const router = useRouter();
 
   const { update } = useSession();
 
@@ -36,7 +38,9 @@ const Buttons = () => {
 
       setTimeout(async () => {
         await update();
+        router.refresh();
       }, 0)
+
 
       if(!response.ok){
         throw new Error(data.message);
