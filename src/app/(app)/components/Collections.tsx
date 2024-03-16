@@ -36,7 +36,7 @@ const Collections = () => {
           Chemistry
         </CollectionCard>
       </div>
-      <Link href="/" className="flex justify-center w-full mt-12">
+      <Link href="/collections" className="flex justify-center w-full mt-12">
         <Button>
           SHOW ALL
         </Button>

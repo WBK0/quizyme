@@ -2,53 +2,48 @@ import Button from "@/components/Button";
 import Card from "@/components/Card";
 import Link from "next/link";
 
-const TopQuizzes = () => {
+type Quiz = {
+  id: number,
+  image: string,
+  topic: string,
+  user: {
+    name: string,
+    image: string
+  },
+  stats: {
+    questions: number
+  }
+
+}
+
+const TopQuizzes = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/top/quizzes`);
+
+  const json = await response.json();
+
+  const colors = ['purple', 'yellow', 'green', 'lightblue']
+
   return (
     <div className="mt-28 px-3">
       <h2 className="font-bold text-3xl w-full mb-8">TOP QUIZZES</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card 
-          image="https://cdn.pixabay.com/photo/2012/11/28/10/34/rocket-launch-67643_1280.jpg"
-          to="/"
-          color="purple"
-          type="quiz"
-          topic="Cosmos"
-          authorName="John Doe"
-          authorImage="http://localhost:3100/defaultPicture.png"
-          quantity={18}
-        />
-        <Card 
-          image="https://cdn.pixabay.com/photo/2014/12/22/10/04/lions-577104_1280.jpg"
-          to="/"
-          color="yellow"
-          type="quiz"
-          topic="Africa"
-          authorName="John Doe"
-          authorImage="http://localhost:3100/defaultPicture.png"
-          quantity={18}
-        />
-        <Card 
-          image="https://cdn.pixabay.com/photo/2016/11/29/02/05/audience-1866738_1280.jpg"
-          to="/"
-          color="green"
-          type="quiz"
-          topic="Football"
-          authorName="John Doe"
-          authorImage="http://localhost:3100/defaultPicture.png"
-          quantity={18}
-        />
-        <Card 
-          image="https://cdn.pixabay.com/photo/2016/04/07/06/53/bmw-1313343_640.jpg"
-          to="/"
-          color="lightblue"
-          type="quiz"
-          topic="Motorcycles"
-          authorName="John Doe"
-          authorImage="http://localhost:3100/defaultPicture.png"
-          quantity={18}
-        />
+        {
+          json.data.slice(0, 4).map((quiz: Quiz, index: number) => (
+            <Card 
+              key={quiz.id}
+              image={quiz.image}
+              to={`/study/${quiz.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${quiz.id}`}
+              color={colors[index % 4]}
+              type="quiz"
+              topic={quiz.topic}
+              authorName={quiz.user.name}
+              authorImage={quiz.user.image}
+              quantity={quiz.stats.questions}
+            />
+          ))
+        }
       </div>
-      <Link href="/" className="flex justify-center w-full mt-6">
+      <Link href="/search?type=quizzes" className="flex justify-center w-full mt-6">
         <Button>
           SHOW MORE
         </Button>
