@@ -14,6 +14,10 @@ const CompleteRegister = async () => {
     redirect('/')
   }
 
+  if(!session?.user?.emailVerified){
+    redirect('/auth/confirm-email')
+  }
+
   return (
     <CompleteRegisterProvider session={session}>
       <div className="max-w-lg mx-auto flex min-h-screen flex-col justify-center px-3 gap-4 relative py-16">

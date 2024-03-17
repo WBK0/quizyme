@@ -6,11 +6,13 @@ declare module "next-auth" {
       id: string, 
       isComplete: boolean,
       email: string
+      emailVerified: Date
     } & DefaultSession["user"]
   }
 
   interface User {
     isComplete?: boolean,
     username?: string
+    emailVerified?: Date
   }
 }

@@ -41,14 +41,14 @@ export const authOptions : AuthOptions = {
           return null;
         }
 
-
         return {
           email: user.email,
           id: user.id,
           isComplete: user.isComplete,
           username: user?.username || undefined,
           image: user?.image || undefined,
-          name: user?.name || undefined
+          name: user?.name || undefined,
+          emailVerified: user?.emailVerified || undefined
         };
       },
     }),
@@ -96,12 +96,12 @@ export const authOptions : AuthOptions = {
           ...session.user,
           id: token.id,
           username: token.username,
-          isComplete: token.isComplete
+          isComplete: token.isComplete,
+          emailVerified: token.emailVerified
         },
       };
     },
     jwt: async ({ token, user, trigger } ) => {
-
       if(trigger === 'update'){
         const dbUser = await prisma.user.findUnique({
           where: {
@@ -114,7 +114,8 @@ export const authOptions : AuthOptions = {
           isComplete: dbUser?.isComplete,
           username: dbUser?.username,
           image: dbUser?.image,
-          name: dbUser?.name
+          name: dbUser?.name,
+          emailVerified: dbUser?.emailVerified
         }
       }
 
@@ -123,7 +124,8 @@ export const authOptions : AuthOptions = {
           ...token,
           id: user.id,
           username: user.username,
-          isComplete: user.isComplete
+          isComplete: user.isComplete,
+          emailVerified: user.emailVerified
         };
       }
       

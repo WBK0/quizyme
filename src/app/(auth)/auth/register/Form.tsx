@@ -94,7 +94,7 @@ const Form = () => {
         type="password"
       />
       <button
-        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
+        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
       >
         Register
       </button>

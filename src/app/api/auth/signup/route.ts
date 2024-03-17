@@ -2,6 +2,8 @@ import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
+import generateCode from "./generateCode";
+import sendEmail from "./sendEmail";
 
 export const POST = async (req: Request) => {
   try {
@@ -26,14 +28,44 @@ export const POST = async (req: Request) => {
       throw new Error("User with that email already exists");
     }
 
+    let code: string;
+    let isCode;
+
+    do {
+      code = generateCode();
+      isCode = await prisma.code.findUnique({
+        where: {
+          code: code,
+        },
+      });
+    } while (isCode !== null);
+
     const hashedPassword = await hash(password, 12);
 
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
+    const result = await prisma.$transaction(async (prisma) => {
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+        },
+      });
+
+      if(!user){
+        throw new Error('An error occurred while creating user');
+      }
+
+      await prisma.confirmCode.create({
+        data: {
+          code,
+          userId: user.id,
+          deleteAt: new Date(Date.now() + 1000 * 60 * 15),
+        },
+      });
+      
+      await sendEmail(email, code);
+    })
+
+    prisma.$disconnect();
 
     return new NextResponse(
       JSON.stringify({

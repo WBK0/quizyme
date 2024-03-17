@@ -8,7 +8,7 @@ const LoginViaProvider = () => {
   return (
     <div className="mt-4">
       <button 
-        className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full mb-3 font-bold relative h-10"
+        className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full mb-3 font-bold relative h-10 hover:scale-105 duration-300"
         onClick={() => {signIn('google')}}
       >
         <i className="absolute left-5 top-1">
@@ -17,7 +17,7 @@ const LoginViaProvider = () => {
         <span>Login with Google</span>
       </button>
       <button 
-        className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full font-bold relative h-10"
+        className="bg-white text-black rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full font-bold relative h-10 hover:scale-105 duration-300"
         onClick={() => {signIn('github')}}
       >
         <i className="absolute left-5 top-1">
