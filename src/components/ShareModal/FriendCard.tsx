@@ -60,7 +60,7 @@ const FriendCard = ({ friend, type, studyId, setInvited, invited } : FriendCardP
 
   return (
     <div className="flex w-full items-center">
-      <Image src={friend.image} alt="User photo" width={64} height={64} className="rounded-full h-16" />
+      <Image src={friend.image} alt="User photo" width={64} height={64} className="rounded-full h-16 aspect-square" />
       <div className="flex flex-col justify-center ml-3">
         <p className="font-bold text-sm sm:text-lg mr-2">{friend.name}</p>
         <p className="font-light text-xs break-all mr-2">@{friend.username}</p>

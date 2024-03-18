@@ -9,7 +9,7 @@ type UserProps = {
 const UserProfileCard = ({ name, username, image } : UserProps) => {
   return (
     <div className="flex flex-col items-center">
-      <Image src={image} alt="user image" width={96} height={96} className="rounded-full"/>
+      <Image src={image} alt="user image" width={96} height={96} className="rounded-full aspect-square"/>
       <p className="font-bold text-2xl mt-4 mb-2">{name}</p>
       <p className="text-sm font-semibold text-gray-400">@{username}</p>
     </div>

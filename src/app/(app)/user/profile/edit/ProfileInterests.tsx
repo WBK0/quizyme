@@ -4,7 +4,7 @@ import { DataContext } from "@/providers/edit-profile/DataProvider";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
-const interestsToSelect = ['✈️ Traveling', '🏎️ Racing', '⚽ Sports', '📘 Study', '🛠️ Crafts', '🖥️ IT', '✈️ Traveling1', '🏎️ Racing1', '⚽ Sports1', '📘 Study1', '🛠️ Crafts1', '🖥️ IT1', '✈️ Traveling2', '🏎️ Racing2', '⚽ Sports2', '📘 Study2', '🛠️ Crafts2', '🖥️ IT2', '✈️ Traveling3', '🏎️ Racing3', '⚽ Sports3', '📘 Study3', '🛠️ Crafts3', '🖥️ IT3', '✈️ Traveling4', '🏎️ Racing4', '⚽ Sports4', '📘 Study4', '🛠️ Crafts4', '🖥️ IT4', '✈️ Traveling5', '🏎️ Racing5', '⚽ Sports5', '📘 Study5', '🛠️ Crafts5', '🖥️ IT5'];
+const interestsToSelect = ['✈️ Traveling', '🏎️ Racing', '⚽ Sports', '📘 Study', '🛠️ Crafts', '🖥️ IT', '🎨 Art', '🎵 Music', '📚 Reading', '🎮 Gaming', '🍳 Cooking', '🌿 Gardening', '🏄‍♂️ Surfing', '🚵‍♂️ Cycling', '🎭 Theater', '🏋️‍♂️ Fitness', '🧘‍♀️ Yoga', '🎬 Movies', '🎤 Singing', '🐶 Pet care', '🎯 Archery', '🎻 Playing an instrument', '📷 Photography', '🍷 Wine tasting'];
 
 const ProfileInterests = () => {
   const { interests, dispatch } = useContext(DataContext);

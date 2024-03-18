@@ -24,11 +24,11 @@ type FormData = {
 const ImageForm = () => {
   const { formValues, handleChangeForm, setStep, step } = useContext(CompleteRegisterContext);
 
-  const [selectedImage, setSelectedImage] = useState<File | null>(formValues?.image || null);
+  const [selectedImage, setSelectedImage] = useState<string>(formValues?.image || "https://cdn.quizyme.codebybartlomiej.pl/uploads/defaultPicture.png");
 
-  const onSubmit = (data : FormData) => {
+  const onSubmit = () => {
     handleChangeForm({
-      image: data.image?.[0] ?? selectedImage
+      image: selectedImage
     })
     setStep(step + 1)
   }
@@ -40,10 +40,47 @@ const ImageForm = () => {
   }, [errors])
 
   useEffect(() => {
+    const uploadImage = async (file : File) => {
+      try {
+        const url = await toast.promise(
+          async () => {
+            const formData = new FormData()
+            formData.append('file', file)
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_CDN_URL}/upload`, {
+              method: 'POST',
+              body: formData
+            })
+
+            const data = await response.json();
+            
+            setSelectedImage(data.url);
+
+            if (!response.ok) {
+              throw new Error('An error occurred while uploading image');
+            }
+          },
+          {
+            pending: 'Uploading image...',
+            success: 'Image uploaded successfully! 🎉',
+            error: 'An error occurred while uploading image'
+          },
+          {
+            hideProgressBar: true,
+            autoClose: 1500
+          }
+        );
+
+        return url;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     let file = watch('image') as File[];
 
     if (file && file[0]) {
-      setSelectedImage(file[0]);
+      uploadImage(file[0]);
     }
   }, [watch('image')])
 
@@ -58,7 +95,7 @@ const ImageForm = () => {
             <Image src={brush} width={32} height={32} alt="brush" className="mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white w-0 h-0 group-hover:w-12 group-hover:h-12 duration-300" />
           </div>
           <Image
-            src={typeof selectedImage == 'string' ? selectedImage : selectedImage ? URL.createObjectURL(selectedImage) : defaultPicture}
+            src={selectedImage}
             width={128}
             height={128}
             alt="profile"
@@ -90,12 +127,12 @@ const ImageForm = () => {
       <div>
         <button
           type="submit"
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
         >
           Next step
         </button>
         <button
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2 hover:scale-105 duration-300"
           onClick={() => setStep(step - 1)}
         >
           Previous step

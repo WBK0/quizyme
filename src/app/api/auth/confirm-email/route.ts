@@ -37,7 +37,7 @@ export const POST = async (req: NextRequest) => {
 
     const isCodeExists = await prisma.confirmCode.findUnique({
       where: {
-        code: code,
+        code: code.toUpperCase(),
         userId: session.user.id
       }
     })

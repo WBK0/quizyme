@@ -8,7 +8,7 @@ export type FormData = {
   username: string;
   bio: string;
   interests: string[];
-  image?: any;
+  image: string;
 };
 
 export const CompleteRegisterContext = createContext({
@@ -26,7 +26,7 @@ const CompleteRegisterProvider = ({ children, session } : { children: React.Reac
     username: '',
     bio: '',
     interests: [],
-    image: session?.user.image ?? null
+    image: session?.user.image ?? "https://cdn.quizyme.codebybartlomiej.pl/uploads/defaultPicture.png"
   }) 
 
   const handleChangeForm = (values: Partial<FormData>) => {

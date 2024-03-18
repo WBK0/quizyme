@@ -162,7 +162,7 @@ const NotificationsList = ({ handleClose } : { handleClose: () => void }) => {
                           height={48} 
                           width={48} 
                           alt="user photo" 
-                          className="rounded-full"
+                          className="rounded-full aspect-square"
                         />
                         <div>
                           <h6 className="font-bold text-normal md:text-lg">

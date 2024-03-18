@@ -82,12 +82,12 @@ const UsernameForm = () => {
       />
       <div>
         <button
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white"
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
         >
           Next step
         </button>
         <button
-          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2"
+          className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2 hover:scale-105 duration-300"
           onClick={() => setStep(step - 1)}
         >
           Previous step

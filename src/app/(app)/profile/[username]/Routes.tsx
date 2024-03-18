@@ -5,11 +5,11 @@ import UserProfileCard from "@/components/UserProfileCard";
 import SelectVariant from "./SelectVariant";
 import Stats from "./Stats";
 import About from "./About";
-import Recommendations from "@/components/Recommendations";
 import Studies from "./Studies";
 import { useEffect, useState } from "react";
 import useUrlParams from "@/hooks/useUrlParams";
 import FollowButton from "./FollowButton";
+import Spinner from "@/components/Loading/Spinner";
 
 const Routes = ({ data } : { data: any }) => {
   const [showModal, setShowModal] = useState<number>(0);
@@ -81,9 +81,9 @@ const Routes = ({ data } : { data: any }) => {
               />;
             default:
               return (
-                <h1 className="font-extrabold text-center text-2xl mt-24">
-                  An unknown error occurred
-                </h1>
+                <div className="flex justify-center pt-24">
+                  <Spinner />
+                </div>
               );
           }
         })()

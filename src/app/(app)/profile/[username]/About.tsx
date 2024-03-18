@@ -18,7 +18,7 @@ const About = ({ firstname, description, interests } : AboutProps) => {
       </h2>
       <div className="flex flex-wrap gap-3 mt-6">
         {interests.length > 0 && interests.map((value) => (
-          <div key={value} className="px-3 sm:px-6 py-1 text-black rounded-full font-bold bg-gray-100 w-fit">
+          <div key={value} className="px-3 sm:px-6 py-1 text-black rounded-full font-bold bg-gray-100 w-fit hover:bg-gray-200">
             {value}
           </div>
         ))}

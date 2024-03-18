@@ -59,7 +59,7 @@ const UserList = ({ openNotifications } : { openNotifications: boolean }) => {
           onClick={() => setShowUserList((prev) => !prev)}
           ref={buttonRef}
         >
-          <Image src={person} height={20} alt="User profile" className="cursor-pointer" />
+          <Image src={person} height={20} alt="User profile" className="cursor-pointer aspect-square" />
         </button>
         {
           showUserList ?

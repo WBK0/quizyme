@@ -19,7 +19,7 @@ const Card = ({to, image, color, type, topic, authorName, authorImage, quantity,
       <div className={`flex justify-center w-full hover:scale-105 duration-300 max-w-2xl aspect-video shadow-small shadow-${color} rounded-2xl relative`}>
         <Image src={image} width={672} height={378} alt="Hero image" className="rounded-2xl"/>
         <div className="absolute left-4 bottom-4 text-white font-black flex flex-wrap items-center gap-2">
-          <Image src={authorImage} width={32} height={32} alt="User photo" className="rounded-full"/>
+          <Image src={authorImage} width={32} height={32} alt="User photo" className="rounded-full aspect-square"/>
           <p>{authorName.split(" ")[0]}</p>
         </div>
         <div className={`absolute right-0 top-0 px-6 rounded-tr-xl rounded-bl-2xl text-white text-md font-bold py-0.5 bg-${color}`}>

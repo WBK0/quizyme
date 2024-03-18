@@ -15,7 +15,7 @@ const UserCard = ({ image, name, username, isFollowing, handleFollow, handleShar
   return (
     <div className="flex w-full mt-6 items-center">
       <Link href={`/profile/${username}`} className="flex">
-        <Image src={image} alt="User photo" width={64} height={64} className="rounded-full h-16" />
+        <Image src={image} alt="User photo" width={64} height={64} className="rounded-full h-16 aspect-square" />
         <div className="flex flex-col justify-center ml-3">
           <p className="font-bold text-sm sm:text-lg mr-2">{name}</p>
           <p className="font-light text-xs break-all mr-2">@{username}</p>

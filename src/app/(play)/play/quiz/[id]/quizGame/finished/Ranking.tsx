@@ -30,7 +30,7 @@ const Ranking = ({ data, type, isQuiz, answersLength, isPointsEnabled = true } :
             <div className='flex items-center text-white justify-between gap-4'>
               <div className='flex gap-3 items-center'>
                 <h6 className={`font-black text-xl ${i < 100 ? 'w-9' : 'w-14'}`}>#{i + 1}</h6>
-                <Image src={user.user.image} alt="Profile picture" width={40} height={40} className='rounded-full' />
+                <Image src={user.user.image} alt="Profile picture" width={40} height={40} className='rounded-full aspect-square' />
                 <p className='font-semibold'>{user.user.name}</p>
               </div>
               {
