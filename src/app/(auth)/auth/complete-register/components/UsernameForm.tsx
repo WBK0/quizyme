@@ -26,7 +26,7 @@ const UsernameForm = () => {
     try {
       const result = await toast.promise(
         async () => {
-          const response = await fetch(`/api/auth/complete-register/check-username/${value.replace(/ /g, '_')}`);
+          const response = await fetch(`/api/auth/complete-register/check-username/${value.trim().replace(/ /g, '_')}`);
           
           if (!response.ok) {
             throw new Error('An error occurred while checking username availability');
@@ -70,7 +70,7 @@ const UsernameForm = () => {
   return (
     <form className="flex flex-col gap-5 max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
       <p className='font-semiBold text-gray-500 text-center'>
-        You will be displayed as <span className="font-bold text-black">@{watch('username') ? watch('username').replace(/ /g, '_') : 'username'}</span>
+        You will be displayed as <span className="font-bold text-black">@{watch('username') ? watch('username').trim().replace(/ /g, '_') : 'username'}</span>
       </p>
       <AuthInput 
         name="username"

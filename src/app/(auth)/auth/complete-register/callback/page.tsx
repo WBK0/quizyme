@@ -32,10 +32,10 @@ const Callback = () => {
         />
       </div>      
       <h1 className="font-black text-4xl text-center">Welcome in our family!</h1>
-      <p className="text-center text-sm mt-6">
+      <p className="text-center text-sm mt-6 font-bold">
         Please wait while we are saving all your data and configuration your account!
       </p>
-      <p className="text-center text-sm ">
+      <p className="text-center text-sm font-bold">
         You will be redirected to the homepage in a few seconds...
       </p>
     </div>

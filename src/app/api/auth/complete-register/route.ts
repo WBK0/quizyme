@@ -1,4 +1,3 @@
-import { connectToDB } from "@/utils/database"
 import { getServerSession } from "next-auth";
 import { authOptions } from "../[...nextauth]/route";
 import * as yup from "yup";
@@ -33,11 +32,8 @@ const schema = yup.object().shape({
 });
 
 export const POST = async (req: Request) => {
-  await connectToDB();
-
   const prisma = new PrismaClient();
   const session = await getServerSession(authOptions);
-  const data = await req.formData();
 
   if(!session?.user?.email) {
     return new Response(
@@ -65,8 +61,10 @@ export const POST = async (req: Request) => {
     );
   }
 
+  const { firstname, lastname, username, image, bio, interests } = await req.json();
+
   await schema.validate(
-    Object.fromEntries(data.entries()),
+    { firstname, lastname, username, image, bio, interests },
     { abortEarly: false }
   ).catch((err) => {
     return new Response(
@@ -78,12 +76,7 @@ export const POST = async (req: Request) => {
     );
   });
 
-  const firstname = data.get('firstname');
-  const lastname = data.get('lastname');
-  const username = data.get('username')?.toString().replace(/ /g, '_');
-  let image = data.get('image');
-  const bio = data.get('bio');
-  const interests = (data.getAll('interests') as string[]).filter(Boolean);
+  console.log(interests)
 
   if(!firstname || !lastname || !username) {
     return new Response(
@@ -112,13 +105,6 @@ export const POST = async (req: Request) => {
       }),
       { status: 400 }
     );
-  }
-
-  if (image == 'null') {
-    image = 'defaultPicture.png';
-  }else if(typeof image !== 'string'){
-    const savedImage = await saveImage(image as File);
-    image = savedImage;
   }
 
   await prisma.user.update({

@@ -54,9 +54,11 @@ export const POST = async (req: NextRequest) => {
       )
     }
 
+    console.log(session.user.id, code, isCodeExists)
+
     await prisma.confirmCode.delete({
       where: {
-        code: code,
+        code: code.toUpperCase(),
         userId: session.user.id
       }
     })
@@ -80,6 +82,7 @@ export const POST = async (req: NextRequest) => {
       }
     );
   } catch (error) {
+    console.log(error);
     return new Response(
       JSON.stringify({
         message: 'An error occurred while confirming email',
