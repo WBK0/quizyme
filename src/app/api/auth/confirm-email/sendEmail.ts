@@ -1,17 +1,17 @@
 import transporter from "@/utils/mailer";
 
-const sendEmail = async (to : string, code : string) => {
+const sendEmail = async (to : string) => {
   try {
     await transporter.sendMail({
       from: 'QuizyMe@codebybartlomiej.pl',
       to: to,
-      subject: 'Account confirmation | QuizyMe',
+      subject: 'Email confirmed successfully | QuizyMe',
       html: `
       <html lang="en">
 				<head>
 					<meta charset="UTF-8">
 					<meta name="viewport" content="width=device-width, initial-scale=1.0">
-					<title>Email confirmation</title>
+					<title>Email confirmed successfully</title>
 					<link rel="preconnect" href="https://fonts.googleapis.com">
 					<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 					<link href="https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;700&family=Oswald:wght@200..700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
@@ -79,21 +79,14 @@ const sendEmail = async (to : string, code : string) => {
 				<body>
 					<div class="container" align="center">
 					<img src="cid:logo" alt="logo" />
-					<h1 style="width: fit-content; margin-top: 15px; margin-bottom: 15px;">Thank you for creating account on our platform!</h1>
-						<p style="margin-top: 10px; margin-bottom: 10px;">Click on link below or copy and enter code on QuizyMe site.</p>
-						<a href="${process.env.NEXT_PUBLIC_URL}/auth/confirm-email?code=${code}" class="button" style="color: white; margin-top: 25px; margin-bottom: 10px;">Confirm your email</a>
-						<div class="code" align="center" style="margin-top: 40px; margin-bottom: 30px;">
-							<p>${Array.from(code)[0]}</p>
-							<p>${Array.from(code)[1]}</p>
-							<p>${Array.from(code)[2]}</p>
-							<p>${Array.from(code)[3]}</p>
-							<p>${Array.from(code)[4]}</p>
-							<p>${Array.from(code)[5]}</p>
-						</div>
-						<p class="ignore" style="margin-top: 25px; margin-bottom: 15px;">
-							If you didn't create account on our platform, please ignore this email.
-						</p>
-						<a class="team" href="${process.env.NEXT_PUBLIC_URL}/" style="color: black">
+					<h1 style="width: fit-content; margin-top: 15px; margin-bottom: 15px;">Thank you for confirmation account on our platform!</h1>
+						<p style="margin-top: 10px; margin-bottom: 10px;">
+              Your email has been confirmed successfully. Now you can use all features of QuizyMe. Complete your profile and start learning with us!
+            </p>
+            <p style="margin-top: 10px; margin-bottom: 10px; color: #645E5E;">
+              If you have any questions or problems, please contact us at: support@codebybartlomiej.pl
+            </p>
+            <a class="team" href="${process.env.NEXT_PUBLIC_URL}/" style="color: black">
 							QuizyMe team
 						</a>
 					</div>

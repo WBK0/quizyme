@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { authOptions } from "../[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { PrismaClient } from "@prisma/client";
+import sendEmail from "./sendEmail";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -54,8 +55,6 @@ export const POST = async (req: NextRequest) => {
       )
     }
 
-    console.log(session.user.id, code, isCodeExists)
-
     await prisma.confirmCode.delete({
       where: {
         code: code.toUpperCase(),
@@ -71,6 +70,8 @@ export const POST = async (req: NextRequest) => {
         emailVerified: new Date()
       }
     })
+
+    sendEmail(session.user.email);
 
     return new Response(
       JSON.stringify({
