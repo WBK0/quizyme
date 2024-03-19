@@ -33,7 +33,7 @@ export const POST = async (req: Request) => {
 
     do {
       code = generateCode();
-      isCode = await prisma.code.findUnique({
+      isCode = await prisma.confirmCode.findUnique({
         where: {
           code: code,
         },
