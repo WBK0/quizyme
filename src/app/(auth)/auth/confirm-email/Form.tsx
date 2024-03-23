@@ -48,7 +48,7 @@ const Form = () => {
   }
 
   useEffect(() => {
-    const test = async () => {  
+    const updateAuth = async () => {  
       if(requsted && !loading){
         await update();
         setTimeout(() => {
@@ -57,7 +57,7 @@ const Form = () => {
       }
     }
 
-    test();
+    updateAuth();
   }, [loading])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index : number) => {

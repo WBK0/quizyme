@@ -1,10 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 import sendEmail from "./sendEmail";
+import { cookies } from "next/headers";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { email } = await req.json();
+    let { email } = await req.json();
+
+    if(!email){
+      email = cookies().get('password-reset-email')?.value;
+    }
 
     const prisma = new PrismaClient();
 
@@ -67,7 +72,6 @@ export const POST = async (req: NextRequest) => {
       { status: 200 }
     )
   } catch (error) {
-
     console.log(error)
     return new Response(
       JSON.stringify({

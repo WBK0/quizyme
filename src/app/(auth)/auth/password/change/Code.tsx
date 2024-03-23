@@ -1,6 +1,171 @@
-const Code = () => {
+"use client";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import ResendCode from "./ResendCode";
+import { toast } from "react-toastify";
+
+type CodeProps = {
+  nextStep: () => void;
+  setConfirmCode: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const Code = ({ nextStep, setConfirmCode } : CodeProps) => {
+  const [code, setCode] = useState(Array(6).fill(''));
+  const inputRefs = useRef<HTMLInputElement[] | null[]>(Array(6).fill(null));
+  const [loading, setLoading] = useState(false);
+
+  const searchParams = useSearchParams()
+
+  const getCode = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/change-password/get-code/${searchParams.get('id')}`, {
+      method: 'GET'
+    });
+
+    const data = await response.json();
+
+    if(response.ok){
+      setCode(data.code.split(''));
+    }
+  }
+
+  useEffect(() => {
+    getCode();
+  }, [])
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+
+      const codeString = code.join('');
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/change-password/check-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code: codeString })
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message);
+      }
+
+      setConfirmCode(codeString);
+      nextStep();
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index : number) => {
+    if(e.target.value.length > 1){
+      e.target.value = e.target.value.slice(1, 2);
+    }
+    setCode((prev) => {
+      return(code[index] = e.target.value, [...prev])
+    })
+    if (e.target.value !== '') {
+      if (index !== 5) {
+        inputRefs.current[index + 1]?.focus();
+      } else {
+        inputRefs.current[index]?.blur();
+      }
+    } 
+  }
+
+  const handleKeys = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === 'Backspace' && code[index] === '') {
+      if (index !== 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    }else if(e.key === 'ArrowLeft'){
+      if (index !== 0) {
+        if (inputRefs.current && inputRefs.current[index - 1]) {
+          inputRefs.current[index - 1]?.focus();
+          setTimeout(() => {
+            if (inputRefs.current && inputRefs.current[index - 1]) {
+              inputRefs.current[index - 1]!.selectionStart = 1;
+            }
+          });
+        }
+      }
+    }else if (e.key === 'ArrowRight') {
+      if (index !== 5) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    }
+  }
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('Text');
+
+    if(text.length !== 6){
+      return;
+    }
+
+    const arrayOfText = text.split(""); 
+
+    setCode(arrayOfText); 
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    target.selectionStart = 1;
+  }
+
+  useEffect(() => {
+    if(searchParams.get('code')){
+      const code = searchParams.get('code')?.split('');
+      if(code)
+        setCode(code);
+    }
+  }, [])
+
+  useEffect(() => {
+    if(code.join('').length === 6){
+      handleSubmit();
+    }
+  }, [code])
+  
   return (
-    <div>Code</div>
+    <>
+      <h6 className="max-w-[500px] mt-8 text-center text-sm text-zinc-500 font-bold">
+        We have sent a 6-character code to your email. Please enter the code below or click the link in your email.
+      </h6>
+      <div className='grid grid-cols-6 gap-1 sm:gap-2 mt-6 max-w-[500px] mx-auto'>
+        {
+          loading ? (
+            <div className='absolute inset-0 bg-black/50 left-0 w-full flex items-center justify-center'>
+              <div
+                className={`inline-block h-24 w-24 animate-spin rounded-full border-[12px] border-solid border-white border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`}
+                role="status">
+              </div>
+            </div>
+          ) : null
+        }
+        {
+          code.map((value, index) => (
+            <input 
+              key={index}
+              className='bg-white w-full rounded-xl sm:rounded-2xl text-center font-black sm:text-3xl text-2xl outline-none uppercase shadow-xl aspect-square cursor-end caret-transparent focus:bg-gray-300 select-none'
+              value={value}
+              onPaste={handlePaste}
+              ref={(el) => inputRefs.current[index] = el}
+              onChange={(e) => handleInputChange(e, index)}
+              onKeyDown={(e) => handleKeys(e, index)}
+              onClick={handleClick}
+            />
+          ))
+        }
+      </div>
+      <ResendCode />
+    </>
   )
 }
 

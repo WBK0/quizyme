@@ -5,18 +5,27 @@ import { useState } from "react";
 import caution from "@/public/caution.png";
 import * as yup from "yup";
 import EasySpinner from "@/components/Loading/EasySpinner";
+import { useRouter } from "next/navigation";
+import { cookies } from 'next/headers'
+import setEmailCookie from "./setEmailCookie";
 
 const emailSchema = yup.string().email('Invalid email format').required('Email is required');
 
-const Email = () => {
+const Email = ({ sessionEmail } : { sessionEmail?: string }) => {
   const [error, setError] = useState<string | null>(null);
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>(sessionEmail || '');
   const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
       setError(null);
+
+      await emailSchema.validate(email).catch((err) => {
+        throw new Error(err.errors[0]);
+      });
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/change-password/send-email`, {
         method: 'POST',
@@ -32,9 +41,9 @@ const Email = () => {
         throw new Error(json.message);
       }
 
-      await emailSchema.validate(email).catch((err) => {
-        throw new Error(err.errors[0]);
-      });
+      setEmailCookie(email);
+      router.push('/auth/password/change');
+
     } catch (error: unknown) {
       if(error instanceof Error)
         setError(error.message || "An unknown error occurred");
@@ -58,6 +67,7 @@ const Email = () => {
               placeholder="Email"
               className={`w-full rounded-xl px-4 py-2 outline-none font-bold text-lg focus:ring-2 focus:ring-black ${error ? 'ring-2 ring-red' : ''}`}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={sessionEmail ? true : false}
               value={email}
             />
             <div className="group">

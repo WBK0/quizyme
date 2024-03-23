@@ -321,6 +321,7 @@ model ConfirmCode {
   code      String   @unique
   userId    String   @db.ObjectId
   deleteAt  DateTime
+  isAsked   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

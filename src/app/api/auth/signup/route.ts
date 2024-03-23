@@ -4,6 +4,18 @@ import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 import generateCode from "./generateCode";
 import sendEmail from "./sendEmail";
+import * as yup from 'yup';
+
+const schema = yup.object({
+  email: yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
+  password: yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(24, 'Password must not exceed 24 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number')
+    .required('Password is required'),
+}).required('Please fill in all required fields');
 
 export const POST = async (req: Request) => {
   try {
@@ -19,6 +31,10 @@ export const POST = async (req: Request) => {
     if (!email || !password) {
       throw new Error("Email and password are required");
     }
+
+    await schema.validate({ email, password }).catch((err) => {
+      throw new Error(err.errors[0]);
+    });
 
     const exists = await prisma.user.findUnique({
       where: { email },
