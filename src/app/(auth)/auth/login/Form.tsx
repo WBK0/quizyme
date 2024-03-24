@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const schema = yup.object({
   email: yup.string()
@@ -25,10 +26,12 @@ type FormData = {
 
 const Form = ({ callbackUrl } : { callbackUrl?: string}) => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: yupResolver(schema) });
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
+    if(isSubmitted || isSubmitting) return;
     try {
       toast.promise(
         async() => {
@@ -41,6 +44,9 @@ const Form = ({ callbackUrl } : { callbackUrl?: string}) => {
           if(!result?.ok){
             throw new Error('An error occurred while sending the form');
           }
+
+          setIsSubmitted(true);
+
           setTimeout(() => {
             router.push(callbackUrl || '/');
           }, 3000);
@@ -77,6 +83,7 @@ const Form = ({ callbackUrl } : { callbackUrl?: string}) => {
       />  
       <button
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
+        disabled={isSubmitting || isSubmitted}
       >
         Login
       </button>

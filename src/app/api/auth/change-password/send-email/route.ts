@@ -52,7 +52,7 @@ export const POST = async (req: NextRequest) => {
     } while (isCode !== null);
 
 
-    await prisma.confirmCode.create({
+    const confirmationCode = await prisma.confirmCode.create({
       data: {
         code,
         userId: user.id,
@@ -62,7 +62,7 @@ export const POST = async (req: NextRequest) => {
 
     await prisma.$disconnect();
 
-    await sendEmail(email, code);
+    await sendEmail(email, confirmationCode.id, code);
 
     return new Response(
       JSON.stringify({

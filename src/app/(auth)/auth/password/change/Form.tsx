@@ -5,6 +5,10 @@ import caution from "@/public/caution.png"
 import eye from "@/public/eye.png";
 import blind from "@/public/blind.png";
 import * as yup from 'yup';
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import EasySpinner from "@/components/Loading/EasySpinner";
 
 type DynamicType = {
   newPassword: 'password' | 'text';
@@ -23,14 +27,19 @@ const schema = yup.object().shape({
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number')
     .required('Password is required'),
   repeatPassword: yup.string()
-    .oneOf([yup.ref('password'), ''], 'Passwords must match')
+    .oneOf([yup.ref('newPassword'), ''], 'Passwords must match')
     .required('Repeat password is required')
 });
 
-const Form = () => {
+const Form = ({ code } : { code: string | null }) => {
+  const session = useSession();
   const [error, setError] = useState<Error>();
   const [dynamicType, setDynamicType] = useState<DynamicType>({ newPassword: 'password', repeatPassword: 'password' });
   const [values, setValues] = useState<{ newPassword: string, repeatPassword: string }>({ newPassword: '', repeatPassword: '' });
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -45,12 +54,37 @@ const Form = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
+    setError({ newPassword: null, repeatPassword: null });
     e.preventDefault();
     try {
       await schema.validate({ newPassword: values.newPassword, repeatPassword: values.repeatPassword }, { abortEarly: false });
       setError({ newPassword: null, repeatPassword: null });
 
-      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/change-password`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code, password: values.newPassword })
+      });
+
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message);
+      }
+
+      setLoading(false);
+      setIsSuccess(true);
+      toast.success('Password changed successfully! Please login with your new password.')
+      if(session.status === 'authenticated'){
+        await signOut({ redirect: false});
+      }
+
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 2000)
 
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -60,6 +94,13 @@ const Form = () => {
         });
         setError(errors);
       }
+      else if(err instanceof Error){
+        setError({
+          newPassword: err.message,
+          repeatPassword: null
+        })
+      }
+      setLoading(false);
     }
   }
   
@@ -114,8 +155,15 @@ const Form = () => {
           <Image src={dynamicType.repeatPassword === 'password' ? eye : blind} width={24} height={24} alt="error" />
         </i>
       </div>
-      <button className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300">
-        Change password
+      <button 
+        className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
+        disabled={loading || isSuccess}
+      >
+        {
+          loading 
+          ? <EasySpinner />
+          : "Change password"
+        }
       </button>
     </form>
   )

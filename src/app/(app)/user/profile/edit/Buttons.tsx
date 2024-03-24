@@ -63,6 +63,8 @@ const Buttons = () => {
       </button>
       <button
         className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white mt-2 hover:scale-105 duration-300"
+        type="button"
+        onClick={() => router.push('/auth/password/reset')}
       >
         Change password
       </button>

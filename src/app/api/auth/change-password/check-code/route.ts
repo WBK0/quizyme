@@ -9,7 +9,7 @@ export const POST = async (req: NextRequest) => {
 
     const confirmCode = await prisma.confirmCode.findFirst({
       where: {
-        code,
+        code: code.toUpperCase(),
       },
     });
 

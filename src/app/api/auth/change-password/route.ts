@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { NextRequest } from "next/server";
 import * as yup from 'yup';
 
-const password = yup.string()
+const passwordSchema = yup.string()
   .min(8, 'Password must be at least 8 characters')
   .max(24, 'Password must not exceed 24 characters')
   .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password must contain at least one uppercase letter, one lowercase letter, and one number')
@@ -22,7 +22,7 @@ export const PATCH = async (req: NextRequest) => {
       )
     }
 
-    await password.validate(password).catch((err: yup.ValidationError) => {
+    await passwordSchema.validate(password).catch((err: yup.ValidationError) => {
       return new Response(
       JSON.stringify({
         status: "Error",
@@ -35,7 +35,7 @@ export const PATCH = async (req: NextRequest) => {
 
     const confirmCode = await prisma.confirmCode.findFirst({
       where: {
-        code,
+        code: code.toUpperCase(),
       }
     });
 
@@ -63,12 +63,30 @@ export const PATCH = async (req: NextRequest) => {
       )
     }
 
+    if(!user.password){
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "If you're registered with third party providers, you can't change your password."
+        }), { status: 400 }
+      )
+    }
+
+    if(await compare(password, user.password)){
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "New password can't be the same as the old password"
+        }), { status: 400 }
+      )
+    }
+
     const hashedPassword = await hash(password, 12);
 
     const result = prisma.$transaction([
       prisma.confirmCode.delete({
         where: {
-          code
+          code: code.toUpperCase()
         }
       }),
       prisma.user.update({
@@ -90,6 +108,7 @@ export const PATCH = async (req: NextRequest) => {
       }), { status: 200 }
     )
   } catch (error) {
+    console.log(error)
     return new Response(
       JSON.stringify({
         status: "Error",

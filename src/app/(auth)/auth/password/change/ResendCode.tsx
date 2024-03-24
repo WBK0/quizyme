@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const ResendCode = () => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(30);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -39,7 +39,7 @@ const ResendCode = () => {
       if(error instanceof Error)
         toast.error(error.message || "An unknown error occurred");
     } finally {
-      setCount(1);
+      setCount(30);
     }
   };
 

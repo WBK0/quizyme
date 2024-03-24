@@ -4,7 +4,7 @@ import Code from "./Code";
 import Form from "./Form";
 
 const Content = () => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
   const [code, setCode] = useState<string | null>(null);
 
   const handleNextStep = () => {
@@ -24,7 +24,9 @@ const Content = () => {
             )
           case 1: 
             return(
-              <Form />
+              <Form 
+                code={code}
+              />
             )
         }
       })()}

@@ -18,8 +18,9 @@ const Email = ({ sessionEmail } : { sessionEmail?: string }) => {
 
   const router = useRouter();
 
-  const handleSubmit = async () => {
-    try {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try { 
       setLoading(true);
       setError(null);
 
@@ -59,7 +60,7 @@ const Email = ({ sessionEmail } : { sessionEmail?: string }) => {
       </div>
       <div>
         <h1 className="font-black text-4xl text-center mt-4 px-3">Change your password</h1>
-        <div className="max-w-sm flex flex-col gap-4 mt-4 px-3 mx-auto">
+        <form className="max-w-sm flex flex-col gap-4 mt-4 px-3 mx-auto" onSubmit={handleSubmit}>
           <p className="text-sm font-semibold text-zinc-600 text-center">Enter your email address and we will send you a link to reset your password.</p>
           <div className="relative mt-6">
             <input
@@ -83,7 +84,6 @@ const Email = ({ sessionEmail } : { sessionEmail?: string }) => {
           </div>
           <button
             className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
-            onClick={handleSubmit}
           >
             {
               loading ? 
@@ -91,7 +91,7 @@ const Email = ({ sessionEmail } : { sessionEmail?: string }) => {
               : "Send email"
             }
           </button>
-        </div>
+        </form>
         
       </div>
     </div>

@@ -1,6 +1,6 @@
 import transporter from "@/utils/mailer";
 
-const sendEmail = async (to : string, code : string) => {
+const sendEmail = async (to: string, id: string, code: string) => {
   try {
     await transporter.sendMail({
       from: 'QuizyMe@codebybartlomiej.pl',
@@ -83,7 +83,7 @@ const sendEmail = async (to : string, code : string) => {
             You have requested to reset your password on QuizyMe!
           </h1>
 						<p style="margin-top: 10px; margin-bottom: 10px;">Click on link below or copy and enter code on QuizyMe site.</p>
-						<a href="${process.env.NEXT_PUBLIC_URL}/auth/confirm-email?code=${code}" class="button" style="color: white; margin-top: 25px; margin-bottom: 10px;">Reset password</a>
+						<a href="${process.env.NEXT_PUBLIC_URL}/auth/password/change?id=${id}" class="button" style="color: white; margin-top: 25px; margin-bottom: 10px;">Reset password</a>
 						<div class="code" align="center" style="margin-top: 40px; margin-bottom: 30px;">
 							<p>${Array.from(code)[0]}</p>
 							<p>${Array.from(code)[1]}</p>
