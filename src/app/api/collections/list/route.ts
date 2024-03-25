@@ -1,10 +1,8 @@
-import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 
 export const GET = async (req: Request) => {
-  const prisma = new PrismaClient();
   try {
-    connectToDB();
+    const prisma = new PrismaClient();
 
     const collection = await prisma.collection.findMany();
 
