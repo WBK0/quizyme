@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import UserProvider from "@/providers/UserProvider";
 import ToastProvider from '@/providers/ToastProvider';
 import Link from 'next/link';
+import Buttons from './Buttons';
 
 export const metadata: Metadata = {
   title: 'QuizyMe | Auth',
@@ -17,13 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="container mx-auto min-h-screen bg-gray-50">
-        <Link
-          type="button"
-          className="fixed top-2 right-2 px-8 py-1 bg-black rounded-full ring-2 ring-black text-white font-bold hover:bg-white hover:text-black duration-300"
-          href="/"
-        >
-          Home
-        </Link>
+        <Buttons />
         <UserProvider>
           <ToastProvider>
             {children}
