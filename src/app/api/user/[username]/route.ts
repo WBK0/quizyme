@@ -1,7 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export const GET = async (req: Request, {params} : {params : {username: string}}) => {
   try {
+    const session = await getServerSession(authOptions);
+
     const { username } = params;
 
     if(!username) {
@@ -24,8 +28,16 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
         }
       },
       include: {
-        Quiz: true,
-        Flashcards: true,
+        Quiz: {
+          include: {
+            LikedStudy: true
+          }
+        },
+        Flashcards: {
+          include: {
+            LikedStudy: true
+          }
+        },
         QuizGameStats: true,
         Followers: true,
         Following: true,
@@ -59,6 +71,7 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
           description: quiz.description,
           stats: quiz.stats,
           numberOfQuestions: quiz.questions.length,
+          isFavorite: quiz.LikedStudy.some((like) => session?.user.id && like.userId === session.user.id),
           createdAt: quiz.createdAt,
         }
       }),
@@ -71,6 +84,7 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
           description: flashcard.description,
           stats: flashcard.stats,
           numberOfFlashcards: flashcard.flashcards.length,
+          isFavorite: flashcard.LikedStudy.some((like) => session?.user.id && like.userId === session.user.id),
           createdAt: flashcard.createdAt,
         }
       }),

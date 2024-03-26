@@ -16,7 +16,7 @@ const LoaderTable = ({ isAll, loading, type } : LoaderTableProps) => {
           </div>
         : isAll ? (
             <h6 className="font-bold text-black text-lg text-center py-3">
-              We couldn't find any more {type} matching your search.
+              We could not find any more {type} matching your search.
             </h6>
           ) 
           : null

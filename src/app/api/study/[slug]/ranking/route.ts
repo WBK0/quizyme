@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest } from "next/server";
 
-export const GET = async (req : NextRequest, { params } : { params: { slug: string }}) => {
+export const GET = async (req: NextRequest, { params } : { params: { slug: string }}): Promise<Response> => {
   try {
     const { slug } = params;
 
@@ -105,6 +105,7 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
     return new Response(
       JSON.stringify({
         status: "Success",
+        message: "Ranking found",
         data: ranking,
       }),
       { status: 200 }
@@ -115,7 +116,8 @@ export const GET = async (req : NextRequest, { params } : { params: { slug: stri
       JSON.stringify({
         status: "Error",
         message: "Internal Server Error"
-      })
-    ), { status: 500 }
+      }),
+      { status: 500 }
+    );
   }
 }

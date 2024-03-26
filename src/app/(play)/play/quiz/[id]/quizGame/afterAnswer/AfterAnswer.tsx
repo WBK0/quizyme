@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import CountUp from 'react-countup';
 import GameData from "../GameData.types";

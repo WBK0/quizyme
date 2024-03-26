@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+"use client";
 import { useEffect, useState } from 'react';
 import Spinner from '@/components/Loading/Spinner';
 import Heading from './Heading';

@@ -111,7 +111,7 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
             </div>
             {
               data 
-              ? <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-small">
+              ? <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
                   <div className="max-w-2xl mx-auto">  
                     {
                       data.length > 0 ?

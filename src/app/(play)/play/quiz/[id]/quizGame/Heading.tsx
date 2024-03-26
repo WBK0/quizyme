@@ -43,7 +43,11 @@ const Heading = ({ gameData, stopTimer, answered, setAnswered, getQuestion } : H
 
   if(time === 0){
     if(!answered){
-      setAnswered({pointsGet: 0, pointsTotal: gameData.points, questionsLeft: gameData.numberOfQuestions - gameData.actualQuestion - 1})
+      setAnswered({
+        pointsGet: 0, 
+        pointsTotal: gameData.points || 0, 
+        questionsLeft: gameData.numberOfQuestions - gameData.actualQuestion - 1
+      })
     }
   }
 

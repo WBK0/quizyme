@@ -7,7 +7,7 @@ const page = async ({ params } : { params : { username: string }}) => {
     method: 'GET',
     next: {
       revalidate: 15,
-    }
+    },
   });
 
   const json = await response.json();

@@ -54,7 +54,9 @@ const Finished = ({ id } : { id: string }) => {
                 <Ranking data={data.data} type='global' isQuiz={false} answersLength={data.answersLength} />
                 <Ranking data={data.data} type='friends' isQuiz={false} answersLength={data.answersLength} />
               </div>
-              <Buttons />
+              <Buttons 
+                studyId={data.studyId}
+              />
             </div>
           : <div className='h-screen w-full flex items-center justify-center'>
               <Spinner />

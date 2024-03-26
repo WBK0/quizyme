@@ -11,6 +11,7 @@ type UserData = {
     tags: string[],
     image: string,
     description: string,
+    isFavorite: boolean | null,
     stats: {
       played: number,
       favorited: number,
@@ -26,6 +27,7 @@ type UserData = {
     tags: string[],
     image: string,
     description: string,
+    isFavorite: boolean | null,
     stats: {
       learned: number,
       favorited: number,

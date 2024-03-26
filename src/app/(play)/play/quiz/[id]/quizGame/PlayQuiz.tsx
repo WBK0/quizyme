@@ -5,8 +5,8 @@ import Question from "./Question";
 import Spinner from "@/components/Loading/Spinner";
 import Answers from "./Answers";
 import GameData from "./GameData.types";
-import AfterAnswer from "./afterAnswer/page";
-import Finished from "./finished/page";
+import AfterAnswer from "./afterAnswer/AfterAnswer";
+import Finished from "./finished/Finished";
 import Welcome from "./welcome/Welcome";
 import NotFound from "@/components/404/404";
 

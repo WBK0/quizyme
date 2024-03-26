@@ -30,7 +30,7 @@ const Login = async ({ searchParams } : { searchParams: { error?: string, callba
         href="/auth/register"
         className="text-center font-bold text-sm text-gray-500 hover:text-black"
       >
-        Don't have an account? Register!
+        Do not have an account? Register!
       </Link>
       {
         searchParams.error

@@ -22,7 +22,7 @@ type CardExtendedProps = {
   editPath?: string;
   handleDelete?: (data: DeleteData) => void;
   plays?: number;
-  tags: string[];
+  tags?: string[];
   results?: string;
   id?: string;
   isFavorite?: boolean | null;
@@ -67,7 +67,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
             )
           }
           <h2 className='font-bold text-lg pr-6'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black '>{topic}</span></h2>
-          <h6 className='text-gray-300 mt-1 text-sm'>{tags && tags.map((tag) => <span>#{tag} </span>)}</h6>
+          <h6 className='text-gray-300 mt-1 text-sm'>{tags && tags.map((tag) => <span key={tag}>#{tag} </span>)}</h6>
         </div>
         <div>
           <div className='flex items-center mt-6 sm:mt-3 flex-wrap'>

@@ -13,7 +13,8 @@ export const GET = async (req: NextRequest) => {
           status: "Unauthorized",
           message: "You need to be logged in to view your notifications.",
         }),
-      ), { status: 401 }
+        { status: 401 }
+      );
     }
 
     const searchParams = req.nextUrl.searchParams;

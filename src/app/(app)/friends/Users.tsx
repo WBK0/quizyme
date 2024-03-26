@@ -121,7 +121,7 @@ const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd
       {
         isScrollEnd ?
           <h6 className="uppercase font-black mt-24 text-center max-w-xl text-xl mx-auto">
-            We couldn't find any more accounts matching your search 
+            We could not find any more accounts matching your search 
           </h6> 
         : <div className="w-full flex justify-center mt-4 pb-2">
             <EasySpinner size={8} />

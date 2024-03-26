@@ -59,8 +59,8 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
           </div>
           {
             data ?
-              <div className="overflow-y-auto w-full mb-6 mt-6 pr-3 scroll-sm">
-                <div className="max-w-3xl mx-auto">  
+              <div className="overflow-y-auto w-full mb-6 pr-3 scroll-sm">
+                <div className="max-w-3xl mx-auto flex flex-col gap-6 pt-6">  
                   {
                     data.length > 0 ?
                       data.map((value, index) => (
@@ -72,7 +72,6 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
                           type={variant}
                           topic={value.topic}
                           scored={Number(value.points)}
-                          status={value.correctAnswers > 0 ? 'Test passed' : 'Learning'}
                           passed={value.correctAnswers}
                           authorName={value.createdBy.name}
                           authorImage={value.createdBy.image}
@@ -80,7 +79,7 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
                         />
                       ))
                       : <h2 className="text-center font-bold text-xl mt-4">
-                          This user hasn't complete any {variant === 'quized' ? 'quiz' : 'flashcards'} yet.
+                          This user has not complete any {variant === 'quized' ? 'quiz' : 'flashcards'} yet.
                         </h2>     
                   }   
                 </div>

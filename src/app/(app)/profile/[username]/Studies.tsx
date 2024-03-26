@@ -1,5 +1,7 @@
 import CardExtended from "@/components/CardExtended";
 import UserData from "./UserData.type";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 type StudiesProps = {
   type: string;
@@ -8,8 +10,67 @@ type StudiesProps = {
   authorImage: string;
 };
 
+type Data = UserData['quizzes'] | UserData['flashcards'];
+
 const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
   const colors = ['purple', 'green', 'yellow', 'lightblue'];
+  const [data, setData] = useState<Data>(content);
+
+  const handleFavorite = async (card: { topic: string, isFavorite: boolean | null, id: string }) => {
+    const isFavorite = card.isFavorite;
+    try {
+      setData((prev: Data) => {
+        if (!prev) return prev;
+        return prev.map((item) => {
+          if (item.id === card.id) {
+            return {
+              ...item,
+              isFavorite: null
+            };
+          }
+          return item;
+        }) as Data;
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}/like`, {
+        method: 'PATCH',
+      });
+
+      if(!response.ok){
+        const json = await response.json();
+        throw new Error(json.message);
+      }
+
+      setData((prev: Data) => {
+        if (!prev) return prev;
+        return prev.map((item) => {
+          if (item.id === card.id) {
+            return {
+              ...item,
+              isFavorite: !card.isFavorite
+            };
+          }
+          return item;
+        }) as Data;
+      });
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message)
+
+      setData((prev: Data) => {
+        if(!prev) return prev;
+        return prev.map((item) => {
+          if(item.id === card.id){
+            return {
+              ...item,
+              isFavorite: isFavorite || false
+            }
+          }
+          return item;
+        }) as Data;
+      });
+    }
+  }
 
   return (
     <div className="mt-24 max-w-3xl mx-auto">
@@ -17,8 +78,8 @@ const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
         content.length > 0 ? (
           <>
             <h1 className="font-black text-3xl">{content.length} {type === 'quiz' ? 'QUIZZES' : 'FLASHCARDS'}</h1>
-            <div>
-              {content.map((value, index) => (
+            <div className="flex flex-col gap-6 pt-8">
+              {data.map((value, index) => (
                 <CardExtended 
                   key={value.id}
                   image={value.image}
@@ -28,6 +89,9 @@ const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
                   topic={value.topic}
                   authorName={authorName}
                   authorImage={authorImage}
+                  tags={value.tags}
+                  isFavorite={value.isFavorite}
+                  handleFavorite={() => handleFavorite(value)}
                   quantity={
                     type === 'quiz'
                       ? (value as UserData['quizzes'][number]).numberOfQuestions
@@ -40,7 +104,7 @@ const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
         )
         : (
           <h1 className="font-extrabold text-center text-2xl">
-            This user doesn't have any {type === 'quiz' ? 'quizzes' : 'flashcards'}
+            This user does not have any {type === 'quiz' ? 'quizzes' : 'flashcards'}
           </h1>
         )
       }

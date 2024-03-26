@@ -10,10 +10,13 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
     const session = await getServerSession(authOptions);
 
     if(!session){
-      return {
-        status: 401,
-        message: "You need to be logged in to update a study"
-      }
+      return new Response(
+        JSON.stringify({
+          status: "Error",
+          message: "You need to be logged in to view this page.",
+        }),
+        { status: 401 }
+      );
     }
 
     const prisma = new PrismaClient();

@@ -17,6 +17,8 @@ const Study = async ({ params } : { params : { slug: string }}) => {
   const json = await response.json();
   const data = json.data;
 
+  console.log(json)
+
   if(!response.ok){
     return <NotFound />
   }

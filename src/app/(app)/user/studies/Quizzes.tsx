@@ -164,7 +164,7 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : QuizzesCo
           {
             isScrollEnd ?
               <div className="flex justify-center pt-12">
-                <p className="text-black font-black text-lg">WE COULDN'T FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
+                <p className="text-black font-black text-lg">WE COULD NOT FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
               </div>
             :
               !display && loadMore ?

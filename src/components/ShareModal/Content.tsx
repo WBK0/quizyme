@@ -80,12 +80,12 @@ const Content = ({ setInvited, type, studyId, handleClose, friends, invited, set
                   />
                 </>
               ))
-              : <p className="text-center font-bold text-xl mt-4">You don't have any friends in quizyme matching this search. <span className="block font-black text-base mt-1">To have a friend you both have to follow each other.</span></p>
+              : <p className="text-center font-bold text-xl mt-4">You do not have any friends in quizyme matching this search. <span className="block font-black text-base mt-1">To have a friend you both have to follow each other.</span></p>
           }
           {
             friends && friends.length > 0 && isAll
             ? <p className="text-center font-bold text-xl mt-4">
-                You don't have any more friends to invite
+                You do not have any more friends to invite
               </p>
             : null
           }

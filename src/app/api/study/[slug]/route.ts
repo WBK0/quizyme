@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export const GET = async (req: Request, {params} : {params : {slug: string}}) => {
   try {
@@ -30,6 +32,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
           user: true,
           code: true,
           collection: true,
+          LikedStudy: true
         }
       }),
       prisma.flashcards.findFirst({
@@ -40,6 +43,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
           user: true,
           code: true,
           collection: true,
+          LikedStudy: true
         }
       }),
     ]);
@@ -65,7 +69,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
         username: quizResults?.user?.username,
       },
       length: quizResults?.stats.questions,
-      code: quizResults?.code.code
+      code: quizResults?.code.code,
     }
 
     const flashcardData = {
@@ -86,7 +90,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
         username: flashcardResults?.user?.username,
       },
       length: flashcardResults?.stats.flashcards,
-      code: flashcardResults?.code.code
+      code: flashcardResults?.code.code,
     }
 
     if(quizResults) {
@@ -123,6 +127,7 @@ export const GET = async (req: Request, {params} : {params : {slug: string}}) =>
       );
     }
   } catch (error) {
+    console.log(error);
     return new Response(
       JSON.stringify({
         status: "Error",
