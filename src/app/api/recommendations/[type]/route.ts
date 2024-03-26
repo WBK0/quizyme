@@ -43,7 +43,8 @@ export const GET = async (req: NextRequest, {params} : {params : {type: string}}
         where:{
           topic: {
             not: skipTopic?.replaceAll('%20', ' ')
-          }
+          },
+          visibility: "Public"
         }
       });
     }else if(type === 'flashcards'){

@@ -4,6 +4,7 @@ import LoaderTable from '../user/space/LoaderTable';
 import Spinner from '@/components/Loading/Spinner';
 import { toast } from 'react-toastify';
 import { Data } from './data.type';
+import { useSearchParams } from 'next/navigation';
 
 type SearchResultsProps = {
   type: string;
@@ -19,7 +20,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
   const [loadMore, setLoadMore] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  console.log(category)
+  const searchParams = useSearchParams();
 
   const step = 10;
 
@@ -95,7 +96,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
     }, 700)
 
     return () => clearTimeout(timeout);
-  }, [search])
+  }, [search, searchParams.get('category')])
 
   useEffect(() => {
     setIsAll(false);
@@ -112,6 +113,62 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
     if(loadMore && !isAll)
       getData(loadMore);
   }, [loadMore])
+
+  const handleFavorite = async (card: { topic: string, isFavorite: boolean | null, id: string }) => {
+    const isFavorite = card.isFavorite;
+    try {
+      setData((prev: Data) => {
+        if (!prev) return prev;
+        return prev.map((item) => {
+          if (item.id === card.id) {
+            return {
+              ...item,
+              isFavorite: null
+            };
+          }
+          return item;
+        });
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${card.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${card.id}/like`, {
+        method: 'PATCH',
+      });
+
+      if(!response.ok){
+        const json = await response.json();
+        throw new Error(json.message);
+      }
+
+      setData((prev : Data) => {
+        if(!prev) return prev;
+        return prev.map((item) => {
+          if(item.id === card.id){
+            return {
+              ...item,
+              isFavorite: !card.isFavorite
+            }
+          }
+          return item;
+        });
+      });
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message)
+
+      setData((prev : Data) => {
+        if(!prev) return prev;
+        return prev.map((item) => {
+          if(item.id === card.id){
+            return {
+              ...item,
+              isFavorite: isFavorite || false
+            }
+          }
+          return item;
+        });
+      });
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -134,6 +191,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
                   tags={card.tags}
                   createdAt={card.createdAt}
                   isFavorite={card.isFavorite}
+                  handleFavorite={() => handleFavorite(card)}
                 /> 
               ))
             }

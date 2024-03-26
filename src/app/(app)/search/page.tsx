@@ -13,7 +13,6 @@ const Search = () => {
   const [localStorageType, setLocalStorageType] = useLocalStorage('search-type', 'quizzes');
   const [search, setSearch] = useState('');
 
-  // Set the type in the URL when type is not set
   useEffect(() => {
     if (params.type) {
       setLocalStorageType(params.type || 'quizzes');

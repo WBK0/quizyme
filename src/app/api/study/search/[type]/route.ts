@@ -52,6 +52,7 @@ export const GET = async(req: NextRequest, { params } : { params: { type: 'quizz
           }
         },
       ],
+      visibility: "Public"
     };
 
     if (category) {

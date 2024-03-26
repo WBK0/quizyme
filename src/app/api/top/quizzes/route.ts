@@ -11,6 +11,9 @@ export const GET = async () => {
       },
       include: {
         user: true
+      },
+      where: {
+        visibility: "Public"
       }
     });
 

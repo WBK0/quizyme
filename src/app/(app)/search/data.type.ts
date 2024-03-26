@@ -18,5 +18,5 @@ export type Data = {
   },
   updateAt: string,
   createdAt: string,
-  isFavorite: boolean
+  isFavorite: boolean | null
 }[] | null;

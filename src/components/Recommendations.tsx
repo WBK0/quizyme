@@ -2,7 +2,10 @@ import Card from "@/components/Card";
 
 const Recommendations = async ({ type, skip } : { type : string, skip?: string }) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/recommendations/${type}${skip ? `?skipTopic=${skip}` : ''}`, {
-    method: 'GET'
+    method: 'GET',
+    next: {
+      revalidate: 300
+    }
   });
 
   const recommendations = await response.json();

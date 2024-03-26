@@ -1,8 +1,8 @@
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const Collections = ({ selected, deleteParams } : {selected: string | null, deleteParams: (param: string) => void}) => {
-
   const handleDeleteParams = () => {
     deleteParams('category');
   }
