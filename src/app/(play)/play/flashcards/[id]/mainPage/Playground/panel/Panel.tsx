@@ -6,9 +6,11 @@ import LeftPanel from "./LeftPanel";
 import MiddlePanel from "./MiddlePanel";
 import RightPanel from "./RightPanel";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
+import { useSession } from "next-auth/react";
 
 const Panel = () => {
   const { actualCard, flashcards, autoPlay, setAutoPlay, flipCard, cardRef, setActualCard, setAnimate, id, setIsEnded } = useContext(GameContext);
+  const { data: session } = useSession();
 
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -20,13 +22,13 @@ const Panel = () => {
       if(actualCard < flashcards.length - 1) {
         setActualCard((prev) => prev + 1)
         setAnimate('left');
-        updateGameData({ id, actualFlashcard: actualCard + 1})
+        updateGameData({ id, actualFlashcard: actualCard + 1, session})
       }
     } else {
       if(actualCard > 0) {
         setActualCard((prev) => prev - 1);
         setAnimate('right');
-        updateGameData({ id, actualFlashcard: actualCard - 1})
+        updateGameData({ id, actualFlashcard: actualCard - 1, session})
       }
     }
   }
@@ -35,7 +37,7 @@ const Panel = () => {
     if(!autoPlay) return;
 
     const interval = setInterval(() => {
-      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard, fullscreen: false, setIsEnded, id});
+      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard, fullscreen: false, setIsEnded, id, session });
     }, 5000)
     
     return () => clearInterval(interval);

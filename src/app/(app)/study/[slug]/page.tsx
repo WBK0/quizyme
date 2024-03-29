@@ -6,6 +6,8 @@ import QuizCode from "./QuizCode";
 import Recommendations from "@/components/Recommendations";
 import ActionButtons from "./ActionButtons";
 import NotFound from "./404";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const Study = async ({ params } : { params : { slug: string }}) => {
   const { slug } = params;
@@ -17,7 +19,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
   const json = await response.json();
   const data = json.data;
 
-  console.log(json)
+  const session = await getServerSession(authOptions);
 
   if(!response.ok){
     return <NotFound />
@@ -47,6 +49,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
             user={data.user} 
             studyId={data.id}
             type={data.type}
+            session={session}
           />
           <About
             description={data.description}
@@ -64,6 +67,7 @@ const Study = async ({ params } : { params : { slug: string }}) => {
           <ActionButtons 
             type={data.type}
             id={data.id}
+            session={session}
           />
         </div>
         :

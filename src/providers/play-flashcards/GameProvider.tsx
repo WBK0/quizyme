@@ -4,6 +4,7 @@ import { disableShuffle, enableShuffle } from "./shuffle";
 import { flipCard } from "./flipCard";
 import { filterFlashcards } from "./filterFlashcards";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 export type Flashcards = {
   id: string;
@@ -65,6 +66,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   const cardRef = useRef<HTMLDivElement>(null);
   const animateRef = useRef<HTMLDivElement>(null);
 
+  const { data: session } = useSession();
+
   useEffect(() => {
     if(cardRef.current?.classList.contains('rotate')) {
       cardRef.current?.classList.add('skip-rotate-animation');
@@ -90,7 +93,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
 
   useEffect(() => {
     if(flashcardsGameData?.shuffleSalt > 0 && !isShuffled){
-      enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id, setIsShuffled });
+      enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id, setIsShuffled, session });
     }
   }, [flashcardsGameData])
 
@@ -102,8 +105,8 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
         setActualCard,
         animate,
         setAnimate: setAnimate,
-        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id, likedIds, filter, setIsShuffled }),
-        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id, setIsShuffled }),
+        disableShuffle: () => disableShuffle({ setAnimate, setFlashcards, flashcardsSet, id, likedIds, filter, setIsShuffled, session }),
+        enableShuffle: (seed: number) => enableShuffle(seed, { setAnimate, flashcards, setFlashcards, id, setIsShuffled, session }),
         flipCard: (byAutoPlay: boolean) => flipCard(byAutoPlay, { autoPlay, cardRef, setAnimateText }),
         cardRef: cardRef,
         animateRef: animateRef,

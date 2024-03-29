@@ -1,5 +1,7 @@
+import { useSession } from "next-auth/react";
 import { Flashcards } from "./GameProvider";
 import { updateGameData } from "./updateGameData";
+import { Session } from "next-auth";
 
 type DisableShuffleProps = {
   setAnimate: React.Dispatch<React.SetStateAction<'left' | 'right' | 'shuffle' | null>>;
@@ -9,6 +11,7 @@ type DisableShuffleProps = {
   filter: string;
   likedIds: string[];
   setIsShuffled: React.Dispatch<React.SetStateAction<boolean>>;
+  session: Session | null;
 }
 
 type EnableShuffleProps = {
@@ -17,9 +20,10 @@ type EnableShuffleProps = {
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcards>>;
   id: string;
   setIsShuffled: React.Dispatch<React.SetStateAction<boolean>>;
+  session: Session | null;
 }
 
-export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, filter, likedIds, setIsShuffled } : DisableShuffleProps) => {
+export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, filter, likedIds, setIsShuffled, session } : DisableShuffleProps) => {
   setAnimate('shuffle');
 
   if(filter === 'liked') {
@@ -29,11 +33,11 @@ export const disableShuffle = ({ setAnimate, setFlashcards, flashcardsSet, id, f
   }
 
   setFlashcards([...flashcardsSet]);
-  updateGameData({ id, shuffleSalt: 0 });
+  updateGameData({ id, shuffleSalt: 0, session });
   setIsShuffled(false);
 }
 
-export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards, id, setIsShuffled } : EnableShuffleProps) => {
+export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashcards, id, setIsShuffled, session } : EnableShuffleProps) => {
   setAnimate('shuffle');
 
   function customRandom(seed : number) {
@@ -57,7 +61,7 @@ export const enableShuffle = (seed : number, { setAnimate, flashcards, setFlashc
 
   setFlashcards([...flashcardsTEMP]);
 
-  updateGameData({ id, shuffleSalt: seed })
+  updateGameData({ id, shuffleSalt: seed, session })
 
   setIsShuffled(true);
 }

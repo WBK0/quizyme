@@ -6,19 +6,13 @@ import { useContext, useEffect, useState } from "react";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
 
 const ConceptList = () => {
   const { flashcardsSet, id, likedIds, setLikedIds } = useContext(GameContext);
 
-  const session = useSession();
+  const { data: session } = useSession();
 
   const handleLike = (cardId : string) => {
-    if(!session.data){
-      toast.error('Please sign in to like the flashcards');
-      return;
-    }
-
     if(likedIds.includes(cardId)) {
       setLikedIds((prev) => prev.filter((item) => item !== cardId))
     } else {
@@ -27,7 +21,7 @@ const ConceptList = () => {
   }
 
   useEffect(() => {
-    updateGameData({ id, likedIds });
+    updateGameData({ id, likedIds, session });
   }, [likedIds])
 
   return (

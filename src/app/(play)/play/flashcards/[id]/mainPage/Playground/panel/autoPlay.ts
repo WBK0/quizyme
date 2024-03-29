@@ -1,4 +1,6 @@
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
 type HandlePlayProps = {
@@ -11,6 +13,7 @@ type HandlePlayProps = {
   fullscreen?: boolean;
   setIsEnded: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
+  session: Session | null;
 }
 
 type HandleStartProps = {
@@ -23,12 +26,12 @@ type HandlePauseProps = {
   setAutoPlay: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const handlePlay = ({ cardRef, actualCard, flashcards, handleCard, flipCard, setAutoPlay, fullscreen = false, setIsEnded, id} : HandlePlayProps) => {
+export const handlePlay = ({ cardRef, actualCard, flashcards, handleCard, flipCard, setAutoPlay, fullscreen = false, setIsEnded, id, session } : HandlePlayProps) => {  
   if(cardRef.current?.classList.contains('rotate')) {
     if(actualCard === flashcards.length - 1){
       if(fullscreen){
         setIsEnded(true);
-        updateGameData({id, isEnded: true });
+        updateGameData({id, isEnded: true, session });
       }
 
       handlePause({ setAutoPlay });

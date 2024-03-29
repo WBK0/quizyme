@@ -8,19 +8,22 @@ import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const EndScreen = () => {
   const { flashcards, setActualCard, setIsEnded, id } = useContext(GameContext)
 
   const router = useRouter();
 
+  const { data: session } = useSession();
+
   const handlePreviousCard = () => {
-    updateGameData({id, isEnded: false})
+    updateGameData({id, isEnded: false, session})
     setIsEnded(false)
   }
 
   const handleReset = () => {
-    updateGameData({id, isEnded: false, actualFlashcard: 0})
+    updateGameData({id, isEnded: false, actualFlashcard: 0, session})
     setIsEnded(false)
     setActualCard(0)
   }

@@ -23,7 +23,7 @@ const RightPanel = () => {
         {
           !loading 
             ? <Image src={fullscreen} width={18} height={18} alt="fullscreen" />
-            : <EasySpinner />
+            : <EasySpinner color="black" />
         }
       </button>
     </div>

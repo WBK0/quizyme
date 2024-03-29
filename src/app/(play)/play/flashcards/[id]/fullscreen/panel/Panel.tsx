@@ -6,9 +6,12 @@ import { handlePlay } from "../../mainPage/Playground/panel/autoPlay";
 import { toast } from "react-toastify";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
 import RightPanel from "./RightPanel";
+import { useSession } from "next-auth/react";
 
 const Panel = () => {
   const { actualCard, flashcards, autoPlay, setActualCard, setAnimate, id, setAutoPlay, cardRef, flipCard, setIsEnded} = useContext(GameContext)
+
+  const { data: session } = useSession();
 
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
@@ -20,13 +23,13 @@ const Panel = () => {
       if(actualCard < flashcards.length - 1) {
         setActualCard((prev) => prev + 1)
         setAnimate('left');
-        updateGameData({ id, actualFlashcard: actualCard + 1})
+        updateGameData({ id, actualFlashcard: actualCard + 1, session})
       }
     } else {
       if(actualCard > 0) {
         setActualCard((prev) => prev - 1);
         setAnimate('right');
-        updateGameData({ id, actualFlashcard: actualCard - 1})
+        updateGameData({ id, actualFlashcard: actualCard - 1, session})
       }
     }
   }
@@ -35,7 +38,7 @@ const Panel = () => {
     if(!autoPlay) return;
 
     const interval = setInterval(() => {
-      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard, fullscreen: true, setIsEnded, id });
+      handlePlay({ setAutoPlay, cardRef, actualCard, flashcards, handleCard, flipCard, fullscreen: true, setIsEnded, id, session });
     }, 5000)
     
     return () => clearInterval(interval);

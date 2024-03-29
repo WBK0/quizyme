@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "./Search";
 import Users from "./Users";
+import { Session } from "next-auth";
 
 type Users = {
   id: number;
@@ -16,7 +17,7 @@ type Users = {
   isFollowing: boolean;
 }[] | null;
 
-const Content = () => {
+const Content = ({ session } : { session: Session | null }) => {
   const [users, setUsers] = useState<Users>(null);
   const [loading, setLoading] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
@@ -80,6 +81,7 @@ const Content = () => {
             search={search}
             isScrollEnd={isScrollEnd}
             setIsScrollEnd={setIsScrollEnd}
+            session={session}
           />
         : <div className="w-full flex justify-center pt-24">
             <Spinner />

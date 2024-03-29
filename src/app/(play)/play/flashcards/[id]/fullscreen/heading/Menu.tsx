@@ -6,8 +6,9 @@ import quiz from "./quiz.svg";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { Session } from "next-auth";
 
-const Menu = () => {
+const Menu = ({ session } : { session: Session | null }) => {
   const [showMenu, setShowMenu] = useState(false);
   const { id } = useContext(GameContext)
 
@@ -18,6 +19,11 @@ const Menu = () => {
   }
 
   const handleQuiz = () => {
+    if(!session){
+      toast.error('You need to be logged in to play a quiz');
+      return;
+    }
+
     setShowMenu(false);
 
     toast.promise(

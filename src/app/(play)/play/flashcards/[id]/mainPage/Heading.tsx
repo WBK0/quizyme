@@ -2,11 +2,12 @@
 import EasySpinner from "@/components/Loading/EasySpinner";
 import useUrlParams from "@/hooks/useUrlParams";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
-const Heading = ({ topic } : { topic: string }) => {
+const Heading = ({ topic, session } : { topic: string, session: Session | null }) => {
   const { setFilter, filter, filterFlashcards, id } = useContext(GameContext);
   const { changeParam } = useUrlParams()
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,11 @@ const Heading = ({ topic } : { topic: string }) => {
   }
 
   const handleQuiz = () => {
+    if(!session){
+      toast.error('You need to be logged in to create a quiz');
+      return;
+    }
+    
     toast.promise(
       async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/flashcards/${id}/user/quiz/create`, {

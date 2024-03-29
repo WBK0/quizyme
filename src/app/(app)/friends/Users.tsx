@@ -1,6 +1,7 @@
 import EasySpinner from "@/components/Loading/EasySpinner";
 import UserCard from "@/components/UserCard";
-import { useEffect, useRef, useState } from "react";
+import { Session } from "next-auth";
+import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 
 type UsersProps = {
@@ -18,9 +19,10 @@ type UsersProps = {
   search: string;
   isScrollEnd: boolean;
   setIsScrollEnd: React.Dispatch<React.SetStateAction<boolean>>;
-}
+  session: Session | null;
+} 
 
-const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd, setIsScrollEnd } : UsersProps) => {
+const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd, setIsScrollEnd, session } : UsersProps) => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   const getMoreUsers = async (skip: number) => {
@@ -76,6 +78,11 @@ const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd
   }, [users, mainRef.current])
 
   const handleFollow = async (id: number) => {
+    if(!session){
+      toast.error('You need to be logged in to follow someone');
+      return;
+    }
+
     try {
       setUsers((prev) => prev && prev.map((user: any) => {
         if(user.id === id){
@@ -101,6 +108,16 @@ const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd
         throw new Error(json.message);
       }
     } catch (error : unknown) {
+      setUsers((prev) => prev && prev.map((user: any) => {
+        if(user.id === id){
+          return {
+            ...user,
+            isFollowing: !user.isFollowing
+          }
+        }
+        return user;
+      }));
+
       if(error instanceof Error)
         toast.error(error.message);
     } 

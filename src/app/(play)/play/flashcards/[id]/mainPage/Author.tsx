@@ -2,6 +2,7 @@
 import Share from "@/components/ShareModal/Share";
 import UserCard from "@/components/UserCard";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -12,15 +13,14 @@ type AuthorProps = {
     image: string,
     name: string,
     username: string
-  }
+  },
+  session: Session | null
 }
 
-const Author = ({ user } : AuthorProps) => {
+const Author = ({ user, session } : AuthorProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const session = useSession();
 
   const { id } = useContext(GameContext);
 
@@ -46,16 +46,26 @@ const Author = ({ user } : AuthorProps) => {
   }
 
   const handleShare = () => {
+    if(!session){
+      toast.error('You need to be logged in to share the study.');
+      return;
+    }
+
     setShowModal(() => !showModal);
   }
 
   const handleFollow = async () => {
+    if(!session){
+      toast.error('You need to be logged in to follow a user.');
+      return;
+    }
+
     try {
       if(isSubmitting){
         throw new Error('Please wait a moment before following again.');
       };
 
-      if(session.data?.user?.id === user.id){
+      if(session?.user?.id === user.id){
         toast.error('You cannot follow yourself.');
         return;
       }

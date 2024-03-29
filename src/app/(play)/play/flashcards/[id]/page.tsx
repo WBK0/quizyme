@@ -48,8 +48,8 @@ const Flashcards = async ({ params, searchParams } : { params : { id: string }, 
         }
         {
           searchParams.fullscreen === "true" 
-          ? <Fullscreen flashcardsSet={flashcardsSet.data}/>
-          : <MainPage flashcardsSet={flashcardsSet.data} />
+          ? <Fullscreen flashcardsSet={flashcardsSet.data} session={session} />
+          : <MainPage flashcardsSet={flashcardsSet.data} session={session} />
         }
       </GameProvider>
     </div>

@@ -5,10 +5,13 @@ import { useContext } from "react"
 import { GameContext } from "@/providers/play-flashcards/GameProvider"
 import { updateGameData } from "@/providers/play-flashcards/updateGameData"
 import { toast } from "react-toastify"
+import { useSession } from "next-auth/react"
 
 const MiddlePanel = () => {
   const { actualCard, flashcards, autoPlay, setActualCard, setAnimate, id, setIsEnded } = useContext(GameContext)
   
+  const { data: session } = useSession();
+
   const handleCard = (method : 'increase' | 'decrease', byAutoPlay: boolean) => {
     if(autoPlay && !byAutoPlay){
       toast.error('Please pause the auto play to change the card manually')
@@ -22,17 +25,17 @@ const MiddlePanel = () => {
 
         setActualCard((prev) => prev + 1)
         setAnimate('left');
-        updateGameData({ id, actualFlashcard: actualCard + 1})
+        updateGameData({ id, actualFlashcard: actualCard + 1, session})
       }
       else if(actualCard === flashcards.length - 1) {
         setIsEnded(true);
-        updateGameData({ id, isEnded: true})
+        updateGameData({ id, isEnded: true, session})
       }
     } else {
       if(actualCard > 0) {
         setActualCard((prev) => prev - 1);
         setAnimate('right');
-        updateGameData({ id, actualFlashcard: actualCard - 1})
+        updateGameData({ id, actualFlashcard: actualCard - 1, session})
       }
     }
   }

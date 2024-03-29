@@ -4,6 +4,7 @@ import heart from './heart.svg';
 import heartfill from './heartfill.svg';
 import Image from "next/image";
 import { updateGameData } from "@/providers/play-flashcards/updateGameData";
+import { useSession } from "next-auth/react";
 
 const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
   const { cardRef, animateRef, flipCard, flashcards, actualCard, setLikedIds, likedIds, id } = useContext(GameContext)
@@ -35,6 +36,8 @@ const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
     }
   }
 
+  const { data: session } = useSession();
+
   useEffect(() => {
     window.addEventListener('resize', calculateHeight);
 
@@ -50,10 +53,10 @@ const Card = ({ likeButton = false } : { likeButton?: boolean }) => {
 
     if(likedIds.some(value => value === flashcards[actualCard].id)){
       setLikedIds((prev) => prev.filter(value => value !== flashcards[actualCard].id))
-      updateGameData({id, likedIds: likedIds.filter(value => value !== flashcards[actualCard].id)})
+      updateGameData({id, likedIds: likedIds.filter(value => value !== flashcards[actualCard].id), session})
     }else{
       setLikedIds((prev) => [...prev, flashcards[actualCard].id])
-      updateGameData({id, likedIds: [...likedIds, flashcards[actualCard].id]})
+      updateGameData({id, likedIds: [...likedIds, flashcards[actualCard].id], session})
     }
   }
 

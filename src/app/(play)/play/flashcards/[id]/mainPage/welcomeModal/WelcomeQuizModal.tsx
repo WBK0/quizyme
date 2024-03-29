@@ -40,7 +40,7 @@ const WelcomeQuizModal = () => {
       {
         showModal ?
           <div className="fixed left-0 top-0 min-h-screen w-full bg-black/50 z-50 flex justify-center items-center">
-            <div className="bg-white max-w-xl w-full relative rounded-2xl">
+            <div className="bg-white max-w-2xl w-full relative rounded-2xl px-3">
               <div className="absolute right-3 top-3">
                 <button 
                   className="font-black"
@@ -60,7 +60,7 @@ const WelcomeQuizModal = () => {
                   After signing in, you can like the flashcards and track your progress. All your data will be saved on our servers.
                 </p>
                 <button
-                  className="bg-black text-white shadow-small shadow-blue rounded-full mt-6 px-12 py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"
+                  className="bg-black text-white rounded-full mt-6 px-12 py-2 font-bold duration-300 hover:scale-105 hover:shadow-transparent"
                   onClick={() => router.push('/auth/login')}
                 >
                   Sign in

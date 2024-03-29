@@ -3,18 +3,26 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import updatePage from "./updatePage";
+import { Session } from "next-auth";
 
 type ActionButtonsProps = {
   type: string;
   id: string;
+  session: Session | null;
 }
 
-const ActionButtons = ({ type, id } : ActionButtonsProps) => {
+const ActionButtons = ({ type, id, session } : ActionButtonsProps) => {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const getFavoriteStatus = async () => {
+    if(!session){
+      setIsFavorite(false);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${id}/isLiked`, {
         method: 'GET',
@@ -74,7 +82,12 @@ const ActionButtons = ({ type, id } : ActionButtonsProps) => {
   }
 
   const handleFavorites = async () => {
-    setLoading(true)
+    if(!session){
+      toast.error('You need to be logged in to favorite a study.');
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${id}/like`, {
         method: 'PATCH',

@@ -1,6 +1,7 @@
 "use client";
 import Share from "@/components/ShareModal/Share";
 import UserCard from "@/components/UserCard";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -13,23 +14,31 @@ type CreatorProps = {
     username: string;
   },
   type: 'flashcards' | 'quiz',
-  studyId: string
+  studyId: string;
+  session: Session | null;
 }
 
-const Creator = ({ user, type, studyId } : CreatorProps) => {
+const Creator = ({ user, type, studyId, session } : CreatorProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [shareModal, setShareModal] = useState<boolean>(false);
 
-  const session = useSession();
+  const handleShare = () => {
+    if(!session){
+      toast.error('You need to be logged in to share the study.');
+      return;
+    }
+    
+    setShareModal(true);
+  }
 
   const handleFollow = async () => {
     try {
-      if(session.status === 'unauthenticated'){
+      if(!session){
         toast.error('You need to be logged in to follow a user.');
         return;
       }
 
-      if(session.data?.user?.id === user.id){
+      if(session?.user?.id === user.id){
         toast.error('You cannot follow yourself.');
         return;
       }
@@ -82,7 +91,7 @@ const Creator = ({ user, type, studyId } : CreatorProps) => {
         name={user.name}
         isFollowing={isFollowing}
         handleFollow={handleFollow}
-        handleShare={() => setShareModal(true)}
+        handleShare={handleShare}
       />
       {
         shareModal

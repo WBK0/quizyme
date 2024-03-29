@@ -4,6 +4,7 @@ import Heading from "./heading/Heading";
 import Playground from "./Playground";
 import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import EndScreen from "./end/EndScreen";
+import { Session } from "next-auth";
 
 type FullscreenProps = {
   flashcardsSet: {
@@ -14,14 +15,15 @@ type FullscreenProps = {
       name: string;
       username: string;
     }
-  }
+  },
+  session: Session | null;
 }
 
-const Fullscreen = ({ flashcardsSet } : FullscreenProps) => {
+const Fullscreen = ({ flashcardsSet, session } : FullscreenProps) => {
   const { isEnded } = useContext(GameContext);
   return (
     <div>
-      <Heading />
+      <Heading session={session} />
       {
         isEnded
         ? <EndScreen />

@@ -3,8 +3,9 @@ import { GameContext } from "@/providers/play-flashcards/GameProvider";
 import useUrlParams from "@/hooks/useUrlParams";
 import EasySpinner from "@/components/Loading/EasySpinner";
 import Menu from "./Menu";
+import { Session } from "next-auth";
 
-const Heading = () => {
+const Heading = ({ session } : { session: Session | null }) => {
   const [loading, setLoading] = useState(false);
   const { actualCard, flashcards } = useContext(GameContext);
 
@@ -18,7 +19,9 @@ const Heading = () => {
   return (
     <div className="flex flex-col fixed w-full bg-white">
       <div className="w-full flex justify-between py-2 flex-wrap sm:flex-nowrap">
-        <Menu />
+        <Menu 
+          session={session}
+        />
         <div className="flex justify-center items-center order-last sm:order-2 mt-2 sm:mt-0 w-full sm:w-fit">
           <p className="font-black text-lg">{actualCard + 1} / {flashcards.length}</p>
         </div>
