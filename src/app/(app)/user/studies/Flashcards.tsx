@@ -130,7 +130,7 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
   }, []);
 
   return (
-    <div ref={container}>
+    <div ref={container} className="flex flex-col gap-5">
       {
         flashcards ?
         <>

@@ -1,8 +1,12 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
 
 export const GET = async (req: Request, {params} : {params : {username: string}}) => {
   try {
     const { username } = params;
+
+    const session = await getServerSession(authOptions);
 
     if(!username) {
       return new Response(
@@ -23,10 +27,14 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
       include: {
         QuizGameStats: {
           include: {
-            quiz: true,
-            user: true
+            quiz: {
+              include: {
+                LikedStudy: true
+              }
+            },
+            user: true,
           }
-        }
+        },
       }
     });
 
@@ -56,7 +64,8 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
           username: quizGameStat.user.username,
           image: quizGameStat.user.image,
           name: quizGameStat.user.name
-        }
+        },
+        isFavorite: quizGameStat.quiz.LikedStudy.some((likedStudy) => likedStudy.userId === session?.user?.id)
       }
     });
 

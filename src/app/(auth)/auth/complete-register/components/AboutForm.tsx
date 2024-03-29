@@ -8,7 +8,8 @@ import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
   bio: yup.string()
-    .max(1024, 'Firstname must be at most 1024 characters')
+    .min(8, 'Bio must be at least 8 characters')
+    .max(1024, 'Bio must be at most 1024 characters')
 }).required('Please fill in all required fields');
 
 type FormData = {

@@ -72,7 +72,7 @@ export const GET = async (req: NextRequest) => {
     }
 
     let friends = user.Followers.map((follower) => {
-      if(user.Followers.some((item) => (item.followerId === follower.followerId))){
+      if(user.Following.some((item) => (item.followingId === follower.followerId))){
         return {
           id: follower.followerId,
           name: follower.follower.name,
@@ -81,6 +81,8 @@ export const GET = async (req: NextRequest) => {
         };
       }
     })
+
+    friends = friends.filter((item) => item !== undefined);
 
     return new Response(
       JSON.stringify({

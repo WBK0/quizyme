@@ -1,72 +1,17 @@
-"use client";
-import SelectButton from "@/components/SelectButton";
-import Form from "./components/Form";
-import useUrlParams from "@/hooks/useUrlParams";
-import { useEffect, useState } from "react";
-import ModalPicture from "../../../components/Create/modal/ModalPicture";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import ImageInput from "@/components/Create/ImageInput";
+import { getServerSession } from "next-auth";
+import Content from "./components/Content";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Unauthorized from "@/components/401/401";
 
-const CreatePage = () => {
-  const { getParams, changeParam } = useUrlParams();
-  const [value, setValue] = useLocalStorage('create-form', {});
-  const [modal, setModal] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+const CreatePage = async () => {
+  const session = await getServerSession(authOptions);
 
-  const setImage = (image : string) => {
-    setValue({
-      ...value,
-      mainImage: image
-    });
+  if(!session){
+    return <Unauthorized />
   }
 
-  const handleModal = () => {
-    setModal(!modal);
-  };
-  
-  useEffect(() => {
-    if(value?.type){
-      changeParam('type', value.type);
-    }
-    else if(!getParams().type){
-      changeParam('type', 'quiz');
-    }
-    setIsClient(true)
-  }, []);
-
-  return (
-    <div className="px-3 max-w-3xl mx-auto">
-      {
-        isClient
-        ? <SelectButton
-            options={['quiz', 'flashcards']}
-            paramsName="type"
-            disable={value.type ? true : false}
-          />
-        : null
-      }
-      
-      <ImageInput
-        isClient={isClient}
-        mainImage={value.mainImage}
-        handleModal={handleModal}
-      />
-      <Form
-        type={getParams().type}
-        localStorage={value}
-        setLocalStorage={setValue}
-        method="create"
-      />
-      {
-        modal && (
-          <ModalPicture 
-            handleCloseModal={handleModal}
-            image={value.mainImage}
-            setImage={setImage}
-          />
-        )
-      }
-    </div>
+  return(
+    <Content />
   )
 }
 export default CreatePage;

@@ -1,4 +1,6 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
 
 export const GET = async (req: Request, {params} : {params : {username: string}}) => {
   try {
@@ -14,6 +16,8 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
       );
     }
 
+    const session = await getServerSession(authOptions);
+
     const prisma = new PrismaClient();
 
     const user = await prisma.user.findFirst({
@@ -23,7 +27,11 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
       include: {
         FlashcardsGame: {
           include: {
-            flashcards: true,
+            flashcards: {
+              include: {
+                LikedStudy: true
+              }
+            },
             user: true,
             flashcardsQuizStats: true
           }
@@ -56,7 +64,8 @@ export const GET = async (req: Request, {params} : {params : {username: string}}
           username: game.user.username,
           image: game.user.image,
           name: game.user.name
-        }
+        },
+        isFavorite: game.flashcards.LikedStudy.some((likedStudy) => likedStudy.userId === session?.user?.id)
       }
     });
 

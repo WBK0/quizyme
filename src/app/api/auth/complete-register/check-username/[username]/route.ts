@@ -1,4 +1,3 @@
-import { connectToDB } from '@/utils/database';
 import { PrismaClient } from '@prisma/client';
 import * as yup from 'yup';
 

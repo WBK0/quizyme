@@ -18,7 +18,6 @@ const submitCompleteRegisterForm = async (values: any) => {
     if(error instanceof Error) {
       toast.error(error.message);
     }
-    console.log(error);
     return false;
   }
 }

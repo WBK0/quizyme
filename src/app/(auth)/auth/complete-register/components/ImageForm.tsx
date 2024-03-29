@@ -2,18 +2,13 @@ import { Resolver, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import defaultPicture from '@/public/defaultPicture.png';
 import brush from '@/public/brush.svg';
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { CompleteRegisterContext } from '../CompleteRegisterProvider';
 
 const schema = yup.object({
-  image: yup.mixed().test(
-    'fileSize',
-    'Image file is too large',
-    (value : any) => !value[0] || (value[0] && value[0].size <= 1024 * 1024)
-  )
+  image: yup.string()
 }).required('Please fill in all required fields');
 
 type FormData = {

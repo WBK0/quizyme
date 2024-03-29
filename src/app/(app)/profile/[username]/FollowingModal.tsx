@@ -1,7 +1,6 @@
 import Spinner from "@/components/Loading/Spinner";
 import Searchbar from "@/components/Searchbar";
 import UserCard from "@/components/UserCard";
-import userPhoto1 from '@/public/userPhoto1.png';
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -18,13 +17,12 @@ type UserData = {
   name: string;
   username: string;
   image: string;
-  isFollowing: boolean;
+  isFollowing: boolean | null;
   userId: string;
 }[] | null;
 
 const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalProps) => {
   const [data, setData] = useState<UserData>(null);
-  const [isSubmitting, setIsSubmitting] = useState<string | null>(null);
   const session = useSession();
 
   const getData = async () => {
@@ -44,15 +42,15 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
       })
       handleCloseModal();
     }
-    setIsSubmitting(null);
   }
 
   const handleFollow = async (userId : string) => {
+    const isFollowing = data?.find(user => user.userId === userId)?.isFollowing;
     try {
-      if(isSubmitting === userId){
-        throw new Error('Please wait a moment until your request.')
+      if(isFollowing === null){
+        toast.error('Please wait a moment until your request.')
+        return;
       }
-      setIsSubmitting(userId);
 
       if(!session.data?.user.id){
         throw new Error('You must be logged in to follow someone.')
@@ -66,7 +64,7 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
             if(user.userId === userId){
               return {
                 ...user,
-                isFollowing: !user.isFollowing
+                isFollowing: null
               }
             }
             return user;
@@ -87,12 +85,43 @@ const FollowingModal = ({ handleCloseModal, variant, userId } : FollowingModalPr
       if(!response.ok){
         throw new Error(json.message);
       }
+
+      setData(prevState => {
+        if(prevState){
+          return prevState.map(user => {
+            if(user.userId === userId){
+              return {
+                ...user,
+                isFollowing: json.message === 'Unfollowed' ? false : true
+              }
+            }
+            return user;
+          })
+        }
+        return null;
+      })
+
     } catch (error : unknown) {
+      setData(prevState => {
+        if(prevState){
+          return prevState.map(user => {
+            if(user.userId === userId){
+              return {
+                ...user,
+                isFollowing: isFollowing || null
+              }
+            }
+            return user;
+          })
+        }
+        return null;
+      })
+
       if(error instanceof Error)
         toast.error(error.message)
+    } finally {
+      updateFollowers();
     }
-    updateFollowers();
-    getData();
   }
 
   useEffect(() => {

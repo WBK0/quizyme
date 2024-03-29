@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../[...nextauth]/route";
 import * as yup from "yup";
 import { PrismaClient } from "@prisma/client";
-import saveImage from "@/utils/uploadImage";
 
 const schema = yup.object().shape({
   firstname: yup.string()
@@ -19,16 +18,16 @@ const schema = yup.object().shape({
     .min(2, 'Username must be at least 2 characters')
     .max(20, 'Username must be at most 20 characters')
     .required('Username is required'),
-  image: yup.mixed().test(
-    'fileSize',
-    'Image file is too large',
-    (value : any) => !value[0] || (value[0] && value[0].size <= 1024 * 1024)
-  ),
+  image: yup.string()
+    .required('Image is required'),
   bio: yup.string()
-    .max(1024, 'Firstname must be at most 1024 characters'),
+    .min(8, 'Bio must be at least 8 characters')
+    .max(1024, 'Bio must be at most 1024 characters')
+    .required('Bio is required'),
   interests: yup.array()
     .of(yup.string())
-    .max(12, 'You can select up to 12 interests'),
+    .min(1, 'You must select at least 1 interest')
+    .max(12, 'You can select up to 12 interests')
 });
 
 export const POST = async (req: Request) => {
@@ -137,5 +136,4 @@ export const POST = async (req: Request) => {
     }),
     { status: 200 }
   );
-
 }

@@ -24,10 +24,11 @@ type UserData = {
     username: string,
     image: string,
     name: string
-  }
+  },
+  isFavorite: boolean | null
 }[] | null;
 
-const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps) => {
+const StudiedModal = ({ handleCloseModal, variant, username } : StudiedModalProps) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
   const [data, setData] = useState<UserData>(null);
 
@@ -41,6 +42,28 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
     const json = await response.json();
 
     setData(json.data);
+  }
+
+  const handleFavorite = async (value: { id: string, topic: string, isFavorite: boolean | null }) => {
+    const isFavorite = value.isFavorite;
+    try {
+      setData((prev) => prev && prev.map((item) => item.id === value.id ? {...item, isFavorite: null} : item));
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${value.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${value.id}/like`, {
+        method: 'PATCH'
+      });
+
+      const json = await response.json();
+
+      if(!response.ok){
+        throw new Error(json.message);
+      }
+
+      setData((prev) => prev && prev.map((item) => item.id === value.id ? {...item, isFavorite: !isFavorite} : item));
+    } catch (error) {
+      setData((prev) => prev && prev.map((item) => item.id === value.id ? {...item, isFavorite: isFavorite} : item));
+      console.log(error);
+    }
   }
 
   useEffect(() => {
@@ -67,15 +90,17 @@ const StudiedModal = ({ handleCloseModal, variant, username} : StudiedModalProps
                         <CardExtended 
                           key={value.id}
                           image={value.image}
-                          to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll(' ', '-')}-${value.id}`}
+                          to={`${process.env.NEXT_PUBLIC_URL}/study/${value.topic.replaceAll('-', '').replaceAll(' ', '-').replaceAll('--', '-')}-${value.id}`}
                           color={colors[index % 4]}
-                          type={variant}
+                          type={variant === 'quized' ? 'quizzes' : 'flashcards'}
                           topic={value.topic}
                           scored={Number(value.points)}
                           passed={value.correctAnswers}
                           authorName={value.createdBy.name}
                           authorImage={value.createdBy.image}
                           quantity={value.numberOfQuestions}
+                          isFavorite={value.isFavorite}
+                          handleFavorite={() => handleFavorite(value)}
                         />
                       ))
                       : <h2 className="text-center font-bold text-xl mt-4">

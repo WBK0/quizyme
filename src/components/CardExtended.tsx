@@ -66,7 +66,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
               <h6 className='font-semibold pb-2'>Invited by <span className='font-black' style={{color: `var(--${color})`}}>{invitedBy}</span></h6>
             )
           }
-          <h2 className='font-bold text-lg pr-6'>{type === 'quiz' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black '>{topic}</span></h2>
+          <h2 className='font-bold text-lg pr-6'>{type === 'quiz' || type === 'quizzes' ? 'Guess the questions about' : 'Learn from flashcards about'} <span className='font-black '>{topic}</span></h2>
           <h6 className='text-gray-300 mt-1 text-sm'>{tags && tags.map((tag) => <span key={tag}>#{tag} </span>)}</h6>
         </div>
         <div>
@@ -116,8 +116,11 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
                     </button>
                   </div>
                   <div className='flex-1'>
-                    <button className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-normal'>
-                      GO {type === 'quiz' ? 'QUIZ' : 'LEARN'}
+                    <button 
+                      className='border-2 border-transparent bg-black text-white hover:bg-white hover:text-black hover:border-black duration-300 h-12 w-full rounded-full font-bold text-normal'
+                      onClick={() => router.push(to)}
+                    >
+                      GO {type === 'quiz' || type === 'quizzes' ? 'QUIZ' : 'LEARN'}
                     </button>
                   </div>
                 </>

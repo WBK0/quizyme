@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import Form from './Form';
+import ResendCode from './ResendCode';
 
 const ConfirmEmail = async () => {  
   const session = await getServerSession(authOptions);
@@ -15,9 +16,6 @@ const ConfirmEmail = async () => {
   if(session.user.emailVerified){
     redirect('/auth/complete-register')
   }
-
-
-  console.log(session?.user)
 
   return (
     <div>
@@ -31,18 +29,7 @@ const ConfirmEmail = async () => {
           We have sent you an email to confirm your account. Please check your email and click on the link or enter the code to confirm your account.
         </p>
         <Form />
-        <div className='flex flex-col gap-2 mt-12 max-w-sm mx-auto w-full'>
-          <button
-            className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
-          >
-            Confirm account
-          </button>
-          <button
-            className="w-full rounded-xl px-4 py-2 outline-none font-bold text-lg bg-black text-white hover:scale-105 duration-300"
-          >
-            Resend email
-          </button>
-        </div>
+        <ResendCode email={session.user.email} />
       </div>
     </div>
   )

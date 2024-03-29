@@ -19,6 +19,11 @@ const InterestForm = () => {
   const handleSubmit = async (e : React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
+    if(selectedInterests.length === 0){
+      toast.error('You must select at least one interest');
+      setLoading(false);
+      return;
+    }
     let tempValues = {...formValues, interests: selectedInterests};
     const submittedForm = await submitCompleteRegisterForm(tempValues);
     if(submittedForm){

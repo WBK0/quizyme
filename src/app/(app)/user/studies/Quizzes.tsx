@@ -130,7 +130,7 @@ const QuizzesContent = ({ search, deleteModal, quizzes, setQuizzes } : QuizzesCo
   }, []);
 
   return (
-    <div ref={container}>
+    <div ref={container} className="flex flex-col gap-5">
       {
         quizzes ?
         <>
