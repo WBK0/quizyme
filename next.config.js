@@ -36,7 +36,8 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverActions: true
+    serverActions: true,
+    appDir: true,
   },
 }
 

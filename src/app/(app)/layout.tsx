@@ -7,6 +7,7 @@ import ToastProvider from '@/providers/ToastProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: 'QuizyMe',
@@ -27,6 +28,9 @@ export default async function RootLayout ({
 
   return (
     <html lang="en">
+      <GoogleAnalytics 
+        gaId='G-9YME6V7GF8'
+      />
       <UserProvider>
         <body className=''>
           {/* TEMPORARY SET BACKGROUND YELLOW - DELETE IN FUTURE */}
