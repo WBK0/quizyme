@@ -13,6 +13,7 @@ type HeadingProps = {
 const Heading = ({ gameData, stopTimer, answered, setAnswered, getQuestion } : HeadingProps) => {
   const maxTime = gameData?.question?.time * 1000;
   const [time, setTime] = useState<number>(gameData?.question?.time * 1000);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
 
   const setTimer = () => {
     setTime((new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500) > 0 ? (new Date(gameData.timeToRespond).getTime() - new Date().getTime() - 2500) : 0);
@@ -52,6 +53,7 @@ const Heading = ({ gameData, stopTimer, answered, setAnswered, getQuestion } : H
   }
 
   const handleEndGame = async () => {
+    setIsFinished(true);
     toast.promise(
       async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API}/play/quiz/${gameData.id}/end`, {
@@ -106,6 +108,7 @@ const Heading = ({ gameData, stopTimer, answered, setAnswered, getQuestion } : H
         <button 
           className="bg-red text-white px-6 rounded-full py-1 font-bold w-fit"
           onClick={handleEndGame}
+          disabled={isFinished}
         >
           END QUIZ
         </button>

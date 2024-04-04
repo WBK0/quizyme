@@ -1,6 +1,6 @@
 import Image from "next/image"
-import leftarrow from './svg/leftArrow.svg'
-import rightarrow from './svg/rightArrow.svg'
+import leftArrow from './svg/leftarrow.svg'
+import rightArrow from './svg/rightarrow.svg'
 import { useContext } from "react"
 import { GameContext } from "@/providers/play-flashcards/GameProvider"
 import { updateGameData } from "@/providers/play-flashcards/updateGameData"
@@ -19,8 +19,6 @@ const MiddlePanel = () => {
     }
 
     if(method === 'increase') {
-      console.log(actualCard, flashcards.length)
-
       if(actualCard < flashcards.length - 1) {
 
         setActualCard((prev) => prev + 1)
@@ -47,13 +45,13 @@ const MiddlePanel = () => {
         onClick={() => handleCard('decrease', false)}
         disabled={actualCard === 0}
       >
-        <Image src={leftarrow} width={18} height={18} alt="leftarrow" />
+        <Image src={leftArrow} width={18} height={18} alt="leftarrow" />
       </button>
       <button
         type="button"
         onClick={() => handleCard('increase', false)}
       >
-        <Image src={rightarrow} width={18} height={18} alt="rightarrow" />
+        <Image src={rightArrow} width={18} height={18} alt="rightarrow" />
       </button>
     </div>
   )

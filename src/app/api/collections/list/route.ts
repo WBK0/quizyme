@@ -5,7 +5,7 @@ export const GET = async (req: Request) => {
     const prisma = new PrismaClient();
 
     const collection = await prisma.collection.findMany();
-
+    
     return new Response(
       JSON.stringify({
         status: "Success",

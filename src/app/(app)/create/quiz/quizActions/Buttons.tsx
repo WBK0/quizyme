@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 
 type ButtonsProps = {
-  handleModal: (action: 'publish' | 'delete' | 'update' | null) => void;
+  handleModal: (action: 'publish' | 'delete' | 'update' | 'update-delete' | null) => void;
   method: 'create' | 'update';
   setView?: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -22,7 +22,7 @@ const Buttons = ({ handleModal, method, setView } : ButtonsProps) => {
     <>
       <button
         className="mx-auto rounded-full w-48 py-2 outline-none font-bold text-lg bg-black text-white box-shadow shadow-small shadow-red hover:scale-105 duration-300"
-        onClick={() => handleModal('delete')}
+        onClick={() => handleModal(method === 'create' ? 'delete' : 'update-delete')}
       >
         Delete quiz
       </button>

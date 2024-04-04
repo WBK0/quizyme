@@ -63,6 +63,9 @@ const Buttons = () => {
       })
     );
     setActualQuestion(questionIndex);
+
+    console.log('formValues', actualQuestion)
+      
     setTimeout(() => {
       reset({
         question: formValues[questionIndex]?.question || "",
@@ -70,7 +73,11 @@ const Buttons = () => {
         answerPoints: formValues[questionIndex]?.answerPoints || formValues[actualQuestion].answerPoints,
         responseType: formValues[questionIndex]?.responseType || formValues[actualQuestion].responseType,
         image: formValues[questionIndex]?.image || "",
-        answers: formValues[questionIndex]?.answers || [
+        answers: formValues[questionIndex]?.answers ? formValues[questionIndex]?.answers : formValues[actualQuestion]?.answers && formValues[actualQuestion]?.responseType === 'True / False' ? [
+          { answer: "True", isCorrect: true, color: "green" },
+          { answer: "False", isCorrect: false, color: "red" },
+        ] :
+        [
           { answer: "", isCorrect: true, color: "blue" },
           { answer: "", isCorrect: false, color: "red" },
         ] 

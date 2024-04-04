@@ -56,7 +56,11 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
           description: description,
           collectionName: collectionName,
           stats: {
-            flashcards: flashcards.length,
+            update: {
+              flashcards: flashcards.length,
+              learned: 0,
+              shared: 0
+            }
           },
           flashcards:
             flashcards.map((flashcard: any) => {

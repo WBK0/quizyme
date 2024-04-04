@@ -22,7 +22,7 @@ interface GameFlashcardsProvider {
     actualFlashcard: number;
     likedIds: string[];
     isEnded: boolean;
-  }
+  } | null;
 }
 
 export const GameContext = createContext({
@@ -92,7 +92,7 @@ export default function GameProvider({ children, flashcardsSet, id, flashcardsGa
   }, [likedIds])
 
   useEffect(() => {
-    if(flashcardsGameData?.shuffleSalt > 0 && !isShuffled){
+    if(flashcardsGameData && flashcardsGameData?.shuffleSalt > 0 && !isShuffled){
       enableShuffle(flashcardsGameData.shuffleSalt, { setAnimate, flashcards, setFlashcards, id, setIsShuffled, session });
     }
   }, [flashcardsGameData])

@@ -70,15 +70,15 @@ export const DELETE = async (req: NextRequest, { params } : { params: { id: stri
           flashcardsId: id
         }
       }),
-      prisma.code.delete({
-        where: {
-          id: flashcards.codeId
-        }
-      }),
       prisma.flashcards.delete({
         where: {
           id: id,
           userId: session.user.id
+        }
+      }),
+      prisma.code.delete({
+        where: {
+          id: flashcards.codeId
         }
       })
     ])

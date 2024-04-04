@@ -1,6 +1,6 @@
 import CardExtended from "@/components/CardExtended";
 import UserData from "./UserData.type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type StudiesProps = {
@@ -15,6 +15,10 @@ type Data = UserData['quizzes'] | UserData['flashcards'];
 const Studies = ({ type, content, authorName, authorImage } : StudiesProps) => {
   const colors = ['purple', 'green', 'yellow', 'lightblue'];
   const [data, setData] = useState<Data>(content);
+
+  useEffect(() => {
+    setData(content);
+  }, [content])
 
   const handleFavorite = async (card: { topic: string, isFavorite: boolean | null, id: string }) => {
     const isFavorite = card.isFavorite;

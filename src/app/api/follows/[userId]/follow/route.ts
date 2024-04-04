@@ -83,6 +83,15 @@ export const PATCH = async (req: NextRequest, {params} : {params : {userId: stri
           senderId: session?.user?.id
         }
       })
+
+      await prisma.user.update({
+        where: {
+          id: userId
+        },
+        data: {
+          newNotifications: true
+        }
+      })
     }
 
     if(!result) {

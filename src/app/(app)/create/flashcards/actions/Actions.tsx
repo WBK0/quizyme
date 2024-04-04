@@ -3,9 +3,9 @@ import Buttons from "./Buttons";
 import Modal from "./Modal";
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 
-const Actions = ({ method, setView } : { method: 'update' | 'create', setView?: React.Dispatch<React.SetStateAction<number>> }) => {
+const Actions = ({ method, setView, id } : { method: 'update' | 'create', setView?: React.Dispatch<React.SetStateAction<number>>, id?: string }) => {
   const [showButtons, setShowButtons] = useState(false);
-  const [modal, setModal] = useState<'publish' | 'delete' | 'update' | null>(null);
+  const [modal, setModal] = useState<'publish' | 'delete' | 'update' | 'update-delete' | null>(null);
   const [ length, setLength ] = useState(0);
 
   const { formValues, lastEditted } = useContext(DataContext);
@@ -62,6 +62,7 @@ const Actions = ({ method, setView } : { method: 'update' | 'create', setView?: 
             handleCloseModal={() => setModal(null)}
             modal={modal}
             length={length || 0}
+            id={id}
           />
         : null
       }

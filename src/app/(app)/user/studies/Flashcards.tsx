@@ -2,6 +2,7 @@ import CardExtended from "@/components/CardExtended";
 import Spinner from "@/components/Loading/Spinner";
 import { useEffect, useRef, useState } from "react";
 import { DeleteData } from "./Content";
+import { toast } from "react-toastify";
 
 type FlashcardsContentProps = {
   search: string;
@@ -29,95 +30,61 @@ export type Flashcards = {
 
 const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : FlashcardsContentProps ) => {
   const colors = ['purple', 'yellow', 'green', 'lightblue']
-  const [loadMore, setLoadMore] = useState(false);
-  const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const [loadMore, setLoadMore] = useState<number>(0);
   const [display, setDisplay] = useState(false);
-  const container = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [isAll, setIsAll] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const limit = 10;
+  const step = 10;
 
-  const getMoreFlashcards = async () => {
+  const getData = async (skip: number) => {
+    setLoading(true);
     try {
-      if(isScrollEnd) return;
-      if(flashcards && flashcards.length < 1){
-        setLoadMore(false);
-        return;
-      }
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards?search=${search}&limit=${step}&skip=${skip}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache',
+      });
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards?search=${search}&skip=${flashcards?.length}&limit=${limit}`);
-
-      const data = await response.json();
+      const json = await response.json();
 
       if(!response.ok){
-        throw new Error(data.message)
+        throw new Error(json.message);
       }
 
-      setFlashcards((prev) => prev && [...prev, ...data.data])
-
-      if(data.data.length < limit){
-        setIsScrollEnd(true);
-      }
-
-      setLoadMore(false);
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const getFlashcards = async (skipSearch?: boolean) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards?search=${skipSearch ? '' : search}&limit=${limit}`);
-
-      const data = await response.json();
-
-      if(!response.ok){
-        throw new Error(data.message)
-      }
-
-      setFlashcards(data.data)
-
-      if(data.data.length < limit){
-        setIsScrollEnd(true);
+      if(skip === 0){
+        setFlashcards(json.data);
+      }else{
+        setFlashcards((prev) => prev && [...prev, ...json.data]);
       }
 
       setDisplay(true);
-    } catch (error) {
-      console.error(error)
+
+      if(json.data.length < step){
+        setIsAll(true);
+      }
+    } catch (error : unknown) {
+      if(error instanceof Error)
+        toast.error(error.message)
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    getFlashcards(true);
-  }, [])
+    if(!containerRef.current) return;
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if(!display) return;
-      setIsScrollEnd(false);
-      setLoadMore(false);
-      setFlashcards(null);
-      getFlashcards();
-    }, 700)
-
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [search])
-
-  useEffect(() => {
-    if(loadMore)
-      getMoreFlashcards();
-  }, [loadMore])
-
-  useEffect(() => {
     const handleScroll = () => {
-      const element = container.current;
+      const element = containerRef.current;
       if (element) {
         const rect = element.getBoundingClientRect();
         const windowHeight = window.innerHeight;
         const percentage = (windowHeight - rect.top) / rect.height;
-        if(percentage > 1){
-          setLoadMore(true);
+        if(percentage >= 1 && !loading){
+          setLoadMore(flashcards?.length || 0);
         }
       }
     };
@@ -127,10 +94,41 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [containerRef.current, flashcards, loading, isAll])
+
+  useEffect(() => {
+    if(!display) return;
+
+    const timeout = setTimeout(() => {
+      setIsAll(false);
+      setLoading(false);
+      setDisplay(false);
+      setFlashcards(null);
+      getData(0);
+    }, 700)
+
+    return () => clearTimeout(timeout);
+  }, [search])
+
+  useEffect(() => {
+    setIsAll(false);
+    setLoading(false);
+    setDisplay(false);
+    setLoadMore(0);
+    if(display){
+      setFlashcards(null);
+    }
+    getData(0);
+  }, [])
+
+  useEffect(() => {
+    if(loadMore && !isAll)
+      getData(loadMore);
+  }, [loadMore])
+
 
   return (
-    <div ref={container} className="flex flex-col gap-5">
+    <div ref={containerRef} className="flex flex-col gap-5">
       {
         flashcards ?
         <>
@@ -162,7 +160,7 @@ const FlashcardsContent = ({ search, deleteModal, flashcards, setFlashcards } : 
             ))
           }  
           {
-            isScrollEnd ?
+            isAll ?
               <div className="flex justify-center pt-12">
                 <p className="text-black font-black text-lg">WE COULD NOT FIND ANY MORE ACCOUNTS MATCHING YOUR SEARCH</p>
               </div>

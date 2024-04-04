@@ -36,11 +36,34 @@ const ModalLocal = ({ setImage } : ModalLocalProps) => {
     }    
   }
 
+  const handleDrop = async (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CDN_URL}/upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      setImage && setImage(data.url);
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred while uploading the image');
+    }
+  }
+
   return (
     <form className="flex flex-col w-full max-w-xl gap-12" onChange={handleChangeForm}>
       <label
         htmlFor="inputFile"
         className="w-full aspect-video mt-16"
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
       >
         <div className="w-full aspect-video rounded-2xl bg-gradient-to-r from-green-gradient to-yellow-gradient p-1.5 cursor-pointer group">
           <div className="w-full h-full bg-gradient-to-r from-[#F4FBF5] to-[#FCFAF1] rounded-xl aspect-video flex flex-col justify-center items-center">

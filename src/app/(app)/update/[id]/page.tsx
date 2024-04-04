@@ -3,7 +3,6 @@ import NotFound from "@/components/404/404";
 import { getServerSession } from "next-auth";
 import Content from "./Content";
 
-
 const Update = async ({ params } : { params : { id: string }}) => {
   const { id } = params;
   const response = await fetch(`${process.env.NEXT_PUBLIC_API}/study/${id}`, {

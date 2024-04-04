@@ -19,6 +19,7 @@ type Friends = {
 const Share = ({ handleClose, type, studyId } : ShareProps) => {
   const [invited, setInvited] = useState<string[] | null>(null);
   const [friends, setFriends] = useState<Friends>(null);
+  const [isSearched, setIsSearched] = useState(false);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAll, setIsAll] = useState(false);
@@ -60,12 +61,16 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
 
   const getFriends = async (skip: number) => {
     setLoading(true);
+    if(search !== ''){
+      setIsSearched(true);
+    }else{
+      setIsSearched(false);
+    }
+    
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API}/friends?skip=${skip}&limit=${step}&search=${search}`);
 
       const json = await response.json();
-
-      console.log(json)
 
       if(!response.ok){
         throw new Error(json.message);
@@ -121,6 +126,7 @@ const Share = ({ handleClose, type, studyId } : ShareProps) => {
         getFriends={getFriends}
         loading={loading}
         isAll={isAll}
+        isSearched={isSearched}
       />
     </div>
   )

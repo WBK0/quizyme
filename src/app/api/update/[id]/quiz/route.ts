@@ -57,7 +57,11 @@ export const PATCH = async (req: NextRequest, {params} : {params : {id: string}}
           description: description,
           collectionName: collectionName,
           stats: {
-            questions: questions.length,
+            update: {
+              questions: questions.length,
+              played: 0,
+              shared: 0
+            }
           },
           questions:
             questions.map((question: any) => {

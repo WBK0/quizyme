@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import updateFollowers from "./updateFollowers";
 import { useRouter } from "next/navigation";
+import EasySpinner from "@/components/Loading/EasySpinner";
 
 const FollowButton = ({ userId } : { userId: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -46,15 +47,14 @@ const FollowButton = ({ userId } : { userId: string }) => {
         throw new Error(json.message);
       }
 
-      getFollowing();
-
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message)
       getFollowing();
+    }finally{
+      updateFollowers();
+      setIsSubmitting(false);
     }
-    updateFollowers();
-
   }
 
   useEffect(() => {
@@ -77,11 +77,18 @@ const FollowButton = ({ userId } : { userId: string }) => {
       <div className="w-full flex mt-6">
           <button
             type="button"
-            className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer`}
+            className={`${isFollowing ? 'bg-white text-black hover:text-white hover:bg-black' : 'bg-black text-white hover:text-black hover:bg-white'} rounded-full mx-auto w-40 py-1 font-bold ring-2 ring-black hover:duration-300 cursor-pointer group`}
             onClick={handleFollow}
           >
             {
-              isFollowing ? 'UNFOLLOW' : 'FOLLOW'
+              isSubmitting 
+              ? <div
+                  className={`inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid ${isFollowing ? 'border-black group-hover:border-white group-hover:border-r-transparent' : 'border-white group-hover:border-black group-hover:border-r-transparent'} border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`}
+                  role="status">
+                </div>
+              : isFollowing 
+                ? 'UNFOLLOW' 
+                : 'FOLLOW'
             }
           </button>
         </div>

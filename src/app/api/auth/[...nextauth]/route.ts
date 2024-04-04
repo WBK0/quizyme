@@ -6,6 +6,8 @@ import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import { compare } from 'bcryptjs';
+import sendEmail from "../signup/sendEmail";
+import generateCode from "../signup/generateCode";
 
 const prisma = new PrismaClient();
 
@@ -131,6 +133,37 @@ export const authOptions : AuthOptions = {
       
       return token;
     },
+  },
+  events: {
+    linkAccount: async ({ user }) => {
+      if(!user.email){
+        return;
+      }
+
+      let code: string;
+      let isCode;
+
+      do {
+        code = generateCode();
+        isCode = await prisma.confirmCode.findUnique({
+          where: {
+            code: code,
+          },
+        });
+      } while (isCode !== null);
+
+      await prisma.confirmCode.create({
+        data: {
+          code,
+          userId: user.id,
+          deleteAt: new Date(Date.now() + 1000 * 60 * 15),
+        },
+      });
+      
+      await sendEmail(user?.email, code)
+
+      return;
+    }
   },
   session: {
     strategy: "jwt",

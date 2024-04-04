@@ -7,15 +7,16 @@ import UseFormProvider from "@/providers/create-quiz/UseFormProvider";
 
 type UpdateQuizProps = {
   setView: React.Dispatch<React.SetStateAction<number>>;
+  id?: string;
 }
 
-const UpdateQuiz = ({ setView } : UpdateQuizProps) => {
+const UpdateQuiz = ({ setView, id } : UpdateQuizProps) => {
   return (
     <div className="relative pb-24 xl:pb-0">
-      <DataProvider>
+      <DataProvider type="update">
         <UseFormProvider>
           <div className="max-w-3xl mx-auto px-3">
-            <QuizActions setView={setView} method="update" />
+            <QuizActions setView={setView} method="update" id={id} />
             <Modal />
             <Form />
           </div>

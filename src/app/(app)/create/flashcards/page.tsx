@@ -9,7 +9,7 @@ const CreateFlashcards = () => {
   return (
     <div>
       <UseFormProvider>
-        <DataProvider>
+        <DataProvider type="create">
           <Actions method="create"/>
           <div className="max-w-4xl mx-auto px-3">
             <Header 

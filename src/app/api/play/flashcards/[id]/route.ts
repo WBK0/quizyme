@@ -37,7 +37,7 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
         }
       }
     });
-
+    
     if(!flashcards) {
       return new Response(
         JSON.stringify({

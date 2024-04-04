@@ -13,6 +13,10 @@ const Multiplechoice = ({ quizAnswers, handleSubmit, correctAnswer } : Multiplec
   const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-yellow']
 
   useEffect(() => {
+    setAnswers(quizAnswers);
+  }, [quizAnswers])
+
+  useEffect(() => {
     answers.forEach((element, index) => {
       answers[index]['isCorrect'] = false;
     });

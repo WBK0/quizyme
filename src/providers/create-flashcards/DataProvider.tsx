@@ -8,6 +8,7 @@ import { UseFormContext } from "./UseFormProvider";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
+  type: 'create' | 'update';
 }
 
 export const DataContext = createContext({
@@ -17,8 +18,8 @@ export const DataContext = createContext({
   lastEditted: "" as string
 });
 
-export default function DataProvider({ children }: CreateQuizProvider) {
-  const [ value, setValue ] = useLocalStorage("create-form", {});
+export default function DataProvider({ children, type }: CreateQuizProvider) {
+  const [ value, setValue ] = useLocalStorage(type === 'create' ? 'create-form' : 'update-form', {});
   const [ formValues, setFormValues ] = useState<FormValues>([]);
   const [ lastEditted, setLastEddited ] = useState<string>("");
   const { getValues, replace } = useContext(UseFormContext);

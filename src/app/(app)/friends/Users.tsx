@@ -1,17 +1,19 @@
 import EasySpinner from "@/components/Loading/EasySpinner";
 import UserCard from "@/components/UserCard";
 import { Session } from "next-auth";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
+type User = {
+  id: string;
+  name: string;
+  username: string;
+  image: string;
+  isFollowing: boolean | null;
+}
+
 type UsersProps = {
-  users: {
-    id: number;
-    name: string;
-    username: string;
-    image: string;
-    isFollowing: boolean;
-  }[] | null;
+  users: User[] | null;
   setUsers: React.Dispatch<React.SetStateAction<UsersProps['users']>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
@@ -23,6 +25,7 @@ type UsersProps = {
 } 
 
 const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd, setIsScrollEnd, session } : UsersProps) => {
+  const [isSubmitting, setIsSubmitting] = useState<string[]>([]);
   const mainRef = useRef<HTMLDivElement>(null);
 
   const getMoreUsers = async (skip: number) => {
@@ -77,18 +80,26 @@ const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd
     }
   }, [users, mainRef.current])
 
-  const handleFollow = async (id: number) => {
+  const handleFollow = async (id: string) => {
+    if(isSubmitting.find((value) => value === id)){
+      return;
+    }
+
+    setIsSubmitting((prev) => [...prev, id]);
+
+    const isFollowing = users?.find((user) => user.id === id)?.isFollowing;
+
     if(!session){
       toast.error('You need to be logged in to follow someone');
       return;
     }
 
     try {
-      setUsers((prev) => prev && prev.map((user: any) => {
+      setUsers((prev) => prev && prev.map((user: User) => {
         if(user.id === id){
           return {
             ...user,
-            isFollowing: !user.isFollowing
+            isFollowing: null
           }
         }
         return user;
@@ -107,20 +118,32 @@ const Users = ({ users, setUsers, setLoading, loading, step, search, isScrollEnd
       if(!response.ok){
         throw new Error(json.message);
       }
-    } catch (error : unknown) {
-      setUsers((prev) => prev && prev.map((user: any) => {
+
+      setUsers((prev) => prev && prev.map((user: User) => {
         if(user.id === id){
           return {
             ...user,
-            isFollowing: !user.isFollowing
+            isFollowing: !isFollowing
           }
         }
         return user;
       }));
+    } catch (error : unknown) {
+      setUsers((prev) => prev && prev.map((user: User) => {
+        if(user.id === id){
+          return {
+            ...user,
+            isFollowing: isFollowing || false
+          }
+        }
+        return user;
+      }))
 
       if(error instanceof Error)
         toast.error(error.message);
-    } 
+    }finally{
+      setIsSubmitting((prev) => prev.filter((value) => value !== id));
+    }
   }
   
   return (

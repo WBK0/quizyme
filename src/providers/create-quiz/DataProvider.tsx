@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 interface CreateQuizProvider {
   children: React.ReactNode;
+  type: 'create' | 'update';
 }
 
 export const DataContext = createContext({
@@ -16,8 +17,8 @@ export const DataContext = createContext({
   setActualQuestion: (() => {}) as React.Dispatch<React.SetStateAction<number>>
 });
 
-export default function DataProvider({ children }: CreateQuizProvider) {
-  const [ value, setValue ] = useLocalStorage("create-form", {});
+export default function DataProvider({ children, type }: CreateQuizProvider) {
+  const [ value, setValue ] = useLocalStorage(type === 'create' ? 'create-form' : 'update-form', {});
   const [formValues, setFormValues] = useState<FormValues>([]);
   const [actualQuestion, setActualQuestion] = useState(0);
   const router = useRouter();

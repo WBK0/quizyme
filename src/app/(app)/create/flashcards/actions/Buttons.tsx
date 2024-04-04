@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { FormInputs } from "../types/FormInputs";
 
 type ButtonsProps = {
-  setModal: (action: 'publish' | 'delete' | 'update' | null) => void;
+  setModal: (action: 'publish' | 'delete' | 'update' | 'update-delete' | null) => void;
   method: 'create' | 'update';
   setView?: React.Dispatch<React.SetStateAction<number>>
 }
@@ -39,7 +39,11 @@ const Buttons = ({ setModal, method, setView } : ButtonsProps) => {
   };
 
   const onDelete = () => {
-    setModal('delete');
+    if(method === 'create'){
+      setModal('delete');
+    } else if(method === 'update'){
+      setModal('update-delete');
+    }
   }
 
   const onUpdate = () => {

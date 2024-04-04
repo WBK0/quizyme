@@ -3,21 +3,45 @@ import { useRouter } from "next/navigation";
 import { onSubmit } from "./submitForm";
 import { DataContext } from "@/providers/create-flashcards/DataProvider";
 import { useContext } from "react";
+import { toast } from "react-toastify";
 
 type ModalProps = {
-  modal: 'publish' | 'delete' | 'update' | null;
+  modal: 'publish' | 'delete' | 'update-delete' | 'update' | null;
   handleCloseModal: () => void;
   length: number;
+  id?: string;
 }
 
-const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
+const Modal = ({ modal, handleCloseModal, length, id } : ModalProps) => {
   const [value, removeLocalStorage] = useLocalStorage('create-form', {});
   const { setFormValues } = useContext(DataContext);
   const router = useRouter();
-
+  
   const onDelete = () => {
-    removeLocalStorage();
-    router.push('/create');
+    if(modal === 'update-delete'){
+      toast.promise(
+        async () => {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/flashcards/delete/${id}`, {
+            method: 'DELETE'
+          })
+  
+          const json = await response.json();
+    
+          if(!response.ok){
+            throw new Error(json.message)
+          }
+
+          router.push('/user/studies?type=flashcards');
+        }, {
+          pending: 'Deleting...',
+          success: `Successfully deleted flashcards`,
+          error: { render: ({ data }: { data?: { message: string } }) => data?.message || `An error occurred while deleting flashcards` },
+        }
+      )
+    } else {
+      removeLocalStorage();
+      router.push('/create');
+    }
   }
 
   return (
@@ -25,7 +49,7 @@ const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
       <div className="flex items-center h-full justify-center">
         <div className="bg-white w-full max-w-lg h-fit min-h-[300px] relative rounded-2xl pb-2 sm:px-6 px-3 flex justify-between flex-col">
           <div>
-            <h2 className="font-bold text-2xl text-center mt-8">Are you sure you want to {modal} this flashcards set?</h2>
+            <h2 className="font-bold text-2xl text-center mt-8">Are you sure you want to {modal === 'update-delete' ? 'delete' : modal} this flashcards set?</h2>
             <h6 className="text-center font-semibold text-lg mt-5">Your set of flashcards contains {length} concepts</h6>
             {
               modal === 'update' ?
@@ -39,10 +63,10 @@ const Modal = ({ modal, handleCloseModal, length } : ModalProps) => {
               type="button"
               onClick={() => modal === 'publish' || modal === 'update'
                 ? onSubmit({formValues: value, setFormValues, removeLocalStorage, router, method: modal === 'publish' ? 'create' : 'update', id: value.id})
-                : onDelete
+                : onDelete()
               }
             >
-              {modal}
+              {modal === 'update-delete' ? 'delete' : modal}
             </button>
             <button 
               type="button"

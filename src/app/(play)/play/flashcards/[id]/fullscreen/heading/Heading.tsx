@@ -17,7 +17,7 @@ const Heading = ({ session } : { session: Session | null }) => {
   }
 
   return (
-    <div className="flex flex-col fixed w-full bg-white">
+    <div className="flex flex-col fixed w-full bg-white z-10">
       <div className="w-full flex justify-between py-2 flex-wrap sm:flex-nowrap">
         <Menu 
           session={session}

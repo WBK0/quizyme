@@ -27,6 +27,7 @@ const ModalOnline = ({ setImage } : ModalOnlineProps) => {
     }
   
     timeoutId = setTimeout(() => {
+      setLoading(true);
       setQuery(e);
       setPage(1);
       setResults([]);
@@ -49,27 +50,28 @@ const ModalOnline = ({ setImage } : ModalOnlineProps) => {
     setImage && setImage(json.url)
   }
 
+  const fetchData = async () => {
+    setIsImageMax(false);
+    const response = await fetch('/api/pixabay', {
+      method: 'POST',
+      body: JSON.stringify({
+        query: query ? query : '',
+        page: page ? page : 1,
+      }),
+    });
+    let json = await response.json();
+
+    const newResults = results.concat(json.hits);
+
+    if(json.hits.length < 21){
+      setIsImageMax(true);
+    }
+
+    setResults(newResults)
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsImageMax(false);
-      const response = await fetch('/api/pixabay', {
-        method: 'POST',
-        body: JSON.stringify({
-          query: query ? query : '',
-          page: page ? page : 1,
-        }),
-      });
-      let json = await response.json();
-
-      const newResults = results.concat(json.hits);
-
-      if(json.hits.length < 21){
-        setIsImageMax(true);
-      }
-
-      setResults(newResults)
-      setLoading(false);
-    };
     fetchData();
   }, [query, page]);
 

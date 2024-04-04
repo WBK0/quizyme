@@ -50,6 +50,7 @@ model User {
   bio                String?
   interests          String[]
   isComplete         Boolean              @default(false)
+  newNotifications   Boolean              @default(true)
   Quiz               Quiz[]
   Flashcards         Flashcards[]
   QuizGame           QuizGame[]

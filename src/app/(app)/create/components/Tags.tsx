@@ -20,7 +20,7 @@ const Tags = ({ register, setValue, error, watch } : TagsProps) => {
     if(watch('tags')){
       setTags(watch('tags'));
     }
-  }, []);
+  }, [watch('tags')]);
 
   const handleRemoveTag = (tag: string) => {
     setTags(tags.filter((t) => t !== tag));
@@ -38,14 +38,10 @@ const Tags = ({ register, setValue, error, watch } : TagsProps) => {
     }
 
     if (tagInput.trim() !== "" && tags.findIndex(element => element.toLowerCase() === tagInput.toLowerCase()) === -1) {
-      setTags([...tags, tagInput]);
+      setValue('tags', [...tags, tagInput]);
       setTagInput("");
     }
   };
-
-  useEffect(() => {
-    setValue('tags', tags);
-  }, [tags]);
 
   return (
     <div>

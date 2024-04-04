@@ -9,7 +9,7 @@ const CreateQuiz = () => {
 
   return (
     <div className="relative pb-24 xl:pb-0">
-      <DataProvider>
+      <DataProvider type="create">
         <UseFormProvider>
           <div className="max-w-3xl mx-auto px-3">
             <QuizActions method="create" />

@@ -143,6 +143,47 @@ export const POST = async (req: NextRequest) => {
       }
     })
 
+    await prisma.user.update({
+      where: {
+        id: inviteeId
+      },
+      data: {
+        newNotifications: true
+      }
+    })
+
+    if(type === 'flashcards'){
+      await prisma.flashcards.update({
+        where: {
+          id: studyId,
+        },
+        data: {
+          stats: {
+            update: {
+              shared: {
+                increment: 1,
+              }
+            }
+          }
+        }
+      });
+    }else if(type === 'quiz'){
+      await prisma.quiz.update({
+        where: {
+          id: studyId,
+        },
+        data: {
+          stats: {
+            update: {
+              shared: {
+                increment: 1,
+              }
+            }
+          }
+        }
+      });
+    }
+
     return new Response(
       JSON.stringify({
         status: "Success",

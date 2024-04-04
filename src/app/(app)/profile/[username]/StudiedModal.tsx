@@ -82,7 +82,7 @@ const StudiedModal = ({ handleCloseModal, variant, username } : StudiedModalProp
           </div>
           {
             data ?
-              <div className="overflow-y-auto w-full mb-6 pr-3 scroll-sm">
+              <div className="overflow-y-auto w-full pb-6 pr-3 scroll-sm">
                 <div className="max-w-3xl mx-auto flex flex-col gap-6 pt-6">  
                   {
                     data.length > 0 ?

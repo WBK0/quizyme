@@ -5,24 +5,48 @@ import { onSubmit } from './submitForm';
 import { DataContext } from '@/providers/create-quiz/DataProvider';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 type ConfirmModalProps = {
   handleCloseModal: () => void;
   questions: number;
   warning?: string;
-  type: 'publish' | 'delete' | 'update' | null;
+  type: 'publish' | 'delete' | 'update' | 'update-delete' | null;
+  id?: string;
 }
 
-const ConfirmModal = ({ handleCloseModal, questions, warning, type } : ConfirmModalProps) => {
-  const [value, setValue, removeLocalStorage] = useLocalStorage('create-form', {});
+const ConfirmModal = ({ handleCloseModal, questions, warning, type, id } : ConfirmModalProps) => {
+  const [value, setValue, removeLocalStorage] = useLocalStorage(type === 'publish' || type === 'delete' ? 'create-form' : 'update-form', {});
 
   const { setFormValues } = useContext(DataContext);
 
   const router = useRouter();
 
   const deleteQuiz = () => {
-    removeLocalStorage();
-    router.push('/create');
+    if(type === 'update-delete'){
+      toast.promise(
+        async () => {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user/studies/quizzes/delete/${id}`, {
+            method: 'DELETE'
+          })
+  
+          const json = await response.json();
+    
+          if(!response.ok){
+            throw new Error(json.message)
+          }
+
+          router.push('/user/studies?type=quizzes');
+        }, {
+          pending: 'Deleting...',
+          success: `Successfully deleted quiz`,
+          error: { render: ({ data }: { data?: { message: string } }) => data?.message || `An error occurred while deleting quiz` },
+        }
+      )
+    } else {
+      removeLocalStorage();
+      router.push('/create');
+    }
   }
 
   return (

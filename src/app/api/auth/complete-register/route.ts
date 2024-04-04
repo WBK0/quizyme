@@ -116,7 +116,8 @@ export const POST = async (req: Request) => {
       image: image,
       bio: typeof bio === 'string' ? bio : null,
       interests: interests,
-      isComplete: true
+      isComplete: true,
+      newNotifications: true
     }
   });
 

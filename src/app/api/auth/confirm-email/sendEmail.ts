@@ -95,7 +95,7 @@ const sendEmail = async (to : string) => {
 			`,
 			attachments: [{
         filename: 'logo.png',
-        path: "@/../public/logo.png",
+        path: "./public/logo.png",
         cid: 'logo'
     }]
     });

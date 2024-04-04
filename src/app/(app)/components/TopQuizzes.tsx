@@ -17,7 +17,11 @@ type Quiz = {
 }
 
 const TopQuizzes = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/top/quizzes`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/top/quizzes`, {
+    next: {
+      revalidate: 600
+    }
+  });
 
   const json = await response.json();
 

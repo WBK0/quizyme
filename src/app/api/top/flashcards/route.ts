@@ -7,7 +7,9 @@ export const GET = async () => {
     const flashcards = await prisma.flashcards.findMany({
       take: 8,
       orderBy: {
-        createdAt: 'desc'
+        stats: {
+          learned: 'desc'
+        }
       },
       include: {
         user: true

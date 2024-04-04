@@ -20,9 +20,10 @@ type ContentProps = {
   getFriends: (skip: number) => Promise<void>;
   loading: boolean;
   isAll: boolean;
+  isSearched: boolean;
 }
 
-const Content = ({ setInvited, type, studyId, handleClose, friends, invited, setSearch, search, getFriends, loading, isAll } : ContentProps) => {
+const Content = ({ setInvited, type, studyId, handleClose, friends, invited, setSearch, search, getFriends, loading, isAll, isSearched } : ContentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,6 +81,7 @@ const Content = ({ setInvited, type, studyId, handleClose, friends, invited, set
                   />
                 </>
               ))
+              : isSearched ? <p className="text-center font-bold text-xl mt-4">No friends found matching this search.</p>
               : <p className="text-center font-bold text-xl mt-4">You do not have any friends in quizyme matching this search. <span className="block font-black text-base mt-1">To have a friend you both have to follow each other.</span></p>
           }
           {

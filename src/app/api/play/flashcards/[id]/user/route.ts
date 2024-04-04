@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
 export const GET = async (req: NextRequest, {params} : {params : {id: string}}) => {
   try {
     const { id } = params;
-
+    
     const session = await getServerSession(authOptions);
 
     if(!session) {
@@ -72,6 +72,21 @@ export const GET = async (req: NextRequest, {params} : {params : {id: string}}) 
           actualFlashcard: 0,
           shuffleSalt: 0,
           likedIds: []
+        }
+      })
+
+      await prisma.flashcards.update({
+        where: {
+          id: id
+        },
+        data: {
+          stats: {
+            update: {
+              learned: {
+                increment: 1
+              }
+            }
+          }
         }
       })
 

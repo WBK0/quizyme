@@ -14,13 +14,13 @@ const QuizActions = ({ method, setView, id } : QuizActionsProps) => {
   const [showButtons, setShowButtons] = useState(false);
   const { formValues } = useContext(DataContext);
   const { watch } = useContext(UseFormContext);
-  const [ modal, setModal ] = useState<'publish' | 'delete' | 'update' | null>(null);
+  const [ modal, setModal ] = useState<'publish' | 'delete' | 'update' | 'update-delete' | null>(null);
 
   const handleShowButtons = () => {
     setShowButtons(!showButtons);
   }
 
-  const handleModal = (action : 'publish' | 'delete' | 'update' | null) => { 
+  const handleModal = (action : 'publish' | 'delete' | 'update' | 'update-delete' | null) => { 
     setModal(action);
   }
 
@@ -62,6 +62,7 @@ const QuizActions = ({ method, setView, id } : QuizActionsProps) => {
             questions={formValues.length}
             warning={watch('question').length > 0 ? 'You have unsaved questions' : ''}
             type={modal}
+            id={id}
           />
         )
         : null

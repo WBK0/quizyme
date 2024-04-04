@@ -1,8 +1,5 @@
 "use client";
-import EasySpinner from "@/components/Loading/EasySpinner";
 import Spinner from "@/components/Loading/Spinner";
-import Searchbar from "@/components/Searchbar";
-import UserCard from "@/components/UserCard";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Search from "./Search";
@@ -10,17 +7,18 @@ import Users from "./Users";
 import { Session } from "next-auth";
 
 type Users = {
-  id: number;
+  id: string;
   name: string;
   username: string;
   image: string;
-  isFollowing: boolean;
+  isFollowing: boolean | null;
 }[] | null;
 
 const Content = ({ session } : { session: Session | null }) => {
   const [users, setUsers] = useState<Users>(null);
   const [loading, setLoading] = useState(false);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const [display, setDisplay] = useState(false);
   const [search, setSearch] = useState('');
 
   const step = 20;
@@ -48,6 +46,8 @@ const Content = ({ session } : { session: Session | null }) => {
     } catch (error : unknown) {
       if(error instanceof Error)
         toast.error(error.message);
+    } finally {
+      setDisplay(true);
     }
   }
 
@@ -56,6 +56,9 @@ const Content = ({ session } : { session: Session | null }) => {
   }, []);
 
   useEffect(() => {
+    if(!display){
+      return;
+    }
     const timeout = setTimeout(() => {
       setUsers(null);
       getUsers();

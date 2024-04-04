@@ -96,7 +96,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
     }, 700)
 
     return () => clearTimeout(timeout);
-  }, [search, searchParams.get('category')])
+  }, [search])
 
   useEffect(() => {
     setIsAll(false);
@@ -107,7 +107,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
       setData(null);
     }
     getData(0);
-  }, [type])
+  }, [type, searchParams.get('category')])
 
   useEffect(() => {
     if(loadMore && !isAll)
@@ -192,6 +192,7 @@ const SearchResults = ({ type, search, category } : SearchResultsProps) => {
                   createdAt={card.createdAt}
                   isFavorite={card.isFavorite}
                   handleFavorite={() => handleFavorite(card)}
+                  plays={('learned' in card.stats) ? card.stats?.learned : card.stats?.played}
                 /> 
               ))
             }

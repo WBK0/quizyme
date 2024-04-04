@@ -49,7 +49,7 @@ const CardExtended = ({ to, image, color, type, topic, quantity, authorName, aut
         hideText={true}
         quantity={quantity}
       />
-      <div className='flex-1 flex justify-between flex-col md:py-3 relative'>
+      <div className='flex-1 flex justify-between flex-col md:py-3 relative w-full px-1.5'>
         {
           showDelete && (
             <button 

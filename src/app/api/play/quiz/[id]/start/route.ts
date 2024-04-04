@@ -68,17 +68,33 @@ export const POST = async (req: NextRequest, { params } : {params : {id: string}
 
     const timeToRespond = new Date(Date.now() + timeForQuestion * 1000 + 5000) // 5 seconds for safety reasons
 
-    const updateQuizGame = await prisma.quizGame.update({
-      where: {
-        id: id,
-        userId: session.user.id,
-      },
-      data: {
-        isStarted: true,
-        timeToRespond: timeToRespond,
-      }
-    });
-
+    const updateQuizGame = await prisma.$transaction([
+      prisma.quizGame.update({
+        where: {
+          id: id,
+          userId: session.user.id,
+        },
+        data: {
+          isStarted: true,
+          timeToRespond: timeToRespond,
+        }
+      }),
+      prisma.quiz.update({
+        data: {
+          stats: {
+            update: {
+              played: {
+                increment: 1,
+              }
+            }
+          }
+        },
+        where: {
+          id: quizGame.quizId,  
+        }
+      })
+    ])
+    
     if(!updateQuizGame) {
       return new Response(
         JSON.stringify({

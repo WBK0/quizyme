@@ -102,12 +102,13 @@ const sendEmail = async (to : string, code : string) => {
 			`,
 			attachments: [{
         filename: 'logo.png',
-        path: "@/../public/logo.png",
+        path: "./public/logo.png",
         cid: 'logo'
     }]
     });
   } catch (error) {
-		throw new Error('An error occurred while sending email');
+      console.log(error)
+	  throw new Error('An error occurred while sending email');
   }
 };
 

@@ -17,7 +17,11 @@ type Flashcard = {
 }
 
 const TopFlashcards = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/top/flashcards`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/top/flashcards`, {
+    next: {
+      revalidate: 600
+    }
+  });
 
   const json = await response.json();
 

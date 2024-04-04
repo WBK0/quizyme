@@ -2,6 +2,7 @@ import Image from "next/image";
 import EasySpinner from "../Loading/EasySpinner";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import Link from "next/link";
 
 type IsSharing = {
   [id: string]: boolean;
@@ -60,11 +61,13 @@ const FriendCard = ({ friend, type, studyId, setInvited, invited } : FriendCardP
 
   return (
     <div className="flex w-full items-center">
-      <Image src={friend.image} alt="User photo" width={64} height={64} className="rounded-full h-16 aspect-square" />
-      <div className="flex flex-col justify-center ml-3">
-        <p className="font-bold text-sm sm:text-lg mr-2">{friend.name}</p>
-        <p className="font-light text-xs break-all mr-2">@{friend.username}</p>
-      </div>
+      <Link href={`/profile/${friend.username}`} className="flex">
+        <Image src={friend.image} alt="User photo" width={64} height={64} className="rounded-full h-16 aspect-square" />
+        <div className="flex flex-col justify-center ml-3">
+          <p className="font-bold text-sm sm:text-lg mr-2">{friend.name}</p>
+          <p className="font-light text-xs break-all mr-2">@{friend.username}</p>
+        </div>
+      </Link>
       <div className="flex-1 flex justify-end items-end gap-3 sm:gap-6 flex-col sm:flex-row">
         {
           invited && 
