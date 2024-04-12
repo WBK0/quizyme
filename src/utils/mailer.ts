@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport(
     port: 465,
     secure: true,
     auth: {
-      user: 'no-reply@codebybartlomiej.pl', // tutaj wpisz swój adres email
-      pass: 'cf9de01f1', // tutaj wpisz swoje hasło do konta email
+      user: 'no-reply@codebybartlomiej.pl',
+      pass: process.env.NODEMAILER_PASSWORD
     },
   })
 );
