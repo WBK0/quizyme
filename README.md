@@ -11,7 +11,6 @@
     <br/>
     <br/>
     <a href="https://quizyme.codebybartlomiej.pl">View Demo</a>
-    .
   </p>
 </p>
 
