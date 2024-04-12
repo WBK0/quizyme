@@ -10,7 +10,7 @@
     Quizyme is an application that allows users to create quizzes and flashcards for educational purposes. It was built using NEXT.js, tailwindcss, and MongoDB. The application has a responsive design and is highly developed. It utilizes the pixabay API to provide users with easy access to a large database of images that can be useful for both quizzes and flashcards.
     <br/>
     <br/>
-    <a href="https://github.com/WBK0/quizyme">View Demo</a>
+    <a href="https://quizyme.codebybartlomiej.pl">View Demo</a>
     .
   </p>
 </p>
