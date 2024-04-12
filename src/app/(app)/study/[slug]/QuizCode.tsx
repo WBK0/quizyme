@@ -32,7 +32,6 @@ const QuizCode = ({ code } : QuizCodeProps) => {
                 key={index}
                 className='bg-white w-full rounded-xl sm:rounded-2xl text-center font-black sm:text-3xl text-2xl outline-none uppercase shadow-xl aspect-square cursor-end caret-transparent select-none'
                 value={value}
-                disabled
               />
             ))
           }

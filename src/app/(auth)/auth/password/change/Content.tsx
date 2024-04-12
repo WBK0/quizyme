@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Code from "./Code";
 import Form from "./Form";
+import { Suspense } from "react";
 
 const Content = () => {
   const [step, setStep] = useState<number>(0);
@@ -17,10 +18,12 @@ const Content = () => {
         switch(step){
           case 0:
             return(
-              <Code
-                nextStep={handleNextStep}
-                setConfirmCode={setCode}
-              />
+              <Suspense>
+                <Code
+                  nextStep={handleNextStep}
+                  setConfirmCode={setCode}
+                />
+              </Suspense>
             )
           case 1: 
             return(

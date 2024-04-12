@@ -1,7 +1,7 @@
 import StartQuiz from "./startQuiz/StartQuiz";
 import QuizGame from "./quizGame/PlayQuiz";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import NotFound from "@/components/404/404";
 
 const PlayQuiz = async ({ params }: { params: {id: string} }) => {

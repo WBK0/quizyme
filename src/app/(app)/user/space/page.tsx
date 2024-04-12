@@ -1,7 +1,7 @@
 import UserProfileCard from "@/components/UserProfileCard";
 import Content from "./Content";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import Unauthorized from "@/components/401/401";
 
 const UserSpace = async () => {

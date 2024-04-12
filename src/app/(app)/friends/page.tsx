@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import Content from "./Content";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 const Friends = async () => {
   const session = await getServerSession(authOptions);

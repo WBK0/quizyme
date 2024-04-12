@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import GameProvider from "@/providers/play-flashcards/GameProvider";
 import NotFound from "@/components/404/404";
 import WelcomeQuizModal from "./mainPage/welcomeModal/WelcomeQuizModal";

@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import NotFound from "@/components/404/404";
 import { getServerSession } from "next-auth";
 import Content from "./Content";

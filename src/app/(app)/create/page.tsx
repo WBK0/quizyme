@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import Content from "./components/Content";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import Unauthorized from "@/components/401/401";
 
 const CreatePage = async () => {

@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "mongoose": "^8.0.0",
     "next": "^14.1.4",
-    "next-auth": "^4.24.4",
+    "next-auth": "^4.24.7",
     "nodemailer": "^6.9.12",
     "nodemailer-smtp-transport": "^2.4.2",
     "prisma-extension-random": "^0.1.3",

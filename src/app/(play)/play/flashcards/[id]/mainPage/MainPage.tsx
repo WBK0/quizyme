@@ -5,7 +5,7 @@ import Author from "./Author";
 import ConceptList from "./Concepts/ConceptList";
 import Footer from "@/components/Footer/Footer";
 import { Session } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 type FlashcardsSet = {
   flashcardsSet: {

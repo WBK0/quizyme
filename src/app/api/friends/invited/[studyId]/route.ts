@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import { authOptions } from "../../../auth/[...nextauth]/auth";
 import { getServerSession } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 import checkMongoDBID from "@/utils/checkMongodbID";

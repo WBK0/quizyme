@@ -3,7 +3,7 @@ import logo from '@/public/logo.svg';
 import Link from "next/link";
 import Form from "./Form";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { redirect } from "next/navigation";
 import LoginViaProvider from "./LoginViaProvider";
 import ErrorOnLogin from "./ErrorOnLogin";

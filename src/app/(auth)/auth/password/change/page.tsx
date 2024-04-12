@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Code from "./Code";
 import logo from '@/public/logo.svg';
 import Content from "./Content";
 

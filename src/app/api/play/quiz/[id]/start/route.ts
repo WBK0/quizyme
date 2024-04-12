@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import checkMongoDBID from "@/utils/checkMongodbID";
 import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";

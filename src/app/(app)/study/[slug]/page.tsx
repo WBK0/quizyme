@@ -7,7 +7,7 @@ import Recommendations from "@/components/Recommendations";
 import ActionButtons from "./ActionButtons";
 import NotFound from "./404";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 const Study = async ({ params } : { params : { slug: string }}) => {
   const { slug } = params;

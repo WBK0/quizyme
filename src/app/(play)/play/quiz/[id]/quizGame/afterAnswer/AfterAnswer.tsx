@@ -86,7 +86,10 @@ const AfterAnswer = ({ getQuestion, answered, setAnswered, gameData } : AfterAns
               (
                 <>
                   <h2 className="text-6xl font-black text-center text-white"> 
-                    <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(gameData.actualQuestion === gameData.numberOfQuestions - 1 ? 0 : 1), handleCountDown()}, 1000)} /> POINTS 
+                    <span className="block sm:inline mb-1.5 sm:mb-0">
+                      <CountUp start={Number(answered.pointsTotal - answered.pointsGet)} end={Number(answered.pointsTotal)} duration={4} onEnd={() => setTimeout(() => {setStep(gameData.actualQuestion === gameData.numberOfQuestions - 1 ? 0 : 1), handleCountDown()}, 1000)} />
+                    </span>
+                    <span> POINTS</span>
                   </h2>
                   <h6 className="text-xl font-bold text-white">{answered.questionsLeft} {answered.questionsLeft > 1 ? 'QUESTIONS' : 'QUESTION'} LEFT</h6>
                 </>

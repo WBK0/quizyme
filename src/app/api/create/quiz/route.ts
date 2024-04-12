@@ -1,7 +1,7 @@
 import { connectToDB } from "@/utils/database";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/auth";
 import { schema } from "./schema";
 import * as yup from 'yup';
 import { generateCode } from "../generateCode";

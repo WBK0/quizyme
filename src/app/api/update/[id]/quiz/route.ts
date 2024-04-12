@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { schema } from "@/app/api/create/quiz/schema";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";

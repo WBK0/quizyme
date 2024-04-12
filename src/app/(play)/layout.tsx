@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import UserProvider from '@/providers/UserProvider';
 import ToastProvider from '@/providers/ToastProvider';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/auth';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {

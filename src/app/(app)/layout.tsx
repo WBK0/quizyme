@@ -5,7 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import UserProvider from '@/providers/UserProvider';
 import ToastProvider from '@/providers/ToastProvider';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/auth';
 import { redirect } from 'next/navigation';
 import { GoogleAnalytics } from '@next/third-parties/google'
 

@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import NotFound from "@/components/404/404";
 import StartQuiz from "../../../quiz/[id]/startQuiz/StartQuiz";
 import PlayQuiz from "./PlayQuiz";

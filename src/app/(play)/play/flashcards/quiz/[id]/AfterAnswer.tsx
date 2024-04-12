@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import CountUp from 'react-countup';
 import GameData from "./GameData.type";
 
 type AfterAnswerProps = {
